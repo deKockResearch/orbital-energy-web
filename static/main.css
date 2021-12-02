@@ -1,5 +1,32 @@
 .grid-container {
-  position: absolute;
 	display: grid;
-	grid-template-columns: repeat(17, auto) 1fr;
+	grid-template-columns: repeat(18, 18fr);
   }
+
+.grid-container div {
+  aspect-ratio: 1;
+  border-top: 1px solid;
+  border-left: 1px solid;
+  border-color: black;
+  justify-content: center;
+  padding: 10%;
+}
+#Helium {
+  grid-column-start: 18;
+}
+#Boron, #Aluminum {
+  grid-column-start: 13;
+}
+
+#Actinoids, #Lanthanoids {
+  grid-column-start: 4;
+}
+.grid-container .grid-bottom {
+  border-bottom: 1px solid;
+  border-color: black;
+  margin-bottom: 10px;
+}
+.grid-container .grid-right {
+  border-right: 1px solid;
+  border-color: black;
+}

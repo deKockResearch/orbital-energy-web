@@ -1,0 +1,36 @@
+.grid-container {
+	display: grid;
+	grid-template-columns: repeat(18, 18fr);
+  }
+
+.grid-container div {
+  aspect-ratio: 1;
+  justify-content: center;
+  padding: 10%;
+}
+#Helium {
+  grid-column-start: 18;
+}
+#Boron, #Aluminum {
+  grid-column-start: 13;
+}
+
+#Actinoids, #Lanthanoids {
+  grid-column-start: 4;
+}
+
+.grid-container .grid-bottom {
+  margin-bottom: 10px;
+}
+
+.sBlock {
+  background-color: #ffff00aa;
+}
+
+.pBlock {
+  background-color: #6699ffaa;
+}
+
+.dBlock {
+  background-color: #cc6666;
+}

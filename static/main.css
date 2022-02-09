@@ -1,36 +1,202 @@
-.grid-container {
-	display: grid;
-	grid-template-columns: repeat(18, 18fr);
-  }
-
-.grid-container div {
-  aspect-ratio: 1;
-  justify-content: center;
-  padding: 10%;
-}
-#Helium {
-  grid-column-start: 18;
-}
-#Boron, #Aluminum {
-  grid-column-start: 13;
+html {
+    background: #bababa;
+    background-size: cover;
+    height: 100%;
+    font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-#Actinoids, #Lanthanoids {
-  grid-column-start: 4;
+body {
+    width: 90%;
+    width: 90vw;
+    margin: 1vh auto;
+    color: black;
 }
 
-.grid-container .grid-bottom {
-  margin-bottom: 10px;
+h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #FFF;
 }
 
-.sBlock {
-  background-color: #ffff00aa;
+.elements {
+    font-size: 1.15vw;
+    width: 70%;
+    float: left;
 }
 
-.pBlock {
-  background-color: #6699ffaa;
+.key {
+    display: none;
 }
 
-.dBlock {
-  background-color: #cc6666;
+.row {
+    display: flex;
+    text-align: center;
+    justify-content: space-around;
+}
+
+.f-block .row {
+    justify-content: flex-end;
+}
+
+.element {
+    display: flex;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    flex: 5vw;
+    color: black;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    margin: 1px;
+    text-decoration: none;
+    transition: background-color 0.2s, transform 0.2s;
+    aspect-ratio: 1;
+}
+
+.element:hover {
+    box-shadow: 2px 2px 5px;
+    transform: scale(1.1);
+
+}
+
+.element.clicked {
+    box-shadow: 2px 2px 5px;
+    transform: scale(1.2);
+}
+
+.description {
+    display: none;
+}
+
+.description:target {
+    display: block;
+}
+
+.key {
+    display: block;
+    padding: 0;
+    width: 60%;
+    max-width: 650px;
+    list-style-type: none;
+    color: #fff;
+    line-height: 1.8;
+    font-weight: normal;
+}
+
+.key li {
+    display: inline-block;
+    margin: 0 .2rem;
+    position: relative;
+    padding-left: 20px;
+    cursor: pointer;
+}
+
+.key li:before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(0, -50%);
+    width: 16px;
+    height: 16px;
+}
+
+.description {
+    padding: 1em;
+    margin: 2em 0;
+    text-overflow: ellipsis;
+}
+
+.description h2 {
+    margin: 0;
+}
+
+.description a {
+    color: #1d2441;
+    text-decoration: none;
+}
+
+.description a:visited {
+    color: #3C4C88;
+}
+
+.description a:hover,
+.description a:focus {
+    color: #3C4C88;
+    text-decoration: underline;
+}
+
+.description .moz-link {
+    padding-left: 24px;
+    position: relative;
+    display: block;
+    background: url("moz.png") no-repeat left center;
+    word-break: break-word;
+}
+
+.element.empty-element {
+    border-style: none;
+}
+
+.element.group-12 {
+    background-color: #6480ba;
+}
+
+.element.group-12:hover {
+    transform: scale(1.1);
+    background-color: #6699ff;
+}
+
+.description.group-base {
+    background-color: rgba(225, 170, 173, 0.5);
+}
+
+.description.group-base:hover {
+    background-color: rgba(212, 132, 137, 0.8);
+}
+
+.key li.group-base:before {
+    background-color: #d48489;
+}
+
+.hover-group-base .element {
+    opacity: .5;
+}
+
+.hover-group-base .element.group-base {
+    opacity: 1;
+}
+
+.element.group-transition {
+    background-color: #eb4848;
+}
+
+.element.group-transition:hover {
+    background-color: #f86c6c;
+}
+
+.element.group-nm {
+    background-color: #ffcc00;
+}
+
+.element.group-nm:hover {
+    background-color: #e1deaa;
+}
+
+.element.group-la {
+    background-color: #00cc33;
+}
+
+.element.group-la:hover {
+    background-color: #d7e1aa;
+}
+
+.weed {
+    padding: 2%;
+    width: 25%;
+    display: inline-block;
 }

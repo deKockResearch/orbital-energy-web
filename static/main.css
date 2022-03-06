@@ -40,7 +40,6 @@ h1 {
 
 .element {
     display: flex;
-    font-weight: bold;
     align-items: center;
     justify-content: center;
     flex: 5vw;
@@ -56,7 +55,7 @@ h1 {
     aspect-ratio: 1;
 }
 
-.element:hover {
+.element.ptable:hover {
     box-shadow: 2px 2px 5px;
     transform: scale(1.1);
 
@@ -124,7 +123,7 @@ h1 {
     color: #3C4C88;
 }
 
-.description a:hover,
+.description a .ptable:hover,
 .description a:focus {
     color: #3C4C88;
     text-decoration: underline;
@@ -146,7 +145,7 @@ h1 {
     background-color: #6480ba;
 }
 
-.element.group-12:hover {
+.element.group-12.ptable:hover {
     transform: scale(1.1);
     background-color: #6699ff;
 }
@@ -155,7 +154,7 @@ h1 {
     background-color: rgba(225, 170, 173, 0.5);
 }
 
-.description.group-base:hover {
+.description.group-base.ptable:hover {
     background-color: rgba(212, 132, 137, 0.8);
 }
 
@@ -175,7 +174,7 @@ h1 {
     background-color: #eb4848;
 }
 
-.element.group-transition:hover {
+.element.group-transition.ptable:hover {
     background-color: #f86c6c;
 }
 
@@ -183,7 +182,7 @@ h1 {
     background-color: #ffcc00;
 }
 
-.element.group-nm:hover {
+.element.group-nm.ptable:hover {
     background-color: #e1deaa;
 }
 
@@ -191,12 +190,54 @@ h1 {
     background-color: #00cc33;
 }
 
-.element.group-la:hover {
+.element.group-la.ptable:hover {
     background-color: #d7e1aa;
 }
 
-.weed {
-    padding: 2%;
-    width: 25%;
+.detailedView {
+    padding: 4%;
+    width: 20%;
     display: inline-block;
+    justify-content: space-evenly;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.detailedView .element {
+    flex: 5vw;
+    color: black;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    margin: 1px;
+    text-decoration: none;
+    aspect-ratio: 1;
+}
+
+.detailedView .aNumber {
+    font-size: 2.4vw;
+    margin-bottom: 2%;
+}
+
+.detailedView .aName {
+    font-size: 2.5vw;
+    margin: 2%;
+}
+
+.detailedView .aSymbol {
+    font-size: 4vw;
+    font-weight: bold;
+    margin: 2%;
+}
+
+.detailedView .aMass {
+    font-size: 2vw;
+    margin: 2%;
+}
+
+.textInput {
+    background-color: #00000000;
+    border: solid 1px;
+    border-color: black;
 }

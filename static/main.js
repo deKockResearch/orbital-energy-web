@@ -2,33 +2,67 @@
  * Magic unicorn crap
  */
 
-console.log(elements);
+// global variables
+var elements;
 
+// import elements.json and store in elements
+fetch("static/elements.json")
+    .then(response => {
+        return response.json();
+    }).then(data => elements = data);
+
+/*
+ * Gets element's data from element list based on atomic number
+ * Input: atomic number
+ * Output: element data with thatomic number given
+ */
 function getElementByAtomicNumber(atomicNumber) {
-    return elements.find( ({ number }) => number === atomicNumber ); 
+    return elements.find( element => element.number === atomicNumber );
 }
 
-$(document).ready(function(){
-    $('.element.ptable').click( function() {
-        var elementID = $(this).text().replace(/\D/g,'');
-        var selectedElement = getElementByAtomicNumber(parseInt(elementID));
+/*
+ * Displays a box with the element's data
+ * Input: selected, object clicked on in HTML
+ * Output: element data with thatomic number given
+ */
+function elementBox(selected) {
+    const elementID = $(selected).text().replace(/\D/g, '');
+    const selectedElement = getElementByAtomicNumber(parseInt(elementID));
+    const classList = $(selected).attr('class').split(/\s+/);
+    $(selected).addClass('clicked');
+    $("<div></div>").attr('id', elementID).appendTo('.detailedView');
+    $("#" + elementID).addClass(['element', classList[2]]);
+    $("#" + elementID).append('<span>' +
+        '<div class="aNumber">' + selectedElement.number + '</div>' +
+        '<div class="aSymbol">' + selectedElement.symbol + '</div>' +
+        '<div class="aName">' + selectedElement.name + '</div>' +
+        '<div class="aMass">' + selectedElement.aMass + '</div>' +
+        '<input type="text" class="textInput" value="' + selectedElement.eConfig + '">' +
+        '</span>');
+}
 
-        if ( $(this).hasClass('clicked')) {
+/*
+ * Main function
+ * Check if element is already in display:
+ *      Removes it if present
+ *      Appends it if absent
+ */
+$(function () {
+    $('.element.ptable').on("click", function () {
+        const elementID = $(this).text().replace(/\D/g, '');
+        if ($(this).hasClass('clicked')) {
             $(this).removeClass('clicked');
             $("#" + elementID).remove();
-
-        } else {
-            var classList = $(this).attr('class').split(/\s+/);
-            console.log(classList);
-            $(this).addClass('clicked');
-            $("<div></div>").attr('id', elementID).appendTo('.detailedView');
-            $("#" + elementID).addClass(['element', classList[2]]);
-            $("#" + elementID).append('<span>' + selectedElement.number + '<br />' 
-            + selectedElement.name + '<br />' 
-            + selectedElement.symbol + '<br />' 
-            + selectedElement.aMass + '<br />' 
-            + '<input type="text" class="textInput" value="' + selectedElement.eConfig + '">' + '</span>');
+            if (!$('.detailedView').html().trim().length) {
+                $("<div></div>").attr('id', 'tempText').appendTo('.detailedView');
+                $("#tempText").append('<p>Select an element from the periodic table for more details</p>');
+            }
         }
-       
+        else {
+            if (!($('.detailedView').is(':empty'))) {
+                $('#tempText').remove();
+            }
+            elementBox(this);
+        }
     });
 });

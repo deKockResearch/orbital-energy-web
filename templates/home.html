@@ -5,15 +5,20 @@
     <title>Periodic Table</title>
     <link rel="stylesheet" type="text/css" href={{ url_for( 'static' , filename='main.css' ) }}>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript">
-        var elements = JSON.parse('{{ elements | tojson | safe}}');
-    </script>
-    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script src="{{ url_for('static', filename='main.js') }}" type="module"></script>
 </head>
 
 <body>
     <main>
-        <h1>Periodic table of the elements</h1>
+        <h1>Orbital Energy</h1>
+        <!--
+            Periodic table of elements.
+            Uses a pseudo-grid table to display the elements
+                - Uses CSS to limit the number of <div> per line to 18
+                - Empty elements in place to represent the gaps
+                - "href" tag not in use at the moment
+                - classes give color, hover behavior and selection status
+        -->
         <div class="elements">
             <div class="row">
                 <a href="#html" class="element ptable group-12"><span>H</br>1</span></a>
@@ -215,33 +220,15 @@
                         <a href="#menuitem" class="element ptable group-la"><span>Lr</br>103</span></a>
                         <div class="element empty-element"></div>
             </div>
-            <!--
-        <ul class="key">
-            <li class="group-base">base</li>
-            <li class="group-metadata">metadata</li>
-            <li class="group-sectioning">sectioning</li>
-            <li class="group-text-content">text-content</li>
-            <li class="group-text-semantics">text-semantics</li>
-            <li class="group-media">media</li>
-            <li class="group-embedded">embedded</li>
-            <li class="group-script">script</li>
-            <li class="group-edits">edits</li>
-            <li class="group-table">table</li>
-            <li class="group-forms">forms</li>
-            <li class="group-interactive">interactive</li>
-            <li class="group-web-components">web-components</li>
-        </ul>
-    -->
         </div>
+        <!--
+            Selected element(s) view
+            By default, it shows the message below
+            On element selection, it displays an exploded view of the element
+        -->
         <div class="detailedView">
-            <div id="43" class="element group-nm">
-                <span>
-                    <div class="aNumber">1</div>
-                    <div class="aSymbol">H</div>
-                    <div class="aName">Hydrogen</div>
-                    <div class="aMass">1.008</div>
-                    <input type="text" class="textInput" value="1s1">
-                </span>
+            <div id="tempText">
+                <p>Select an element from the periodic table for more details</p>
             </div>
         </div>
     </main>

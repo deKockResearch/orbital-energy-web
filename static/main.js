@@ -17,7 +17,7 @@ fetch("static/elements.json")
  * Output: element data with thatomic number given
  */
 function getElementByAtomicNumber(atomicNumber) {
-    return elements.find( element => element.number === atomicNumber );
+    return elements.find(element => element.number === atomicNumber);
 }
 
 /*
@@ -39,6 +39,7 @@ function elementBox(selected) {
         '<div class="aMass">' + selectedElement.aMass + '</div>' +
         '<input type="text" class="textInput" value="' + selectedElement.eConfig + '">' +
         '</span>');
+    drawSZLevels(selectedElement.eConfig);
 }
 
 /*
@@ -50,19 +51,33 @@ function elementBox(selected) {
 $(function () {
     $('.element.ptable').on("click", function () {
         const elementID = $(this).text().replace(/\D/g, '');
+
         if ($(this).hasClass('clicked')) {
+            // remove selected element if already displayed
             $(this).removeClass('clicked');
             $("#" + elementID).remove();
+
+            // place instruction text in detailedView div
+            $("<div></div>").attr('id', 'tempText').appendTo('.detailedView');
+            $("#tempText").append('<p>Select an element from the periodic table for more details</p>');
+
+            /* Checks if the selected element box is empty
             if (!$('.detailedView').html().trim().length) {
                 $("<div></div>").attr('id', 'tempText').appendTo('.detailedView');
                 $("#tempText").append('<p>Select an element from the periodic table for more details</p>');
             }
-        }
-        else {
-            if (!($('.detailedView').is(':empty'))) {
-                $('#tempText').remove();
-            }
+            */
+        } else {
+            $('.element.ptable').removeClass('clicked');
+            $('.detailedView').empty();
             elementBox(this);
         }
     });
 });
+
+function drawSZLevels(eConfig) {
+    const configList = eConfig.split(' ');
+    for (var i=0; i < configList.length; i++) {
+        console.log(configList[i]);
+    }
+}

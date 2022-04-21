@@ -39,7 +39,7 @@ function elementBox(selected) {
         '<div class="aMass">' + selectedElement.aMass + '</div>' +
         '<input type="text" class="textInput" value="' + selectedElement.eConfig + '">' +
         '</span>');
-    drawSZLevels(selectedElement.eConfig);
+    configParser(selectedElement.eConfig);
 }
 
 /*
@@ -56,6 +56,8 @@ $(function () {
             // remove selected element if already displayed
             $(this).removeClass('clicked');
             $("#" + elementID).remove();
+            $('.energyLevels').empty();
+
 
             // place instruction text in detailedView div
             $("<div></div>").attr('id', 'tempText').appendTo('.detailedView');
@@ -70,14 +72,54 @@ $(function () {
         } else {
             $('.element.ptable').removeClass('clicked');
             $('.detailedView').empty();
+            $('.energyLevels').empty();
             elementBox(this);
         }
     });
 });
 
-function drawSZLevels(eConfig) {
+function configParser(eConfig) {
+
+    // variables used in for loop
+    var eCount;
+    var orbital;
+    var subShell;
+    var imgCount;
+
+    // change eConfig into a list
     const configList = eConfig.split(' ');
-    for (var i=0; i < configList.length; i++) {
-        console.log(configList[i]);
+
+    // loop back to front
+    for (var i = configList.length; i > 0; i--) {
+        eCount = parseInt(configList[i - 1].substr(2));
+        orbital = configList[i - 1].substr(0, 2);
+        subShell = orbital.substr(1);
+        console.log(subShell);
+        switch (subShell) {
+            case "s":
+                imgCount = 1;
+                break;
+            case "p":
+                imgCount = 3;
+                break;
+            case "d":
+                imgCount = 5;
+            case "f":
+                break;
+        }
+        drawSZLevel(imgCount, eCount, orbital);
     }
 }
+
+function drawSZLevel(imgCount, eCount, orbital) {
+    $('<div>', { class: 'orbital', id: orbital}).appendTo('.energyLevels');
+
+    for (var i = 0; i < imgCount; i++) {
+        $("#" + orbital).append("<img src=/static/symbol.png ></img>")
+    }
+    $("#" + orbital).append('<p>' + orbital + '</p>')
+}
+
+$("#hide").on("click", function() {
+    $('.energyLevels').toggle();
+});

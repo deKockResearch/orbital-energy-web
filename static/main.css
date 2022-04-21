@@ -18,6 +18,15 @@ h1 {
     color: #FFF;
 }
 
+.wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.innerTop {
+    flex-direction: row;
+}
+
 .elements {
     font-size: 1.15vw;
     width: 70%;
@@ -64,77 +73,6 @@ h1 {
 .element.clicked {
     box-shadow: 2px 2px 5px;
     transform: scale(1.2);
-}
-
-.description {
-    display: none;
-}
-
-.description:target {
-    display: block;
-}
-
-.key {
-    display: block;
-    padding: 0;
-    width: 60%;
-    max-width: 650px;
-    list-style-type: none;
-    color: #fff;
-    line-height: 1.8;
-    font-weight: normal;
-}
-
-.key li {
-    display: inline-block;
-    margin: 0 .2rem;
-    position: relative;
-    padding-left: 20px;
-    cursor: pointer;
-}
-
-.key li:before {
-    content: '';
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translate(0, -50%);
-    width: 16px;
-    height: 16px;
-}
-
-.description {
-    padding: 1em;
-    margin: 2em 0;
-    text-overflow: ellipsis;
-}
-
-.description h2 {
-    margin: 0;
-}
-
-.description a {
-    color: #1d2441;
-    text-decoration: none;
-}
-
-.description a:visited {
-    color: #3C4C88;
-}
-
-.description a .ptable:hover,
-.description a:focus {
-    color: #3C4C88;
-    text-decoration: underline;
-}
-
-.description .moz-link {
-    padding-left: 24px;
-    position: relative;
-    display: block;
-    background: url("moz.png") no-repeat left center;
-    word-break: break-word;
 }
 
 .element.empty-element {
@@ -240,4 +178,21 @@ h1 {
     background-color: #00000000;
     border: solid 1px;
     border-color: black;
+}
+
+.energyLevels {
+    display: inline-block;
+    margin: auto;
+    width: 50%;
+    text-align: center;
+}
+
+.orbital {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.energyLevels img {
+    width: 8%;
+    aspect-ratio: 1;
 }

@@ -122,4 +122,24 @@ function drawSZLevel(imgCount, eCount, orbital) {
 
 $("#hide").on("click", function() {
     $('.energyLevels').toggle();
+    drawMatrix();
 });
+
+function drawMatrix() {
+    const eLevels = ["1s","2s","2p","3s","3p","4s","3d","4p"]
+    var text;
+    for (var i = 0; i <= eLevels.length; i++) {
+        for (var j = 0; j <= eLevels.length; j++){
+            if (j == 0 && i == 0) {
+                text = "lol empty";
+            } else if (i == 0) {
+                text = eLevels[j-1];
+            } else if (j == 0) {
+                text = eLevels[i-1];
+            } else {
+                text = 'matrix[' + i + '][' + j +  ']';
+            }
+            console.log(text);
+        }
+    }
+}

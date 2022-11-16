@@ -75,15 +75,15 @@ h1 {
     transform: scale(1.2);
 }
 
-.element.empty-element {
+.empty-element {
     border-style: none;
 }
 
-.element.group-12 {
+.group-12 {
     background-color: #6480ba;
 }
 
-.element.group-12.ptable:hover {
+.group-12.ptable:hover {
     transform: scale(1.1);
     background-color: #6699ff;
 }
@@ -108,27 +108,27 @@ h1 {
     opacity: 1;
 }
 
-.element.group-transition {
+.group-transition {
     background-color: #eb4848;
 }
 
-.element.group-transition.ptable:hover {
+.group-transition.ptable:hover {
     background-color: #f86c6c;
 }
 
-.element.group-nm {
+.group-nm {
     background-color: #ffcc00;
 }
 
-.element.group-nm.ptable:hover {
+.group-nm.ptable:hover {
     background-color: #e1deaa;
 }
 
-.element.group-la {
+.group-la {
     background-color: #00cc33;
 }
 
-.element.group-la.ptable:hover {
+.group-la.ptable:hover {
     background-color: #d7e1aa;
 }
 
@@ -136,26 +136,24 @@ h1 {
     padding: 4%;
     width: 20%;
     display: inline-block;
-    justify-content: space-evenly;
     font-family: 'Times New Roman', Times, serif;
 }
 
-.detailedView .element {
-    flex: 5vw;
+.detailedView .showcase {
+    text-align: center;
     color: black;
     box-sizing: border-box;
     border-radius: 3px;
     border-width: 1px;
     border-style: solid;
     border-color: black;
-    margin: 1px;
     text-decoration: none;
     aspect-ratio: 1;
 }
 
 .detailedView .aNumber {
     font-size: 2.4vw;
-    margin-bottom: 2%;
+    margin-top: 7%;
 }
 
 .detailedView .aName {
@@ -195,4 +193,92 @@ h1 {
 .energyLevels img {
     width: 8%;
     aspect-ratio: 1;
+}
+
+/* Component Needs */
+@import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700);
+@import url(https://fonts.googleapis.com/css?family=Raleway:100,400,700);
+.pc-tab > input,
+.pc-tab section > div {
+  display: none;
+}
+
+#tab1:checked ~ section .tab1,
+#tab2:checked ~ section .tab2,
+#tab3:checked ~ section .tab3 {
+  display: block;
+}
+
+#tab1:checked ~ nav .tab1,
+#tab2:checked ~ nav .tab2,
+#tab3:checked ~ nav .tab3 {
+  color: red;
+}
+
+.pc-tab {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.pc-tab ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pc-tab ul li label {
+  font-family: "Raleway";
+  float: left;
+  padding: 15px 25px;
+  border: 1px solid #ddd;
+  border-bottom: 0;
+  background: #eeeeee;
+  color: #444;
+}
+.pc-tab ul li label:hover {
+  background: #dddddd;
+}
+.pc-tab ul li label:active {
+  background: #ffffff;
+}
+.pc-tab ul li:not(:last-child) label {
+  border-right-width: 0;
+}
+.pc-tab section {
+  font-family: "Droid Serif";
+  clear: both;
+}
+.pc-tab section div {
+  padding: 20px;
+  width: 100%;
+  border: 1px solid #ddd;
+  background: #fff;
+  line-height: 1.5em;
+  letter-spacing: 0.3px;
+  color: #444;
+}
+.pc-tab section div h2 {
+  margin: 0;
+  font-family: "Raleway";
+  letter-spacing: 1px;
+  color: #34495e;
+}
+
+#tab1:checked ~ nav .tab1 label,
+#tab2:checked ~ nav .tab2 label,
+#tab3:checked ~ nav .tab3 label {
+  background: white;
+  color: #111;
+  position: relative;
+}
+#tab1:checked ~ nav .tab1 label:after,
+#tab2:checked ~ nav .tab2 label:after,
+#tab3:checked ~ nav .tab3 label:after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: #ffffff;
+  left: 0;
+  bottom: -1px;
 }

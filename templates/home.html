@@ -228,15 +228,44 @@
             By default, it shows the message below
             On element selection, it displays an exploded view of the element
         -->
-                <div class="detailedView">
+                <div class="detailedView" id="details">
                     <div id="tempText">
                         <p>Select an element from the periodic table for more details</p>
                     </div>
                 </div>
             </div>
-            <div class="energyLevels">
+            <div class="energyLevels" id="energyLevels"></div>
+
+            <button id="hide" type="submit">Show/Hide</button>
+            <div class="pc-tab">
+                <input checked="checked" id="tab1" type="radio" name="pct" />
+                <input id="tab2" type="radio" name="pct" />
+                <input id="tab3" type="radio" name="pct" />
+                <nav>
+                    <ul>
+                        <li class="tab1">
+                            <label for="tab1">First Tab</label>
+                        </li>
+                        <li class="tab2">
+                            <label for="tab2">Second Tab</label>
+                        </li>
+                        <li class="tab3">
+                            <label for="tab3">Third Tab</label>
+                        </li>
+                    </ul>
+                </nav>
+                <section>
+                    <div class="tab1" id="matrix-1">
+                    </div>
+                    <div class="tab2" id="matrix-2">
+                    </div>
+                    <div class="tab3" id="matrix-3">
+                    </div>
+                </section>
             </div>
-            <button id="hide" type="submit" >Show/Hide</button>
+
+
+
         </div>
 
     </main>

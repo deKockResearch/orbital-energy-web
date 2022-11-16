@@ -830,6 +830,24 @@ const elements = [
         eConfig: "",
     },
 ];
+const faussurierMatrix = [
+    [0.31, 0.0135, 0.0003, 0.0, 0.0, 0.0, 0.0],
+    [0.7388, 0.3082, 0.2522, 0.0, 0.0, 0.0, 0.0],
+    [0.9461, 0.3481, 0.3495, 0.0392, 0.021, 0.0007, 0.0097],
+    [0.9511, 0.8511, 0.648, 0.3106, 0.2496, 0.1676, 0.0477],
+    [0.9696, 0.855, 0.7916, 0.3002, 0.3136, 0.3226, 0.0513],
+    [0.9987, 0.9865, 0.9413, 0.4847, 0.323, 0.3786, 0.0743],
+    [0.934, 0.7502, 0.85, 0.6718, 0.6068, 0.6547, 0.2983],
+];
+const mendozaMatrix = [
+    [0.31, 0.0268, 0.0047, 0.0046, 0.0, 0.0, 0.0],
+    [0.6874, 0.2761, 0.2686, 0.2663, 0.0136, 0.0012, 0.0068],
+    [0.9282, 0.3264, 0.3465, 0.3398, 0.0365, 0.0066, 0.0229],
+    [0.9312, 0.5774, 0.5652, 0.5651, 0.2604, 0.1751, 0.0718],
+    [0.9457, 0.8394, 0.7401, 0.7373, 0.3122, 0.3211, 0.0876],
+    [0.9938, 0.9894, 0.9393, 0.9367, 0.3189, 0.3773, 0.095],
+    [0.9462, 0.8092, 0.7443, 0.7282, 0.5256, 0.6104, 0.3019],
+];
 /*
  * Gets element's data from element list based on atomic number
  * Input: atomic number
@@ -945,9 +963,6 @@ function elementBox(selected) {
     // assign text and value to input
     textInput.type = "text";
     textInput.value = selectedElement.eConfig;
-    if (document.getElementById("tab3").getAttribute("checked") == "checked") {
-        textInput.readOnly = true;
-    }
     // append elements
     div.appendChild(aNumber);
     div.appendChild(aSymbol);
@@ -1001,10 +1016,7 @@ function drawSZLevel(imgCount, eCount, orbital) {
 }
 function drawMatrix(id, editable) {
     let tableLocation = document.getElementById(id);
-    //let tableRow = document.createElement("tr");
-    //let tableHeader = document.createElement("th");
-    //let tableData = document.createElement("td");
-    const eLevels = ["1s", "2s", "2p", "3s", "3p", "4s", "3d", "4p"];
+    const eLevels = ["1s", "2s", "2p", "3s", "3p", "3d", "4s"];
     for (let i = 0; i <= eLevels.length; i++) {
         let tableRow = document.createElement("tr");
         for (let j = 0; j <= eLevels.length; j++) {
@@ -1028,8 +1040,16 @@ function drawMatrix(id, editable) {
                 else {
                     tableData.contentEditable = "false";
                 }
-                tableData.textContent = "0.01";
-                //$("#matrix").append('<td contenteditable="true">matrix[' + i + '][' + j +  '] </td>');
+                console.log(id);
+                if (id === "matrix-1") {
+                    tableData.textContent = faussurierMatrix[i - 1][j - 1].toString();
+                }
+                else if (id === "matrix-2") {
+                    tableData.textContent = mendozaMatrix[i - 1][j - 1].toString();
+                }
+                else {
+                    tableData.textContent = "0.01";
+                }
                 tableRow.appendChild(tableData);
             }
         }
@@ -1044,5 +1064,12 @@ function drawMatrix(id, editable) {
  * Unable to change electron config if matrix 1 or 2 is selected
  * Matrix beautification
  * Get num electrons in each orbital
- */ 
+ * Invalid electron configuration
+ *
+ * Questions for prof:
+ * Clarification on equations - relationship btn J and K terms, and why they don't show up in total energy equation
+ * alpha beta name?
+ * Display canonical orbital energy?
+ * Link to how the matrices were generated?
+ */
 //# sourceMappingURL=main.js.map

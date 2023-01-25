@@ -4,7 +4,13 @@
 <head>
     <title>Periodic Table</title>
     <link rel="stylesheet" type="text/css" href={{ url_for( 'static' , filename='main.css' ) }}>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "p5": "./node_modules/p5/lib/p5.js"
+            }
+        }
+    </script>
     <script src="{{ url_for('static', filename='main.js') }}" type="module"></script>
 </head>
 
@@ -237,35 +243,32 @@
             <div class="energyLevels" id="energyLevels"></div>
 
             <button id="hide" type="submit">Show/Hide</button>
-            <div class="pc-tab">
-                <input checked="checked" id="tab1" type="radio" name="pct" />
-                <input id="tab2" type="radio" name="pct" />
-                <input id="tab3" type="radio" name="pct" />
-                <nav>
-                    <ul>
-                        <li class="tab1">
-                            <label for="tab1">Faussurier</label>
-                        </li>
-                        <li class="tab2">
-                            <label for="tab2">Mendoza</label>
-                        </li>
-                        <li class="tab3">
-                            <label for="tab3">Third Tab</label>
-                        </li>
-                    </ul>
-                </nav>
-                <section>
-                    <div class="tab1" id="matrix-1">
-                    </div>
-                    <div class="tab2" id="matrix-2">
-                    </div>
-                    <div class="tab3" id="matrix-3">
-                    </div>
-                </section>
+
+            <div id="matrices">
+                <div class="matrix">
+                    <h3>Faussurier</h3>
+                    <div id="matrix-1"></div>
+                </div>
+                <div class="matrix">
+                    <h3>Mendoza</h3>
+                    <div id="matrix-2"></div>
+                </div>
+                <div class="matrix">
+                    <h3>Custom</h3>
+                    <div id="matrix-3"></div>
+                </div>
             </div>
+            <div id="eConfigInputBox">
+                <input type="text" id="eConfigInput"></input>
+            </div>
+            <select name="matrixSelector" id="matrixSelector">
+                <option value="Faussurier">Faussurier</option>
+                <option value="Mendoza">Mendoza</option>
+                <option value="Custom">Custom</option>
+            </select>
+            <div id="eLevelsID">
 
-
-
+            </div>
         </div>
 
     </main>

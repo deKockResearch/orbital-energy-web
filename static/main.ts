@@ -2,6 +2,9 @@
  *
  *
  */
+import {} from "p5/global";
+import * as p5 from "p5";
+
 const elements = [
   {
     name: "Hydrogen",
@@ -893,6 +896,8 @@ window.addEventListener("load", () => {
   drawMatrix("matrix-1", false);
   drawMatrix("matrix-2", false);
   drawMatrix("matrix-3", true);
+
+  P5Stuff();
 });
 
 /*
@@ -951,6 +956,12 @@ function elementBox(selected): void {
   const elementID = selected.textContent.replace(/\D/g, "");
   const selectedElement = getElementByAtomicNumber(parseInt(elementID));
 
+  // temporary spot to update eConfigInput
+  const eConfigInput = <HTMLInputElement>(
+    document.getElementById("eConfigInput")
+  );
+  eConfigInput.value = selectedElement.eConfig;
+
   // add clicked class to element
   selected.classList.add("clicked");
 
@@ -960,7 +971,7 @@ function elementBox(selected): void {
   let aSymbol = document.createElement("div");
   let aName = document.createElement("div");
   let aMass = document.createElement("div");
-  let textInput = document.createElement("input");
+  let textInput = document.createElement("div");
 
   // assign classes to elements
   div.classList.add("showcase", selected.classList[2]);
@@ -975,10 +986,7 @@ function elementBox(selected): void {
   aSymbol.textContent = selectedElement.symbol;
   aName.textContent = selectedElement.name;
   aMass.textContent = String(selectedElement.aMass);
-
-  // assign text and value to input
-  textInput.type = "text";
-  textInput.value = selectedElement.eConfig;
+  textInput.textContent = selectedElement.eConfig;
 
   // append elements
   div.appendChild(aNumber);
@@ -1076,6 +1084,98 @@ function drawMatrix(id, editable): void {
     }
     tableLocation.appendChild(tableRow);
   }
+}
+
+// P5 stuff - put in separate file!!!!!!!!!
+function P5Stuff() {
+  class SZlevel {
+    constructor() {}
+
+    makeOrbital(eCount, center, lineLength) {
+      // main orbital line
+      line(
+        center[0] - lineLength / 2,
+        center[1],
+        center[0] + lineLength / 2,
+        center[1]
+      );
+
+      if (eCount >= 1) {
+        // first electron arrow
+        line(
+          center[0] - lineLength / 6,
+          center[1] - lineLength / 2,
+          center[0] - lineLength / 6,
+          center[1] + lineLength / 2
+        );
+        line(
+          center[0] - lineLength / 6,
+          center[1] - lineLength / 2,
+          center[0] - (5 * lineLength) / 12,
+          center[1] - lineLength / 6
+        );
+      }
+      if (eCount === 2) {
+        // second electron arrow
+        line(
+          center[0] + lineLength / 6,
+          center[1] - lineLength / 2,
+          center[0] + lineLength / 6,
+          center[1] + lineLength / 2
+        );
+        line(
+          center[0] + lineLength / 6,
+          center[1] + lineLength / 2,
+          center[0] + (5 * lineLength) / 12,
+          center[1] + lineLength / 6
+        );
+      }
+    }
+
+    makeLevel(orbName, center, lineLength) {
+      if (orbName.charAt(1) === "s") {
+        // 1s2
+        this.makeOrbital(Number(orbName.slice(2)), center, lineLength);
+      } else if (orbName.charAt(1) === "p") {
+        // draw three lines and then populate it based off the electrons in the orbital
+        let eLoc = [0, 0, 0];
+        let eCount = Number(orbName.slice(2));
+        for (let i = 0; eCount > 0; i++) {
+          eLoc[i % 3] += 1;
+          eCount--;
+        }
+
+        this.makeOrbital(eLoc[0], center, lineLength);
+        this.makeOrbital(eLoc[1], [center[0] + 125, center[1]], lineLength);
+        this.makeOrbital(eLoc[2], [center[0] + 250, center[1]], lineLength);
+      } else {
+        console.log("Unsupported orbital type");
+      }
+    }
+  }
+
+  let sketch = (p: p5) => {
+    let h = 800;
+    let w = 800;
+    p.setup = () => {
+      p.createCanvas(w, h);
+    };
+    p.draw = () => {
+      p.background(0);
+      let newSZLevel = new SZlevel();
+      let eConfig = "1s1 2s1 3s2";
+      let lineLength = 100;
+      let centerP = [w / 2, h / 2];
+      let eList = eConfig.split(" ");
+
+      for (let i = 0; i < eList.length; i++) {
+        newSZLevel.makeLevel(eList[i], centerP, lineLength);
+        centerP = [w / 2, centerP[1] - (lineLength * 5) / 4];
+      }
+    };
+  };
+  console.log('P5!');
+  new p5(sketch, document.getElementById("eLevelsID"));
 }
 
 /* TO DO LIST!

@@ -235,35 +235,46 @@
             </div>
             <div class="energyLevels" id="energyLevels"></div>
 
-            <button id="hide" type="submit">Show/Hide</button>
-
+            <!--<button id="hide" type="submit">Show/Hide</button>-->
+            <select name="matrixSelector" id="matrixSelector">
+                <option value="dynamic23Matrix">Dynamic 2, 3</option>
+                <!--<option value="Mendoza">Mendoza</option>-->
+                <option value="customMatrix">Custom</option>
+            </select>
             <div id="matrices">
                 <div class="matrix">
-                    <h3>Faussurier</h3>
-                    <div id="matrix-1"></div>
+                    <div id="matrix-grid"></div>
                 </div>
+                <!--
                 <div class="matrix">
                     <h3>Mendoza</h3>
                     <div id="matrix-2"></div>
                 </div>
+            
                 <div class="matrix">
                     <h3>Custom</h3>
                     <div id="matrix-3"></div>
-                </div>
+                </div>-->
             </div>
             <div id="eConfigInputBox">
                 <input type="text" id="eConfigInput"></input>
             </div>
-            <select name="matrixSelector" id="matrixSelector">
-                <option value="Faussurier">Faussurier</option>
-                <option value="Mendoza">Mendoza</option>
-                <option value="Custom">Custom</option>
-            </select>
-            <div id="eLevelsID">
-
+            <div id="energy-box" style="border: 1px black solid;">
+                <h3>Calculated energy in
+                    <select name="unitSelector" id="unitSelector">
+                        <option value="hr">hartrees (hr)</option>
+                        <option value="Ry">rydbergs (Ry)</option>
+                        <option value="eV">electron volts (eV)</option>
+                        <option value="J">joules (J)</option>
+                        <option value="Cal">calories (Cal)</option>
+                    </select>
+                </h3>
+                <div id="eLevelsID"></div>
+                <div id="tvTable"></div>
+                <div id="vijTable"></div>
+                <div> Total: <span id="total-energy"></span></div>
             </div>
         </div>
-
     </main>
 </body>
 

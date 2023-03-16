@@ -3,13 +3,18 @@
  *
  */
 import { elements } from "./elements.js";
-import { faussurierMatrix, mendozaMatrix } from "./matrices.js";
+import { dynamic23Matrix, customMatrix, } from "./matrices.js";
 import { drawDiagram } from "./energyDiagramsDisplay.js";
+import { totalOrbitalEnergy, energyComponents } from "./orbitalEnergy.js";
 /*
  * Gets element's data from element list based on atomic number
  * Input: atomic number
  * Output: element data with the atomic number given
  */
+// Global variables
+let selectedMatrix;
+let selectedElement;
+let eConfigInput;
 function getElementByAtomicNumber(atomicNumber) {
     return elements.find((element) => element.number === atomicNumber);
 }
@@ -19,9 +24,18 @@ window.addEventListener("load", () => {
     for (let i = 0; i < pTableElements.length; i++) {
         pTableElements[i].addEventListener("click", toggleElement);
     }
-    drawMatrix("matrix-1", false);
-    drawMatrix("matrix-2", false);
-    drawMatrix("matrix-3", true);
+    const matrixSelect = document.getElementById("matrixSelector");
+    matrixSelect.addEventListener("change", () => {
+        document.getElementById("matrix-grid").replaceChildren();
+        drawMatrix("matrix-grid");
+        calculateEnergy();
+    });
+    const unitSelect = document.getElementById("unitSelector");
+    unitSelect.addEventListener("change", () => {
+        calculateEnergy();
+    });
+    drawMatrix("matrix-grid");
+    //drawMatrix("matrix-2", false);
 });
 /*
  * Main function
@@ -31,6 +45,8 @@ window.addEventListener("load", () => {
  */
 function toggleElement(e) {
     var _a;
+    document.getElementById("tvTable").replaceChildren();
+    document.getElementById("total-energy").textContent = "";
     let target = e.target.nodeName === "A"
         ? e.target
         : e.target.parentElement;
@@ -40,6 +56,7 @@ function toggleElement(e) {
         target.classList.remove("clicked");
         document.getElementById("details").replaceChildren();
         document.getElementById("energyLevels").replaceChildren();
+        document.getElementById("eLevelsID").replaceChildren();
         // place instruction text in detailedView div
         let div = document.createElement("div");
         div.id = "tempText";
@@ -48,12 +65,6 @@ function toggleElement(e) {
             "Select an element from the periodic table for more details";
         div.appendChild(tempText);
         document.getElementById("details").appendChild(div);
-        /* Checks if the selected element box is empty
-                  if (!$('.detailedView').html().trim().length) {
-                      $("<div></div>").attr('id', 'tempText').appendTo('.detailedView');
-                      $("#tempText").append('<p>Select an element from the periodic table for more details</p>');
-                  }
-                  */
     }
     else {
         const pTableElements = document.getElementsByClassName("element ptable");
@@ -63,6 +74,7 @@ function toggleElement(e) {
         document.getElementById("details").replaceChildren();
         (_a = document.getElementById("energyLevels")) === null || _a === void 0 ? void 0 : _a.replaceChildren();
         elementBox(target);
+        calculateEnergy();
     }
 }
 /*
@@ -73,9 +85,9 @@ function toggleElement(e) {
 function elementBox(selected) {
     // retrieve element information
     const elementID = selected.textContent.replace(/\D/g, "");
-    const selectedElement = getElementByAtomicNumber(parseInt(elementID));
+    selectedElement = getElementByAtomicNumber(parseInt(elementID));
     // temporary spot to update eConfigInput
-    const eConfigInput = (document.getElementById("eConfigInput"));
+    eConfigInput = document.getElementById("eConfigInput");
     eConfigInput.value = selectedElement.eConfig;
     // add clicked class to element
     selected.classList.add("clicked");
@@ -107,11 +119,15 @@ function elementBox(selected) {
     div.appendChild(textInput);
     document.getElementById("details").appendChild(div);
     //configParser(selectedElement.eConfig);
-    drawDiagram(selectedElement.eConfig);
 }
-function drawMatrix(id, editable) {
+function drawMatrix(id) {
     let tableLocation = document.getElementById(id);
-    const eLevels = ["1s", "2s", "2p", "3s", "3p", "3d", "4s"];
+    //const eLevels = ["1s", "2s", "2p", "3s", "3p", "3d", "4s"];
+    const eLevels = ["1s", "2s", "2p", "3s", "3p"];
+    const selectedMatrixName = document.getElementById("matrixSelector").value;
+    selectedMatrix =
+        selectedMatrixName === "dynamic23Matrix" ? dynamic23Matrix : customMatrix;
+    const editable = selectedMatrix !== dynamic23Matrix;
     for (let i = 0; i <= eLevels.length; i++) {
         let tableRow = document.createElement("tr");
         for (let j = 0; j <= eLevels.length; j++) {
@@ -135,20 +151,129 @@ function drawMatrix(id, editable) {
                 else {
                     tableData.contentEditable = "false";
                 }
-                console.log(id);
+                /*
                 if (id === "matrix-1") {
-                    tableData.textContent = faussurierMatrix[i - 1][j - 1].toString();
+                  tableData.textContent = dynamic23Matrix[i - 1][j - 1].toString();
+                
+                } else if (id === "matrix-2") {
+                  tableData.textContent = mendozaMatrix[i - 1][j - 1].toString();
+                } else {
+                  tableData.textContent = "0.01";
                 }
-                else if (id === "matrix-2") {
-                    tableData.textContent = mendozaMatrix[i - 1][j - 1].toString();
-                }
-                else {
-                    tableData.textContent = "0.01";
-                }
+                */
+                tableData.textContent = selectedMatrix[i - 1][j - 1].toString();
                 tableRow.appendChild(tableData);
             }
         }
         tableLocation.appendChild(tableRow);
+    }
+}
+function calculateEnergy() {
+    const sigfig = 3;
+    const totalEnergyBox = document.getElementById("total-energy");
+    let totalText = "";
+    const energyResult = totalOrbitalEnergy(eConfigInput.value, selectedMatrix);
+    const unitSelect = document.getElementById("unitSelector").value;
+    if (unitSelect == "hr") {
+        totalText = `${String(energyResult[0].toFixed(sigfig))} hr`;
+    }
+    else if (unitSelect == "Ry") {
+        totalText = `${String((energyResult[0] * 2).toFixed(sigfig))} Ry`;
+    }
+    else if (unitSelect == "eV") {
+        totalText = `${String((energyResult[0] * 27.211386245988).toFixed(sigfig))} eV`;
+    }
+    else if (unitSelect == "J") {
+        totalText = `${String((((energyResult[0] * 4.3597447222071) / 10) ^ 18).toFixed(sigfig))} J`;
+    }
+    else if (unitSelect == "Cal") {
+        totalText = `${String(energyResult[0].toFixed(sigfig))} Cal`;
+    }
+    else {
+        console.log(unitSelect);
+    }
+    totalEnergyBox.textContent = totalText;
+    let convertedEnergy = [];
+    for (let i = 1; i < energyResult.length; i++) {
+        if (unitSelect == "hr") {
+            convertedEnergy.push(`${String(energyResult[i].toFixed(sigfig))} hr`);
+        }
+        else if (unitSelect == "Ry") {
+            convertedEnergy.push(`${String((energyResult[i] * 2).toFixed(sigfig))} Ry`);
+        }
+        else if (unitSelect == "eV") {
+            convertedEnergy.push(`${String((energyResult[i] * 27.211386245988).toFixed(sigfig))} eV`);
+        }
+        else if (unitSelect == "J") {
+            convertedEnergy.push(`${String((((energyResult[i] * 4.3597447222071) / 10) ^ 18).toFixed(sigfig))} J`);
+        }
+        else if (unitSelect == "Cal") {
+            convertedEnergy.push(`${String(energyResult[i].toFixed(sigfig))} Cal`);
+        }
+    }
+    drawDiagram(selectedElement.eConfig, convertedEnergy);
+    energyComponentsTable();
+}
+function energyComponentsTable() {
+    const energyDict = energyComponents(eConfigInput.value, selectedMatrix);
+    const tiValues = energyDict["t_i"];
+    const viValues = energyDict["v_i"];
+    const vijValues = energyDict["v_ij"];
+    let tvLocation = document.getElementById("tvTable");
+    let vijLocation = document.getElementById("vijTable");
+    const eLevels = ["1s", "2s", "2p", "3s", "3p"];
+    // t(i) and v(i) table
+    for (let i = 0; i <= tiValues.length; i++) {
+        let tableRow = document.createElement("tr");
+        for (let j = 0; j <= 2; j++) {
+            let tableData = document.createElement("td");
+            let tableHeader = document.createElement("th");
+            if (j === 0 && i === 0) {
+                tableRow.appendChild(tableData);
+            }
+            else if (j === 0) {
+                tableHeader.textContent = eLevels[i - 1];
+                tableRow.appendChild(tableHeader);
+            }
+            else if (i === 0) {
+                tableHeader.textContent = j === 1 ? "t(i)" : "v(en)";
+                tableRow.appendChild(tableHeader);
+            }
+            else if (j === 1) {
+                console.log(j);
+                tableData.textContent = tiValues[i - 1].toFixed(3).toString();
+                tableRow.appendChild(tableData);
+            }
+            else {
+                tableData.textContent = viValues[i - 1].toFixed(3).toString();
+                tableRow.appendChild(tableData);
+            }
+        }
+        tvLocation.appendChild(tableRow);
+    }
+    // v(i, j) table
+    for (let i = 0; i <= vijValues.length; i++) {
+        let tableRow = document.createElement("tr");
+        for (let j = 0; j <= vijValues.length; j++) {
+            let tableData = document.createElement("td");
+            let tableHeader = document.createElement("th");
+            if (j === 0 && i === 0) {
+                tableRow.appendChild(tableData);
+            }
+            else if (i === 0) {
+                tableHeader.textContent = eLevels[j - 1];
+                tableRow.appendChild(tableHeader);
+            }
+            else if (j === 0) {
+                tableHeader.textContent = eLevels[i - 1];
+                tableRow.appendChild(tableHeader);
+            }
+            else {
+                tableData.textContent = vijValues[i - 1][j - 1].toFixed(3).toString();
+                tableRow.appendChild(tableData);
+            }
+        }
+        vijLocation.appendChild(tableRow);
     }
 }
 /* TO DO LIST!

@@ -1,5 +1,5 @@
 import p5 from "p5";
-export function drawDiagram(eConfig) {
+export function drawDiagram(eConfig, calcEnergy) {
     let sketch = (p) => {
         class SZlevel {
             constructor() { }
@@ -23,7 +23,7 @@ export function drawDiagram(eConfig) {
                     p.line(center[0] + disp, center[1] + unitL / 2, center[0] + 2 * disp, center[1] + (disp * 3) / 2);
                 }
             }
-            makeLevel(orbName, center, unitL) {
+            makeLevel(orbName, center, unitL, energyValue) {
                 if (orbName.charAt(1) === "s") {
                     // 1s2
                     this.makeOrbital(Number(orbName.slice(2)), [center[0] + (unitL * 5) / 4, center[1]], unitL);
@@ -43,7 +43,7 @@ export function drawDiagram(eConfig) {
                 else {
                     console.log("Unsupported orbital type");
                 }
-                p.text(orbName.slice(0, 2), center[0] + unitL * 5, center[1] + unitL / 8);
+                p.text(`${orbName.slice(0, 2)} Energy: ${energyValue}`, center[0] + unitL * 5, center[1] + unitL / 8);
             }
             makeAxis(center, unitL) {
                 let lineStart = [center[0] / 2, center[1]];
@@ -67,12 +67,12 @@ export function drawDiagram(eConfig) {
             let centerP = [w / 2, h / 2];
             let eList = eConfig.split(" ");
             // Set text size
-            p.textSize(unitL / 2);
+            p.textSize(unitL / 3);
             // Create y-axis
             newSZLevel.makeAxis(centerP, unitL);
             // Draw orbitals lowest to highest
             for (let i = 0; i < eList.length; i++) {
-                newSZLevel.makeLevel(eList[i], centerP, unitL);
+                newSZLevel.makeLevel(eList[i], centerP, unitL, calcEnergy[i]);
                 centerP = [w / 2, centerP[1] - (unitL * 5) / 4];
             }
         };

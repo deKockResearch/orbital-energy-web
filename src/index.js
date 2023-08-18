@@ -154,7 +154,7 @@ function drawMatrix(id) {
                 /*
                 if (id === "matrix-1") {
                   tableData.textContent = dynamic23Matrix[i - 1][j - 1].toString();
-                
+
                 } else if (id === "matrix-2") {
                   tableData.textContent = mendozaMatrix[i - 1][j - 1].toString();
                 } else {

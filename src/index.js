@@ -128,19 +128,19 @@ function drawMatrix(id) {
     selectedMatrix =
         selectedMatrixName === "dynamic23Matrix" ? dynamic23Matrix : customMatrix;
     const editable = selectedMatrix !== dynamic23Matrix;
-    for (let i = 0; i <= eLevels.length; i++) {
+    for (let i = 0; i < eLevels.length; i++) {
         let tableRow = document.createElement("tr");
-        for (let j = 0; j <= eLevels.length; j++) {
+        for (let j = 0; j < eLevels.length; j++) {
             let tableData = document.createElement("td");
             let tableHeader = document.createElement("th");
-            if (j == 0 && i == 0) {
+            if (j === 0 && i === 0) {
                 tableRow.appendChild(tableData);
             }
-            else if (i == 0) {
+            else if (i === 0) {
                 tableHeader.textContent = eLevels[j - 1];
                 tableRow.appendChild(tableHeader);
             }
-            else if (j == 0) {
+            else if (j === 0) {
                 tableHeader.textContent = eLevels[i - 1];
                 tableRow.appendChild(tableHeader);
             }
@@ -174,19 +174,19 @@ function calculateEnergy() {
     let totalText = "";
     const energyResult = totalOrbitalEnergy(eConfigInput.value, selectedMatrix);
     const unitSelect = document.getElementById("unitSelector").value;
-    if (unitSelect == "hr") {
+    if (unitSelect === "hr") {
         totalText = `${String(energyResult[0].toFixed(sigfig))} hr`;
     }
-    else if (unitSelect == "Ry") {
+    else if (unitSelect === "Ry") {
         totalText = `${String((energyResult[0] * 2).toFixed(sigfig))} Ry`;
     }
-    else if (unitSelect == "eV") {
+    else if (unitSelect === "eV") {
         totalText = `${String((energyResult[0] * 27.211386245988).toFixed(sigfig))} eV`;
     }
-    else if (unitSelect == "J") {
+    else if (unitSelect === "J") {
         totalText = `${String((((energyResult[0] * 4.3597447222071) / 10) ^ 18).toFixed(sigfig))} J`;
     }
-    else if (unitSelect == "Cal") {
+    else if (unitSelect === "Cal") {
         totalText = `${String(energyResult[0].toFixed(sigfig))} Cal`;
     }
     else {
@@ -195,19 +195,19 @@ function calculateEnergy() {
     totalEnergyBox.textContent = totalText;
     let convertedEnergy = [];
     for (let i = 1; i < energyResult.length; i++) {
-        if (unitSelect == "hr") {
+        if (unitSelect === "hr") {
             convertedEnergy.push(`${String(energyResult[i].toFixed(sigfig))} hr`);
         }
-        else if (unitSelect == "Ry") {
+        else if (unitSelect === "Ry") {
             convertedEnergy.push(`${String((energyResult[i] * 2).toFixed(sigfig))} Ry`);
         }
-        else if (unitSelect == "eV") {
+        else if (unitSelect === "eV") {
             convertedEnergy.push(`${String((energyResult[i] * 27.211386245988).toFixed(sigfig))} eV`);
         }
-        else if (unitSelect == "J") {
+        else if (unitSelect === "J") {
             convertedEnergy.push(`${String((((energyResult[i] * 4.3597447222071) / 10) ^ 18).toFixed(sigfig))} J`);
         }
-        else if (unitSelect == "Cal") {
+        else if (unitSelect === "Cal") {
             convertedEnergy.push(`${String(energyResult[i].toFixed(sigfig))} Cal`);
         }
     }
@@ -223,9 +223,9 @@ function energyComponentsTable() {
     let vijLocation = document.getElementById("vijTable");
     const eLevels = ["1s", "2s", "2p", "3s", "3p"];
     // t(i) and v(i) table
-    for (let i = 0; i <= tiValues.length; i++) {
+    for (let i = 0; i < tiValues.length; i++) {
         let tableRow = document.createElement("tr");
-        for (let j = 0; j <= 2; j++) {
+        for (let j = 0; j < 2; j++) {
             let tableData = document.createElement("td");
             let tableHeader = document.createElement("th");
             if (j === 0 && i === 0) {
@@ -240,7 +240,7 @@ function energyComponentsTable() {
                 tableRow.appendChild(tableHeader);
             }
             else if (j === 1) {
-                console.log(j);
+                // console.log(j);
                 tableData.textContent = tiValues[i - 1].toFixed(3).toString();
                 tableRow.appendChild(tableData);
             }
@@ -252,9 +252,9 @@ function energyComponentsTable() {
         tvLocation.appendChild(tableRow);
     }
     // v(i, j) table
-    for (let i = 0; i <= vijValues.length; i++) {
+    for (let i = 0; i < vijValues.length; i++) {
         let tableRow = document.createElement("tr");
-        for (let j = 0; j <= vijValues.length; j++) {
+        for (let j = 0; j < vijValues.length; j++) {
             let tableData = document.createElement("td");
             let tableHeader = document.createElement("th");
             if (j === 0 && i === 0) {

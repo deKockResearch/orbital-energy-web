@@ -24,7 +24,6 @@ function getElementByAtomicNumber(atomicNumber: number): ElementType {
 
 window.addEventListener("load", () => {
   // periodic table interactions
-  // const pTableElements = document.getElementsByClassName("element ptable");
   const pTableElements = document.querySelectorAll(".clickable > .element.ptable");
   for (let i = 0; i < pTableElements.length; i++) {
     pTableElements[i].addEventListener("click", toggleElement);
@@ -53,8 +52,11 @@ window.addEventListener("load", () => {
  *      Appends it if absent
  */
 function toggleElement(e: Event): void {
+  // Erase tables and values from previously selected element.
   document.getElementById("tvTable")!.replaceChildren();
+  document.getElementById("vijTable")!.replaceChildren();
   document.getElementById("total-energy")!.textContent = "";
+
   const detailsElem = document.getElementById("details")!;
 
   let target =
@@ -261,20 +263,27 @@ function energyComponentsTable() {
   const eLevels = ["1s", "2s", "2p", "3s", "3p"];
 
   // t(i) and v(i) table
-  for (let i = 0; i < tiValues.length; i++) {
+
+  // Use <= because the 1st row (not 0th row) uses 0th element in array,
+  // 2nd rwo uses 1st element in array.
+  for (let i = 0; i <= tiValues.length; i++) {
     let tableRow = document.createElement("tr");
 
     for (let j = 0; j < 2; j++) {
-      let tableData = document.createElement("td");
-      let tableHeader = document.createElement("th");
+      const tableData = document.createElement("td");
 
       if (j === 0 && i === 0) {
+        // Top left corner: empty cell
         tableRow.appendChild(tableData);
-      } else if (j === 0) {
-        tableHeader.textContent = eLevels[i - 1];
-        tableRow.appendChild(tableHeader);
       } else if (i === 0) {
+        // first row, 2nd column
+        const tableHeader = document.createElement("th");
         tableHeader.textContent = j === 1 ? "t(i)" : "v(en)";
+        tableRow.appendChild(tableHeader);
+      } else if (j === 0) {
+        // First column of each row.
+        const tableHeader = document.createElement("th");
+        tableHeader.textContent = eLevels[i - 1];
         tableRow.appendChild(tableHeader);
       } else if (j === 1) {
         tableData.textContent = tiValues[i - 1].toFixed(3).toString();
@@ -288,10 +297,10 @@ function energyComponentsTable() {
   }
 
   // v(i, j) table
-  for (let i = 0; i < vijValues.length; i++) {
+  for (let i = 0; i <= vijValues.length; i++) {
     let tableRow = document.createElement("tr");
 
-    for (let j = 0; j < vijValues.length; j++) {
+    for (let j = 0; j <= vijValues.length; j++) {
       let tableData = document.createElement("td");
       let tableHeader = document.createElement("th");
 

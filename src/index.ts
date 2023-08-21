@@ -24,7 +24,8 @@ function getElementByAtomicNumber(atomicNumber: number): ElementType {
 
 window.addEventListener("load", () => {
   // periodic table interactions
-  const pTableElements = document.getElementsByClassName("element ptable");
+  // const pTableElements = document.getElementsByClassName("element ptable");
+  const pTableElements = document.querySelectorAll(".clickable > .element.ptable");
   for (let i = 0; i < pTableElements.length; i++) {
     pTableElements[i].addEventListener("click", toggleElement);
   }

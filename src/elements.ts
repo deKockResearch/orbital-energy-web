@@ -1,4 +1,12 @@
-export const elements = [
+export interface ElementType {
+    name: string;
+    symbol: string;
+    number: number;
+    aMass: number;
+    eConfig: string;
+}
+
+export const elements: ElementType[] = [
     {
         "name": "Hydrogen",
         "symbol": "H",
@@ -296,7 +304,8 @@ export const elements = [
     {
         "name": "Technetium",
         "symbol": "Tc",
-        "aMass": "(97)",
+        // Was "(97)"
+        "aMass": 97,
         "number": 43,
         "eConfig": "[Kr]4d5 5s2"
     },
@@ -825,4 +834,4 @@ export const elements = [
         "number": 118,
         "eConfig": ""
     }
-]
+];

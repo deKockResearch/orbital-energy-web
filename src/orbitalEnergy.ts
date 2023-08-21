@@ -1,4 +1,4 @@
-export function totalOrbitalEnergy(eConfig, mx) {
+export function totalOrbitalEnergy(eConfig: string, mx: number[][]) {
   const orbitalList = eConfig.split(" ");
   let atomicNumber = 0;
   for (let num = 0; num < orbitalList.length; num++) {
@@ -22,21 +22,26 @@ export function totalOrbitalEnergy(eConfig, mx) {
   return energyArray;
 }
 
-export function energyComponents(eConfig, mx) {
+export function energyComponents(eConfig: string, mx: number[][]) {
   const orbitalList = eConfig.split(" ");
   let atomicNumber = 0;
   for (let num = 0; num < orbitalList.length; num++) {
     atomicNumber += Number(orbitalList[num].slice(2));
   }
   let Zlst = [];
-  let returnDict = {};
-  returnDict["t_i"] = [];
-  returnDict["v_i"] = [];
-  returnDict["v_ij"] = [];
+  let returnDict: {
+    t_i: number[],
+    v_i: number[],
+    v_ij: number[][]
+  } = {
+    t_i: [],
+    v_i: [],
+    v_ij: []
+  };
 
   for (let i = 0; i < orbitalList.length; i++) {
     let n_i = Number(orbitalList[i].charAt(0));
-    let N_i = Number(orbitalList[i].slice(2));
+    // let N_i = Number(orbitalList[i].slice(2));
 
     let Z_i = atomicNumber;
     for (let j = 0; j < orbitalList.length; j++) {
@@ -44,8 +49,8 @@ export function energyComponents(eConfig, mx) {
     }
     Zlst.push(Z_i);
 
-    returnDict["t_i"].push((Z_i * Z_i) / (2 * n_i * n_i));
-    returnDict["v_i"].push(0 - (atomicNumber * Z_i) / (n_i * n_i));
+    returnDict.t_i.push((Z_i * Z_i) / (2 * n_i * n_i));
+    returnDict.v_i.push(0 - (atomicNumber * Z_i) / (n_i * n_i));
   }
 
   /*
@@ -63,20 +68,20 @@ export function energyComponents(eConfig, mx) {
     i++;
   }
   */
-  let n_i = 0;
-  let n_j = 0;
-  let tempArray = [];
+  // let n_i = 0;
+  // let n_j = 0;
+  // let tempArray = [];
 
   for (let i in Zlst) {
-    n_i = Number(orbitalList[i].charAt(0));
-    tempArray = [];
+    const n_i = Number(orbitalList[i].charAt(0));
+    const tempArray: number[] = [];
     for (let j in Zlst) {
-      n_j = Number(orbitalList[j].charAt(0));
+      const n_j = Number(orbitalList[j].charAt(0));
       tempArray.push(
         (Zlst[i] * mx[i][j]) / (n_i * n_i) + (Zlst[j] * mx[j][i]) / (n_j * n_j)
       )
     }
-    returnDict["v_ij"].push(tempArray);
+    returnDict.v_ij.push(tempArray);
   }
   return returnDict;
 }

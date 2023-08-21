@@ -1,11 +1,7 @@
-/*
- *
- *
- */
-import { elements } from "./elements.js";
+import { ElementType, elements } from "./elements";
 import {
-  faussurierMatrix,
-  mendozaMatrix,
+  // faussurierMatrix,
+  // mendozaMatrix,
   dynamic23Matrix,
   customMatrix,
 } from "./matrices.js";
@@ -18,12 +14,12 @@ import { totalOrbitalEnergy, energyComponents } from "./orbitalEnergy.js";
  */
 
 // Global variables
-let selectedMatrix;
-let selectedElement;
+let selectedMatrix: number[][];
+let selectedElement: ElementType;
 let eConfigInput: HTMLInputElement;
 
-function getElementByAtomicNumber(atomicNumber: number) {
-  return elements.find((element) => element.number === atomicNumber);
+function getElementByAtomicNumber(atomicNumber: number): ElementType {
+  return elements.find((element) => element.number === atomicNumber)!;
 }
 
 window.addEventListener("load", () => {
@@ -32,9 +28,9 @@ window.addEventListener("load", () => {
   for (let i = 0; i < pTableElements.length; i++) {
     pTableElements[i].addEventListener("click", toggleElement);
   }
-  const matrixSelect = document.getElementById("matrixSelector");
+  const matrixSelect = document.getElementById("matrixSelector")!;
   matrixSelect.addEventListener("change", () => {
-    document.getElementById("matrix-grid").replaceChildren();
+    document.getElementById("matrix-grid")!.replaceChildren();
     drawMatrix("matrix-grid");
     calculateEnergy();
   });
@@ -56,22 +52,23 @@ window.addEventListener("load", () => {
  *      Appends it if absent
  */
 function toggleElement(e: Event): void {
-  document.getElementById("tvTable").replaceChildren();
-  document.getElementById("total-energy").textContent = "";
+  document.getElementById("tvTable")!.replaceChildren();
+  document.getElementById("total-energy")!.textContent = "";
+  const detailsElem = document.getElementById("details")!;
 
   let target =
     (e.target as HTMLElement).nodeName === "A"
-      ? (e.target as HTMLElement)
-      : (e.target as HTMLElement).parentElement;
-  const elementID = target.textContent!.replace(/\D/g, "");
+      ? (e.target as HTMLElement)!
+      : (e.target as HTMLElement).parentElement!;
+  // const elementID = target.textContent!.replace(/\D/g, "");
 
   if (target.classList.contains("clicked")) {
     // remove selected element if already displayed
     target.classList.remove("clicked");
 
-    document.getElementById("details").replaceChildren();
-    document.getElementById("energyLevels").replaceChildren();
-    document.getElementById("eLevelsID").replaceChildren();
+    detailsElem.replaceChildren();
+    document.getElementById("energyLevels")!.replaceChildren();
+    document.getElementById("eLevelsID")!.replaceChildren();
 
     // place instruction text in detailedView div
     let div = document.createElement("div");
@@ -80,13 +77,13 @@ function toggleElement(e: Event): void {
     tempText.textContent =
       "Select an element from the periodic table for more details";
     div.appendChild(tempText);
-    document.getElementById("details").appendChild(div);
+    detailsElem.appendChild(div);
   } else {
     const pTableElements = document.getElementsByClassName("element ptable");
     for (let i = 0; i < pTableElements.length; i++) {
       pTableElements[i].classList.remove("clicked");
     }
-    document.getElementById("details").replaceChildren();
+    detailsElem.replaceChildren();
     document.getElementById("energyLevels")?.replaceChildren();
     elementBox(target);
     calculateEnergy();
@@ -98,9 +95,9 @@ function toggleElement(e: Event): void {
  * Input: selected, object clicked on in HTML
  * Output: element data with thatomic number given
  */
-function elementBox(selected): void {
+function elementBox(selected: HTMLElement): void {
   // retrieve element information
-  const elementID = selected.textContent.replace(/\D/g, "");
+  const elementID = selected.textContent!.replace(/\D/g, "");
   selectedElement = getElementByAtomicNumber(parseInt(elementID));
 
   // temporary spot to update eConfigInput
@@ -139,12 +136,12 @@ function elementBox(selected): void {
   div.appendChild(aName);
   div.appendChild(aMass);
   div.appendChild(textInput);
-  document.getElementById("details").appendChild(div);
+  document.getElementById("details")!.appendChild(div);
   //configParser(selectedElement.eConfig);
 }
 
-function drawMatrix(id): void {
-  let tableLocation = document.getElementById(id);
+function drawMatrix(id: string): void {
+  let tableLocation = document.getElementById(id)!;
   //const eLevels = ["1s", "2s", "2p", "3s", "3p", "3d", "4s"];
   const eLevels = ["1s", "2s", "2p", "3s", "3p"];
 
@@ -157,17 +154,17 @@ function drawMatrix(id): void {
 
   const editable = selectedMatrix !== dynamic23Matrix;
 
-  for (let i = 0; i <= eLevels.length; i++) {
+  for (let i = 0; i < eLevels.length; i++) {
     let tableRow = document.createElement("tr");
-    for (let j = 0; j <= eLevels.length; j++) {
+    for (let j = 0; j < eLevels.length; j++) {
       let tableData = document.createElement("td");
       let tableHeader = document.createElement("th");
-      if (j == 0 && i == 0) {
+      if (j === 0 && i === 0) {
         tableRow.appendChild(tableData);
-      } else if (i == 0) {
+      } else if (i === 0) {
         tableHeader.textContent = eLevels[j - 1];
         tableRow.appendChild(tableHeader);
-      } else if (j == 0) {
+      } else if (j === 0) {
         tableHeader.textContent = eLevels[i - 1];
         tableRow.appendChild(tableHeader);
       } else {
@@ -180,7 +177,7 @@ function drawMatrix(id): void {
         /*
         if (id === "matrix-1") {
           tableData.textContent = dynamic23Matrix[i - 1][j - 1].toString();
-        
+
         } else if (id === "matrix-2") {
           tableData.textContent = mendozaMatrix[i - 1][j - 1].toString();
         } else {
@@ -197,50 +194,50 @@ function drawMatrix(id): void {
 
 function calculateEnergy(): void {
   const sigfig = 3;
-  const totalEnergyBox = document.getElementById("total-energy");
+  const totalEnergyBox = document.getElementById("total-energy")!;
   let totalText: string = "";
   const energyResult = totalOrbitalEnergy(eConfigInput.value, selectedMatrix);
   const unitSelect = (
     document.getElementById("unitSelector") as HTMLSelectElement
   ).value;
-  if (unitSelect == "hr") {
+  if (unitSelect === "hr") {
     totalText = `${String(energyResult[0].toFixed(sigfig))} hr`;
-  } else if (unitSelect == "Ry") {
+  } else if (unitSelect === "Ry") {
     totalText = `${String((energyResult[0] * 2).toFixed(sigfig))} Ry`;
-  } else if (unitSelect == "eV") {
+  } else if (unitSelect === "eV") {
     totalText = `${String(
       (energyResult[0] * 27.211386245988).toFixed(sigfig)
     )} eV`;
-  } else if (unitSelect == "J") {
+  } else if (unitSelect === "J") {
     totalText = `${String(
       (((energyResult[0] * 4.3597447222071) / 10) ^ 18).toFixed(sigfig)
     )} J`;
-  } else if (unitSelect == "Cal") {
+  } else if (unitSelect === "Cal") {
     totalText = `${String(energyResult[0].toFixed(sigfig))} Cal`;
   } else {
     console.log(unitSelect);
   }
   totalEnergyBox.textContent = totalText;
 
-  let convertedEnergy = [];
+  let convertedEnergy: string[] = [];
   for (let i = 1; i < energyResult.length; i++) {
-    if (unitSelect == "hr") {
+    if (unitSelect === "hr") {
       convertedEnergy.push(`${String(energyResult[i].toFixed(sigfig))} hr`);
-    } else if (unitSelect == "Ry") {
+    } else if (unitSelect === "Ry") {
       convertedEnergy.push(
         `${String((energyResult[i] * 2).toFixed(sigfig))} Ry`
       );
-    } else if (unitSelect == "eV") {
+    } else if (unitSelect === "eV") {
       convertedEnergy.push(
         `${String((energyResult[i] * 27.211386245988).toFixed(sigfig))} eV`
       );
-    } else if (unitSelect == "J") {
+    } else if (unitSelect === "J") {
       convertedEnergy.push(
         `${String(
           (((energyResult[i] * 4.3597447222071) / 10) ^ 18).toFixed(sigfig)
         )} J`
       );
-    } else if (unitSelect == "Cal") {
+    } else if (unitSelect === "Cal") {
       convertedEnergy.push(`${String(energyResult[i].toFixed(sigfig))} Cal`);
     }
   }
@@ -257,16 +254,16 @@ function energyComponentsTable() {
   const viValues = energyDict["v_i"];
   const vijValues = energyDict["v_ij"];
 
-  let tvLocation = document.getElementById("tvTable");
-  let vijLocation = document.getElementById("vijTable");
+  let tvLocation = document.getElementById("tvTable")!;
+  let vijLocation = document.getElementById("vijTable")!;
 
   const eLevels = ["1s", "2s", "2p", "3s", "3p"];
 
   // t(i) and v(i) table
-  for (let i = 0; i <= tiValues.length; i++) {
+  for (let i = 0; i < tiValues.length; i++) {
     let tableRow = document.createElement("tr");
 
-    for (let j = 0; j <= 2; j++) {
+    for (let j = 0; j < 2; j++) {
       let tableData = document.createElement("td");
       let tableHeader = document.createElement("th");
 
@@ -279,7 +276,6 @@ function energyComponentsTable() {
         tableHeader.textContent = j === 1 ? "t(i)" : "v(en)";
         tableRow.appendChild(tableHeader);
       } else if (j === 1) {
-        console.log(j);
         tableData.textContent = tiValues[i - 1].toFixed(3).toString();
         tableRow.appendChild(tableData);
       } else {
@@ -291,10 +287,10 @@ function energyComponentsTable() {
   }
 
   // v(i, j) table
-  for (let i = 0; i <= vijValues.length; i++) {
+  for (let i = 0; i < vijValues.length; i++) {
     let tableRow = document.createElement("tr");
 
-    for (let j = 0; j <= vijValues.length; j++) {
+    for (let j = 0; j < vijValues.length; j++) {
       let tableData = document.createElement("td");
       let tableHeader = document.createElement("th");
 

@@ -1,12 +1,12 @@
 import p5 from "p5";
 
-export function drawDiagram(eConfig: string, calcEnergy : number[]): void {
+export function drawDiagram(eConfig: string, calcEnergy : string[]): void {
   let sketch = (p: p5) => {
     class SZlevel {
       constructor() {}
 
       // Make a singular orbital
-      makeOrbital(eCount, center, unitL) {
+      makeOrbital(eCount: number, center: number[], unitL: number) {
         // main orbital line
         p.line(
           center[0] - unitL / 2,
@@ -64,7 +64,7 @@ export function drawDiagram(eConfig: string, calcEnergy : number[]): void {
         }
       }
 
-      makeLevel(orbName, center, unitL, energyValue) {
+      makeLevel(orbName: string, center: number[], unitL: number, energyValue: string) {
         if (orbName.charAt(1) === "s") {
           // 1s2
           this.makeOrbital(
@@ -93,7 +93,7 @@ export function drawDiagram(eConfig: string, calcEnergy : number[]): void {
             unitL
           );
         } else {
-          console.log("Unsupported orbital type");
+          console.log("Unsupported orbital type: ", orbName.charAt(1));
         }
         p.text(
           `${orbName.slice(0, 2)} Energy: ${energyValue}`,
@@ -102,7 +102,7 @@ export function drawDiagram(eConfig: string, calcEnergy : number[]): void {
         );
       }
 
-      makeAxis(center, unitL) {
+      makeAxis(center: number[], unitL: number) {
         let lineStart = [center[0] / 2, center[1]];
         p.line(
           lineStart[0],
@@ -157,6 +157,7 @@ export function drawDiagram(eConfig: string, calcEnergy : number[]): void {
   };
 
   // Display canvas
-  document.getElementById("eLevelsID").replaceChildren();
-  new p5(sketch, document.getElementById("eLevelsID"));
+  const elevelsIdElem = document.getElementById("eLevelsID")!;
+  elevelsIdElem.replaceChildren();
+  new p5(sketch, elevelsIdElem);
 }

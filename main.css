@@ -295,8 +295,10 @@ h1 {
 #matrices {
     display: flex;
     justify-content: center;
-    padding-top: 2em;
-    padding-bottom: 2em;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin: 8px;
+    border: 1px black solid;
 }
 
 .matrix {
@@ -307,4 +309,8 @@ h1 {
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
+}
+
+#matrixSelector {
+    height: fit-content;
 }

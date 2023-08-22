@@ -1,7 +1,7 @@
 import { ElementType, elements } from "./elements";
 import {
-  // faussurierMatrix,
-  // mendozaMatrix,
+  faussurierMatrix,
+  mendozaMatrix,
   dynamic23Matrix,
   customMatrix,
 } from "./matrices.js";
@@ -110,12 +110,12 @@ function elementBox(selected: HTMLElement): void {
   selected.classList.add("clicked");
 
   // create elements to populate
-  let div = document.createElement("div");
-  let aNumber = document.createElement("div");
-  let aSymbol = document.createElement("div");
-  let aName = document.createElement("div");
-  let aMass = document.createElement("div");
-  let textInput = document.createElement("div");
+  const div = document.createElement("div");
+  const aNumber = document.createElement("div");
+  const aSymbol = document.createElement("div");
+  const aName = document.createElement("div");
+  const aMass = document.createElement("div");
+  const textInput = document.createElement("div");
 
   // assign classes to elements
   div.classList.add("showcase", selected.classList[2]);
@@ -151,14 +151,30 @@ function drawMatrix(id: string): void {
     document.getElementById("matrixSelector") as HTMLSelectElement
   ).value;
 
-  selectedMatrix =
-    selectedMatrixName === "dynamic23Matrix" ? dynamic23Matrix : customMatrix;
+  switch (selectedMatrixName) {
+    case "dynamic23Matrix" :
+      selectedMatrix = dynamic23Matrix;
+      break;
+    case "customMatrix" :
+      selectedMatrix = customMatrix;
+      break;
+    case "faussurierMatrix":
+      selectedMatrix = faussurierMatrix;
+      break;
+    case "mendozaMatrix":
+      selectedMatrix = mendozaMatrix;
+      break;
+    default:
+      console.log("Unknown selected matrix: ", selectedMatrixName);
+  }
 
   const editable = selectedMatrix !== dynamic23Matrix;
 
-  for (let i = 0; i < eLevels.length; i++) {
+  // use <= because always subtracting 1 from the indices, and
+  // 0th column/row are headers.
+  for (let i = 0; i <= eLevels.length; i++) {
     let tableRow = document.createElement("tr");
-    for (let j = 0; j < eLevels.length; j++) {
+    for (let j = 0; j <= eLevels.length; j++) {
       let tableData = document.createElement("td");
       let tableHeader = document.createElement("th");
       if (j === 0 && i === 0) {

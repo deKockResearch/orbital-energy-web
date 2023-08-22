@@ -238,15 +238,16 @@
       <div class="energyLevels" id="energyLevels"></div>
 
       <!--<button id="hide" type="submit">Show/Hide</button>-->
-      <select name="matrixSelector" id="matrixSelector">
-        <option value="dynamic23Matrix">Dynamic 2, 3</option>
-        <!--<option value="Mendoza">Mendoza</option>-->
-        <option value="customMatrix">Custom</option>
-      </select>
       <div id="matrices">
-        <div class="matrix">
+        <select name="matrixSelector" id="matrixSelector">
+          <option value="dynamic23Matrix">Dynamic 2, 3</option>
+          <option value="mendozaMatrix">Mendoza</option>
+          <option value="faussurierMatrix">Faussurier</option>
+          <option value="customMatrix">Custom</option>
+        </select>
+        <span class="matrix">
           <div id="matrix-grid"></div>
-        </div>
+        </span>
         <!--
                 <div class="matrix">
                     <h3>Mendoza</h3>

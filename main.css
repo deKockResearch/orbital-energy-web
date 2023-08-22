@@ -292,23 +292,19 @@ h1 {
     bottom: -1px;
 }
 
-#matrices {
+.horizontal-flex {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     padding-top: 8px;
     padding-bottom: 8px;
     margin: 8px;
     border: 1px black solid;
 }
 
-.matrix {
-    margin: auto;
-    font-size: 1.25em;
-}
-
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
+    font-size: 1.1em;
 }
 
 #matrixSelector {

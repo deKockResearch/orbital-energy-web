@@ -237,28 +237,12 @@
       </div>
       <div class="energyLevels" id="energyLevels"></div>
 
-      <!--<button id="hide" type="submit">Show/Hide</button>-->
-      <div id="matrices">
-        <select name="matrixSelector" id="matrixSelector">
-          <option value="dynamic23Matrix">Dynamic 2, 3</option>
-          <option value="mendozaMatrix">Mendoza</option>
-          <option value="faussurierMatrix">Faussurier</option>
-          <option value="customMatrix">Custom</option>
-        </select>
-        <span class="matrix">
-          <div id="matrix-grid"></div>
-        </span>
-        <!--
-                <div class="matrix">
-                    <h3>Mendoza</h3>
-                    <div id="matrix-2"></div>
-                </div>
-
-                <div class="matrix">
-                    <h3>Custom</h3>
-                    <div id="matrix-3"></div>
-                </div>-->
+      <div class="horizontal-flex">
+          <table id="dynamic23Matrix"></table>
+          <table id="faussurierMatrix"></table>
+          <table id="customMatrix"></table>
       </div>
+
       <div id="eConfigInputBox">
         <input type="text" id="eConfigInput"></input>
       </div>
@@ -274,9 +258,17 @@
         </h3>
         <div id="eLevelsID"></div>
         <h4>tvTable</h4>
-        <div id="tvTable"></div>
+        <div id="tvTables" class="horizontal-flex">
+            <table id="dynamic23TvTable"></table>
+            <table id="faussurierTvTable"></table>
+            <table id="customTvTable"></table>
+        </div>
         <h4>vijTable</h4>
-        <div id="vijTable"></div>
+        <div id="vijTables" class="horizontal-flex">
+            <table id="dynamic23VijTable"></table>
+            <table id="faussurierVijTable"></table>
+            <table id="customVijTable"></table>
+        </div>
         <h4> Total: <span id="total-energy"></span></h4>
       </div>
     </div>

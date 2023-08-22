@@ -1,7 +1,6 @@
 import { ElementType, elements } from "./elements";
 import {
   faussurierMatrix,
-  mendozaMatrix,
   dynamic23Matrix,
   customMatrix,
 } from "./matrices.js";
@@ -14,7 +13,6 @@ import { totalOrbitalEnergy, energyComponents } from "./orbitalEnergy.js";
  */
 
 // Global variables
-let selectedMatrix: number[][];
 let selectedElement: ElementType;
 let eConfigInput: HTMLInputElement;
 
@@ -28,12 +26,7 @@ window.addEventListener("load", () => {
   for (let i = 0; i < pTableElements.length; i++) {
     pTableElements[i].addEventListener("click", toggleElement);
   }
-  const matrixSelect = document.getElementById("matrixSelector")!;
-  matrixSelect.addEventListener("change", () => {
-    document.getElementById("matrix-grid")!.replaceChildren();
-    drawMatrix("matrix-grid");
-    calculateEnergy();
-  });
+
   const unitSelect = document.getElementById(
     "unitSelector"
   ) as HTMLSelectElement;
@@ -41,9 +34,17 @@ window.addEventListener("load", () => {
     calculateEnergy();
   });
 
-  drawMatrix("matrix-grid");
-  //drawMatrix("matrix-2", false);
+  drawMatrices();
 });
+
+function removeTableEntries() {
+  document.getElementById("dynamic23TvTable")!.replaceChildren();
+  document.getElementById("faussurierTvTable")!.replaceChildren();
+  document.getElementById("customTvTable")!.replaceChildren();
+  document.getElementById("dynamic23VijTable")!.replaceChildren();
+  document.getElementById("faussurierVijTable")!.replaceChildren();
+  document.getElementById("customVijTable")!.replaceChildren();
+}
 
 /*
  * Main function
@@ -53,8 +54,7 @@ window.addEventListener("load", () => {
  */
 function toggleElement(e: Event): void {
   // Erase tables and values from previously selected element.
-  document.getElementById("tvTable")!.replaceChildren();
-  document.getElementById("vijTable")!.replaceChildren();
+  removeTableEntries();
   document.getElementById("total-energy")!.textContent = "";
 
   const detailsElem = document.getElementById("details")!;
@@ -142,33 +142,20 @@ function elementBox(selected: HTMLElement): void {
   //configParser(selectedElement.eConfig);
 }
 
-function drawMatrix(id: string): void {
-  let tableLocation = document.getElementById(id)!;
+function drawMatrices(): void {
+  drawMatrix("dynamic23Matrix", dynamic23Matrix);
+  drawMatrix("faussurierMatrix", faussurierMatrix);
+  drawMatrix("customMatrix", customMatrix);
+}
+
+function drawMatrix(id: string, matrix: number[][]): void {
+  let tableElem = document.getElementById(id)!;
   //const eLevels = ["1s", "2s", "2p", "3s", "3p", "3d", "4s"];
   const eLevels = ["1s", "2s", "2p", "3s", "3p"];
 
-  const selectedMatrixName = (
-    document.getElementById("matrixSelector") as HTMLSelectElement
-  ).value;
-
-  switch (selectedMatrixName) {
-    case "dynamic23Matrix" :
-      selectedMatrix = dynamic23Matrix;
-      break;
-    case "customMatrix" :
-      selectedMatrix = customMatrix;
-      break;
-    case "faussurierMatrix":
-      selectedMatrix = faussurierMatrix;
-      break;
-    case "mendozaMatrix":
-      selectedMatrix = mendozaMatrix;
-      break;
-    default:
-      console.log("Unknown selected matrix: ", selectedMatrixName);
-  }
-
-  const editable = selectedMatrix !== dynamic23Matrix;
+  const capElem = document.createElement("caption");
+  capElem.textContent = id;
+  tableElem.appendChild(capElem);
 
   // use <= because always subtracting 1 from the indices, and
   // 0th column/row are headers.
@@ -186,40 +173,25 @@ function drawMatrix(id: string): void {
         tableHeader.textContent = eLevels[i - 1];
         tableRow.appendChild(tableHeader);
       } else {
-        if (editable) {
-          tableData.contentEditable = "true";
-        } else {
-          tableData.contentEditable = "false";
-        }
-
-        /*
-        if (id === "matrix-1") {
-          tableData.textContent = dynamic23Matrix[i - 1][j - 1].toString();
-
-        } else if (id === "matrix-2") {
-          tableData.textContent = mendozaMatrix[i - 1][j - 1].toString();
-        } else {
-          tableData.textContent = "0.01";
-        }
-        */
-        tableData.textContent = selectedMatrix[i - 1][j - 1].toString();
+        tableData.contentEditable = id === 'customMatrix' ? "true" : "false";
+        tableData.textContent = matrix[i - 1][j - 1].toString();
         tableRow.appendChild(tableData);
       }
     }
-    tableLocation.appendChild(tableRow);
+    tableElem.appendChild(tableRow);
   }
 }
 
 function calculateEnergy(): void {
 
   // remove table contents
-  document.getElementById("tvTable")!.replaceChildren();
-  document.getElementById("vijTable")!.replaceChildren();
+  removeTableEntries();
 
   const sigfig = 3;
   const totalEnergyBox = document.getElementById("total-energy")!;
   let totalText: string = "";
-  const energyResult = totalOrbitalEnergy(eConfigInput.value, selectedMatrix);
+  // TODO: FIX ME: don't use dynamic23 every time
+  const energyResult = totalOrbitalEnergy(eConfigInput.value, dynamic23Matrix);
   const unitSelect = (
     document.getElementById("unitSelector") as HTMLSelectElement
   ).value;
@@ -267,18 +239,30 @@ function calculateEnergy(): void {
 
   drawDiagram(selectedElement.eConfig, convertedEnergy);
 
-  energyComponentsTable();
+  energyComponentsTable("dynamic23", dynamic23Matrix);
+  energyComponentsTable("faussurier", faussurierMatrix);
+  energyComponentsTable("custom", customMatrix);
 }
 
-function energyComponentsTable() {
-  const energyDict = energyComponents(eConfigInput.value, selectedMatrix);
+function energyComponentsTable(matrixName: string, matrix: number[][]) {
+  const energyDict = energyComponents(eConfigInput.value, matrix);
 
   const tiValues = energyDict["t_i"];
   const viValues = energyDict["v_i"];
   const vijValues = energyDict["v_ij"];
 
-  let tvLocation = document.getElementById("tvTable")!;
-  let vijLocation = document.getElementById("vijTable")!;
+  const tvTableHTMLId = matrixName + 'TvTable';
+  const vijTableHTMLId = matrixName + 'VijTable';
+
+  const tvTableElem = document.getElementById(tvTableHTMLId)!;
+  const vijTableElem = document.getElementById(vijTableHTMLId)!;
+
+  const capElem = document.createElement("caption");
+  capElem.textContent = matrixName;
+  tvTableElem.appendChild(capElem);
+  const capElem2 = document.createElement("caption");
+  capElem2.textContent = matrixName;
+  vijTableElem.appendChild(capElem2);
 
   const eLevels = ["1s", "2s", "2p", "3s", "3p"];
 
@@ -313,7 +297,7 @@ function energyComponentsTable() {
         tableRow.appendChild(tableData);
       }
     }
-    tvLocation.appendChild(tableRow);
+    tvTableElem.appendChild(tableRow);
   }
 
   // v(i, j) table
@@ -337,7 +321,7 @@ function energyComponentsTable() {
         tableRow.appendChild(tableData);
       }
     }
-    vijLocation.appendChild(tableRow);
+    vijTableElem.appendChild(tableRow);
   }
 }
 

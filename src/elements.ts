@@ -40,7 +40,7 @@ export const elements: ElementType[] = [
         "symbol": "B",
         "aMass": 10.81,
         "number": 5,
-        "eConfig": "1s2 2s2 2p"
+        "eConfig": "1s2 2s2 2p1"
     },
     {
         "name": "Carbon",
@@ -80,9 +80,9 @@ export const elements: ElementType[] = [
     {
         "name": "Sodium",
         "symbol": "Na",
-        "aMass": 14.007,
+        "aMass": 22.990,
         "number": 11,
-        "eConfig": "1s2 2s2 2p6 3s"
+        "eConfig": "1s2 2s2 2p6 3s1"
     },
     {
         "name": "Magnesium",
@@ -96,14 +96,14 @@ export const elements: ElementType[] = [
         "symbol": "Al",
         "aMass": 26.982,
         "number": 13,
-        "eConfig": "1s2 2s2 2p6 3s 3p"
+        "eConfig": "1s2 2s2 2p6 3s2 3p1"
     },
     {
         "name": "Silicon",
         "symbol": "Si",
         "aMass": 28.085,
         "number": 14,
-        "eConfig": "1s2 2s2 2p6 3s 3p2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p2"
     },
     {
         "name": "Phosphorus",
@@ -138,7 +138,7 @@ export const elements: ElementType[] = [
         "symbol": "K",
         "aMass": 39.098,
         "number": 19,
-        "eConfig": "1s2 2s2 2p6 3s2 3p6 4s"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 4s1"
     },
     {
         "name": "Calcium",
@@ -152,7 +152,7 @@ export const elements: ElementType[] = [
         "symbol": "Sc",
         "aMass": 44.956,
         "number": 21,
-        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d 4s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d1 4s2"
     },
     {
         "name": "Titanium",
@@ -173,7 +173,7 @@ export const elements: ElementType[] = [
         "symbol": "Cr",
         "aMass": 51.996,
         "number": 24,
-        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d5 4s"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d5 4s1"
     },
     {
         "name": "Manganese",
@@ -208,7 +208,7 @@ export const elements: ElementType[] = [
         "symbol": "Cu",
         "aMass": 63.546,
         "number": 29,
-        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s1"
     },
     {
         "name": "Zinc",
@@ -222,7 +222,7 @@ export const elements: ElementType[] = [
         "symbol": "Ga",
         "aMass": 69.723,
         "number": 31,
-        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p1"
     },
     {
         "name": "Germanium",
@@ -264,505 +264,504 @@ export const elements: ElementType[] = [
         "symbol": "Rb",
         "aMass": 85.468,
         "number": 37,
-        "eConfig": "[Kr]5s"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 5s1"
     },
     {
         "name": "Strontium",
         "symbol": "Sr",
         "aMass": 87.62,
         "number": 38,
-        "eConfig": "[Kr]5s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 5s2"
     },
     {
         "name": "Yttrium",
         "symbol": "Y",
         "aMass": 88.906,
         "number": 39,
-        "eConfig": "[Kr]4d 5s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d1 5s2"
     },
     {
         "name": "Zirconium",
         "symbol": "Zr",
         "aMass": 91.224,
         "number": 40,
-        "eConfig": "[Kr]4d2 5s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d2 5s2"
     },
     {
         "name": "Niobium",
         "symbol": "Nb",
         "aMass": 92.906,
         "number": 41,
-        "eConfig": "[Kr]4d4 5s"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d4 5s1"
     },
     {
         "name": "Molybdenum",
         "symbol": "Mo",
         "aMass": 95.95,
         "number": 42,
-        "eConfig": "[Kr]4d5 5s"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d5 5s1"
     },
     {
         "name": "Technetium",
         "symbol": "Tc",
-        // Was "(97)"
         "aMass": 97,
         "number": 43,
-        "eConfig": "[Kr]4d5 5s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d5 5s2"
     },
     {
         "name": "Ruthenium",
         "symbol": "Ru",
         "aMass": 101.07,
         "number": 44,
-        "eConfig": "[Kr]4d7 5s"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d7 5s"
     },
     {
         "name": "Rhodium",
         "symbol": "Rh",
         "aMass": 102.91,
         "number": 45,
-        "eConfig": "[Kr]4d8 5s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d8 5s2"
     },
     {
         "name": "Palladium",
         "symbol": "Pd",
         "aMass": 106.42,
         "number": 46,
-        "eConfig": "[Kr]4d10"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10"
     },
     {
         "name": "Silver",
         "symbol": "Ag",
         "aMass": 107.87,
         "number": 47,
-        "eConfig": "[Kr]4d10 5s"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s1"
     },
     {
         "name": "Cadmium",
         "symbol": "Cd",
         "aMass": 112.41,
         "number": 48,
-        "eConfig": "[Kr]4d10 5s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2"
     },
     {
         "name": "Indium",
         "symbol": "In",
         "aMass": 114.82,
         "number": 49,
-        "eConfig": "[Kr]4d10 5s2 5p"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p1"
     },
     {
         "name": "Tin",
         "symbol": "Sn",
         "aMass": 118.71,
         "number": 50,
-        "eConfig": "[Kr]4d10 5s2 5p2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p2"
     },
     {
         "name": "Antimony",
         "symbol": "Sb",
         "aMass": 121.76,
         "number": 51,
-        "eConfig": "[Kr]4d10 5s2 5p3"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p3"
     },
     {
         "name": "Tellerium",
         "symbol": "Te",
         "aMass": 127.60,
         "number": 52,
-        "eConfig": "[Kr]4d10 5s2 5p4"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p4"
     },
     {
         "name": "Iodine",
         "symbol": "I",
         "aMass": 126.90,
         "number": 53,
-        "eConfig": "[Kr]4d10 5s2 5p5"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p5"
     },
     {
         "name": "Xenon",
         "symbol": "Xe",
         "aMass": 131.29,
         "number": 54,
-        "eConfig": "[Kr]4d10 5s2 5p6"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6"
     },
     {
         "name": "Caesium",
         "symbol": "Cs",
         "aMass": 132.91,
         "number": 55,
-        "eConfig": "[Xe]6s"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 6s1"
     },
     {
         "name": "Barium",
         "symbol": "Ba",
         "aMass": 137.33,
         "number": 56,
-        "eConfig": "[Xe]6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 6s2"
     },
     {
         "name": "Lanthanum",
         "symbol": "La",
         "aMass": 138.91,
         "number": 57,
-        "eConfig": "[Xe]5d 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 5d1 6s2"
     },
     {
         "name": "Cerium",
         "symbol": "Ce",
         "aMass": 140.12,
         "number": 58,
-        "eConfig": "[Xe]4f 5d 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f1 5d 6s2"
     },
     {
         "name": "Preseodymium",
         "symbol": "Pr",
         "aMass": 140.91,
         "number": 59,
-        "eConfig": "[Xe]4f3 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f3 6s2"
     },
     {
         "name": "Neodymium",
         "symbol": "Nd",
         "aMass": 144.24,
         "number": 60,
-        "eConfig": "[Xe]4f4 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f4 6s2"
     },
     {
         "name": "Promethium",
         "symbol": "Pm",
         "aMass": 145,
         "number": 61,
-        "eConfig": "[Xe]4f5 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f5 6s2"
     },
     {
         "name": "Samarium",
         "symbol": "Sm",
         "aMass": 150.36,
         "number": 62,
-        "eConfig": "[Xe]4f6 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f6 6s2"
     },
     {
         "name": "Europium",
         "symbol": "Eu",
         "aMass": 151.96,
         "number": 63,
-        "eConfig": "[Xe]4f7 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f7 6s2"
     },
     {
         "name": "Gadolinium",
         "symbol": "Gd",
         "aMass": 157.25,
         "number": 64,
-        "eConfig": "[Xe]4f7 5d 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f7 5d 6s2"
     },
     {
         "name": "Terbium",
         "symbol": "Tb",
         "aMass": 158.93,
         "number": 65,
-        "eConfig": "[Xe]4f9 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f9 6s2"
     },
     {
         "name": "Dysprosium",
         "symbol": "Dy",
         "aMass": 162.5,
         "number": 66,
-        "eConfig": "[Xe]4f10 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f10 6s2"
     },
     {
         "name": "Holmium",
         "symbol": "Ho",
         "aMass": 164.93,
         "number": 67,
-        "eConfig": "[Xe]4f11 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f11 6s2"
     },
     {
         "name": "Erbium",
         "symbol": "Er",
         "aMass": 167.26,
         "number": 68,
-        "eConfig": "[Xe]4f12 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f12 6s2"
     },
     {
         "name": "Thulium",
         "symbol": "Tm",
         "aMass": 168.93,
         "number": 69,
-        "eConfig": "[Xe]4f13 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f13 6s2"
     },
     {
         "name": "Ytterbium",
         "symbol": "Yb",
         "aMass": 173.05,
         "number": 70,
-        "eConfig": "[Xe]4f14 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 6s2"
     },
     {
         "name": "Lutetium",
         "symbol": "Lu",
         "aMass": 174.97,
         "number": 71,
-        "eConfig": "[Xe]4f14 5d 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d 6s2"
     },
     {
         "name": "Hafnium",
         "symbol": "Hf",
         "aMass": 178.49,
         "number": 72,
-        "eConfig": "[Xe]4f14 5d2 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d2 6s2"
     },
     {
         "name": "Tantalum",
         "symbol": "Ta",
         "aMass": 180.95,
         "number": 73,
-        "eConfig": "[Xe]4f14 5d3 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d3 6s2"
     },
     {
         "name": "Tungsten",
         "symbol": "W",
         "aMass": 183.84,
         "number": 74,
-        "eConfig": "[Xe]4f14 5d4 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d4 6s2"
     },
     {
         "name": "Rhenium",
         "symbol": "Re",
         "aMass": 186.21,
         "number": 75,
-        "eConfig": "[Xe]4f14 5d5 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d5 6s2"
     },
     {
         "name": "Osmium",
         "symbol": "Os",
         "aMass": 190.23,
         "number": 76,
-        "eConfig": "[Xe]4f14 5d6 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2"
     },
     {
         "name": "Iridium",
         "symbol": "Ir",
         "aMass": 192.22,
         "number": 77,
-        "eConfig": "[Xe]4f14 5d7 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d7 6s2"
     },
     {
         "name": "Platinum",
         "symbol": "Pt",
         "aMass": 195.08,
         "number": 78,
-        "eConfig": "[Xe]4f14 5d9 6s"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d9 6s"
     },
     {
         "name": "Gold",
         "symbol": "Au",
         "aMass": 196.97,
         "number": 79,
-        "eConfig": "[Xe]4f14 5d10 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d10 6s2"
     },
     {
         "name": "Mercury",
         "symbol": "Hg",
         "aMass": 200.59,
         "number": 80,
-        "eConfig": "[Xe]4f14 5d6 6s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2"
     },
     {
         "name": "Thallium",
         "symbol": "Tl",
         "aMass": 204.38,
         "number": 81,
-        "eConfig": "[Hg]6p"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p1"
     },
     {
         "name": "Lead",
         "symbol": "Pb",
         "aMass": 207.2,
         "number": 82,
-        "eConfig": "[Hg]6p2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p2"
     },
     {
         "name": "Bismuth",
         "symbol": "Bi",
         "aMass": 208.98,
         "number": 83,
-        "eConfig": "[Hg]6p3"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p3"
     },
     {
         "name": "Polonium",
         "symbol": "Po",
         "aMass": 209,
         "number": 84,
-        "eConfig": "[Hg]6p4"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p4"
     },
     {
         "name": "Astatine",
         "symbol": "At",
         "aMass": 210,
         "number": 85,
-        "eConfig": "[Hg]6p5"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p5"
     },
     {
         "name": "Radon",
         "symbol": "Rn",
         "aMass": 222,
         "number": 86,
-        "eConfig": "[Hg]6p6"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6"
     },
     {
         "name": "Francium",
         "symbol": "Fr",
         "aMass": 223,
         "number": 87,
-        "eConfig": "[Rn]7s"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 7s1"
     },
     {
         "name": "Radium",
         "symbol": "Ra",
         "aMass": 226,
         "number": 88,
-        "eConfig": "[Rn]7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 7s2"
     },
     {
         "name": "Actinium",
         "symbol": "Ac",
         "aMass": 227,
         "number": 89,
-        "eConfig": "[Rn]6d 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 6d1 7s2"
     },
     {
         "name": "Thorium",
         "symbol": "Th",
         "aMass": 232.04,
         "number": 90,
-        "eConfig": "[Rn]6d2 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 6d2 7s2"
     },
     {
         "name": "Protactinium,",
         "symbol": "Pa",
         "aMass": 231.04,
         "number": 91,
-        "eConfig": "[Rn]5f3 6d 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f3 6d1 7s2"
     },
     {
         "name": "Uranium",
         "symbol": "U",
         "aMass": 238.03,
         "number": 92,
-        "eConfig": "[Rn]5f3 6d 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f3 6d1 7s2"
     },
     {
         "name": "Neptunium",
         "symbol": "Np",
         "aMass": 237,
         "number": 93,
-        "eConfig": "[Rn]5f4 6d 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f4 6d1 7s2"
     },
     {
         "name": "Plutonium",
         "symbol": "Pu",
         "aMass": 244,
         "number": 94,
-        "eConfig": "[Rn]5f6 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f6 7s2"
     },
     {
         "name": "Americium",
         "symbol": "Am",
         "aMass": 243,
         "number": 95,
-        "eConfig": "[Rn]5f7 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f7 7s2"
     },
     {
         "name": "Curium",
         "symbol": "Cm",
         "aMass": 247,
         "number": 96,
-        "eConfig": "[Rn]5f7 6d 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f7 6d1 7s2"
     },
     {
         "name": "Berkelium",
         "symbol": "Bk",
         "aMass": 247,
         "number": 97,
-        "eConfig": "[Rn]5f9 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f9 7s2"
     },
     {
         "name": "Californium",
         "symbol": "Cf",
         "aMass": 251,
         "number": 98,
-        "eConfig": "[Rn]5f10 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f10 7s2"
     },
     {
         "name": "Einsteinium",
         "symbol": "Es",
         "aMass": 252,
         "number": 99,
-        "eConfig": "[Rn]5f11 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f11 7s2"
     },
     {
         "name": "Fermium",
         "symbol": "Fm",
         "aMass": 257,
         "number": 100,
-        "eConfig": "[Rn]5f12 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f12 7s2"
     },
     {
         "name": "Mendelevium",
         "symbol": "Md",
         "aMass": 258,
         "number": 101,
-        "eConfig": "[Rn]5f13 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f13 7s2"
     },
     {
         "name": "Nobelium",
         "symbol": "No",
         "aMass": 259,
         "number": 102,
-        "eConfig": "[Rn]5f14 6d 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f14 6d 7s2"
     },
     {
         "name": "Lawrencium",
         "symbol": "Lr",
         "aMass": 266,
         "number": 103,
-        "eConfig": "[Rn]5f14 7s2 7p"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f14 7s2 7p"
     },
     {
         "name": "Rutherfordium",
         "symbol": "Rf",
         "aMass": 267,
         "number": 104,
-        "eConfig": "[Rn]5f14 6d2 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f14 6d2 7s2"
     },
     {
         "name": "Dubnium",
         "symbol": "Db",
         "aMass": 268,
         "number": 105,
-        "eConfig": "[Rn]5f14 6d3 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f14 6d3 7s2"
     },
     {
         "name": "Seaborgium",
         "symbol": "Sg",
         "aMass": 269,
         "number": 106,
-        "eConfig": "[Rn]5f14 642 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f14 642 7s2"
     },
     {
         "name": "Bohrium",
         "symbol": "Bh",
         "aMass": 270,
         "number": 107,
-        "eConfig": "[Rn]5f14 6d5 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f14 6d5 7s2"
     },
     {
         "name": "Hassium",
         "symbol": "Hs",
         "aMass": 269,
         "number": 108,
-        "eConfig": "[Rn]5f14 6d6 7s2"
+        "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p65f14 6d6 7s2"
     },
     {
         "name": "Meitnerium",

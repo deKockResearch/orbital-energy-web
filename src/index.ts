@@ -59,11 +59,10 @@ function toggleElement(e: Event): void {
 
   const detailsElem = document.getElementById("details")!;
 
-  let target =
+  const target =
     (e.target as HTMLElement).nodeName === "A"
       ? (e.target as HTMLElement)!
       : (e.target as HTMLElement).parentElement!;
-  // const elementID = target.textContent!.replace(/\D/g, "");
 
   if (target.classList.contains("clicked")) {
     // remove selected element if already displayed
@@ -74,9 +73,9 @@ function toggleElement(e: Event): void {
     document.getElementById("eLevelsID")!.replaceChildren();
 
     // place instruction text in detailedView div
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.id = "tempText";
-    let tempText = document.createElement("p");
+    const tempText = document.createElement("p");
     tempText.textContent =
       "Select an element from the periodic table for more details";
     div.appendChild(tempText);
@@ -196,6 +195,11 @@ function drawMatrix(id: string): void {
 }
 
 function calculateEnergy(): void {
+
+  // remove table contents
+  document.getElementById("tvTable")!.replaceChildren();
+  document.getElementById("vijTable")!.replaceChildren();
+
   const sigfig = 3;
   const totalEnergyBox = document.getElementById("total-energy")!;
   let totalText: string = "";

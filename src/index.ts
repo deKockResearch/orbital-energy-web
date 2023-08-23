@@ -31,7 +31,7 @@ window.addEventListener("load", () => {
     "unitSelector"
   ) as HTMLSelectElement;
   unitSelect.addEventListener("change", () => {
-    calculateEnergy();
+    calculateEnergies();
   });
 
   drawMatrices();
@@ -44,6 +44,9 @@ function removeTableEntries() {
   document.getElementById("dynamic23VijTable")!.replaceChildren();
   document.getElementById("faussurierVijTable")!.replaceChildren();
   document.getElementById("customVijTable")!.replaceChildren();
+  document.getElementById("dynamic23TotalEnergy")!.replaceChildren();
+  document.getElementById("faussurierTotalEnergy")!.replaceChildren();
+  document.getElementById("customTotalEnergy")!.replaceChildren();
 }
 
 /*
@@ -55,7 +58,6 @@ function removeTableEntries() {
 function toggleElement(e: Event): void {
   // Erase tables and values from previously selected element.
   removeTableEntries();
-  document.getElementById("total-energy")!.textContent = "";
 
   const detailsElem = document.getElementById("details")!;
 
@@ -69,6 +71,7 @@ function toggleElement(e: Event): void {
     target.classList.remove("clicked");
 
     detailsElem.replaceChildren();
+    // tODO: WHAT IS THIS?
     document.getElementById("energyLevels")!.replaceChildren();
     document.getElementById("eLevelsID")!.replaceChildren();
 
@@ -88,7 +91,7 @@ function toggleElement(e: Event): void {
     detailsElem.replaceChildren();
     document.getElementById("energyLevels")?.replaceChildren();
     elementBox(target);
-    calculateEnergy();
+    calculateEnergies();
   }
 }
 
@@ -142,6 +145,8 @@ function elementBox(selected: HTMLElement): void {
   //configParser(selectedElement.eConfig);
 }
 
+// draw the matrices in the middle of the screen. These are not
+// based on the selected element, energy units selection, etc.
 function drawMatrices(): void {
   drawMatrix("dynamic23Matrix", dynamic23Matrix);
   drawMatrix("faussurierMatrix", faussurierMatrix);
@@ -182,16 +187,28 @@ function drawMatrix(id: string, matrix: number[][]): void {
   }
 }
 
-function calculateEnergy(): void {
-
+function calculateEnergies(): void {
   // remove table contents
   removeTableEntries();
 
+  const energies: string[][] = [];
+  energies.push(calculateEnergy("dynamic23", dynamic23Matrix));
+  energies.push(calculateEnergy("faussurier", faussurierMatrix));
+  energies.push(calculateEnergy("custom", customMatrix));
+
+  drawDiagram(selectedElement.eConfig, energies, ["dynamic23", "faussurier", "custom"]);
+}
+
+
+// return the computed total energies in strings
+function calculateEnergy(matrixName: string, matrix: number[][]): string[] {
+
   const sigfig = 3;
-  const totalEnergyBox = document.getElementById("total-energy")!;
+  const totalEnergyElemId = matrixName + "TotalEnergy";
+  const totalEnergyBox = document.getElementById(totalEnergyElemId)!;
   let totalText: string = "";
-  // TODO: FIX ME: don't use dynamic23 every time
-  const energyResult = totalOrbitalEnergy(eConfigInput.value, dynamic23Matrix);
+
+  const energyResult = totalOrbitalEnergy(eConfigInput.value, matrix);
   const unitSelect = (
     document.getElementById("unitSelector") as HTMLSelectElement
   ).value;
@@ -237,11 +254,10 @@ function calculateEnergy(): void {
     }
   }
 
-  drawDiagram(selectedElement.eConfig, convertedEnergy);
 
-  energyComponentsTable("dynamic23", dynamic23Matrix);
-  energyComponentsTable("faussurier", faussurierMatrix);
-  energyComponentsTable("custom", customMatrix);
+  energyComponentsTable(matrixName, matrix);
+
+  return convertedEnergy;
 }
 
 function energyComponentsTable(matrixName: string, matrix: number[][]) {

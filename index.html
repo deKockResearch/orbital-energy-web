@@ -238,9 +238,16 @@
       <div class="energyLevels" id="energyLevels"></div>
 
       <div class="horizontal-flex">
-          <table id="dynamic23Matrix"></table>
-          <table id="faussurierMatrix"></table>
-          <table id="customMatrix"></table>
+        <table id="dynamic23Matrix"></table>
+        <table id="faussurierMatrix"></table>
+        <div>
+          <select name="matrixSelector" id="matrixSelector">
+            <option value="custom" id="custom" selected>Custom</option>
+            <option value="row23ArgonOnly" id="row23ArgonOnly">row23ArgonOnly</option>
+            <option value="row23Frozen" id="row23Frozen">row23Frozen</option>
+          </select>
+          <table id="selectableMatrix"></table>
+        </div>
       </div>
 
       <div id="eConfigInputBox">
@@ -249,7 +256,7 @@
       <div id="energy-box" style="border: 1px black solid;">
         <h3>Calculated energy in
           <select name="unitSelector" id="unitSelector">
-            <option value="hr">hartrees (hr)</option>
+            <option value="Ha">hartrees (Ha)</option>
             <option value="Ry">rydbergs (Ry)</option>
             <option value="eV">electron volts (eV)</option>
             <option value="J">joules (J)</option>
@@ -259,22 +266,22 @@
         <div id="eLevelsID"></div>
         <h4>tvTable</h4>
         <div id="tvTables" class="horizontal-flex">
-            <table id="dynamic23TvTable"></table>
-            <table id="faussurierTvTable"></table>
-            <table id="customTvTable"></table>
+          <table id="dynamic23TvTable"></table>
+          <table id="faussurierTvTable"></table>
+          <table id="selectableTvTable"></table>
         </div>
         <h4>vijTable</h4>
         <div id="vijTables" class="horizontal-flex">
-            <table id="dynamic23VijTable"></table>
-            <table id="faussurierVijTable"></table>
-            <table id="customVijTable"></table>
+          <table id="dynamic23VijTable"></table>
+          <table id="faussurierVijTable"></table>
+          <table id="selectableVijTable"></table>
         </div>
         <h4> Total:
-        <div id="totalEnergies" class="horizontal-flex">
-          <span id="dynamic23TotalEnergy"></span>
-          <span id="faussurierTotalEnergy"></span>
-          <span id="customTotalEnergy"></span>
-        </div>
+          <div id="totalEnergies" class="horizontal-flex">
+            <span id="dynamic23TotalEnergy"></span>
+            <span id="faussurierTotalEnergy"></span>
+            <span id="selectableTotalEnergy"></span>
+          </div>
       </div>
     </div>
   </main>

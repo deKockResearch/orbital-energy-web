@@ -56,6 +56,7 @@ export function drawDiagram(eConfig: string, calcEnergies: string[][], matrixNam
         p.line(lineStart[0] - unitL / 6, lineStart[1] - unitL / 4 - (unitL * 11) / 2, lineStart[0], lineStart[1] - unitL / 2 - (unitL * 11) / 2);
         p.line(lineStart[0] + unitL / 6, lineStart[1] - unitL / 4 - (unitL * 11) / 2, lineStart[0], lineStart[1] - unitL / 2 - (unitL * 11) / 2);
         p.text("Energy", lineStart[0] - unitL * 2, lineStart[1] - unitL * 3);
+        p.text("Not to scale", lineStart[0] - unitL * 1.5, lineStart[1] - unitL / 2 - (unitL * 11.5) / 2);
       }
     }
 

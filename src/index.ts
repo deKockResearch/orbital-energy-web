@@ -3,18 +3,21 @@ import {
   faussurierMatrix,
   dynamic23Matrix,
   customMatrix,
+  row23ArgonOnlyMatrix,
+  row23FrozenMatrix,
 } from "./matrices.js";
 import { drawDiagram } from "./energyDiagramsDisplay.js";
 import { totalOrbitalEnergy, energyComponents } from "./orbitalEnergy.js";
-/*
- * Gets element's data from element list based on atomic number
- * Input: atomic number
- * Output: element data with the atomic number given
- */
+
 
 // Global variables
 let selectedElement: ElementType;
 let eConfigInput: HTMLInputElement;
+
+const eLevels = ["1s", "2s", "2p", "3s", "3p"];
+
+// The user can select a 3rd matrix to display. We default to 'custom'.
+let selectedMatrixName = 'custom';
 
 function getElementByAtomicNumber(atomicNumber: number): ElementType {
   return elements.find((element) => element.number === atomicNumber)!;
@@ -32,28 +35,41 @@ window.addEventListener("load", () => {
     calculateEnergies();
   });
 
+  const matrixSelect = (document.getElementById("matrixSelector") as HTMLSelectElement);
+  matrixSelect.addEventListener("change", () => {
+
+
+    // switched from some matrix to showing custom matrix, so start watching for
+    // changes to it.
+    if (selectedMatrixName !== 'custom' && matrixSelect.value === 'custom') {
+      watchCustomMatrixForChanges();
+    }
+    selectedMatrixName = matrixSelect.value;
+    drawMatrices();
+    if (eConfigInput) {
+      // element has been selected.
+      calculateEnergies();
+    }
+
+  });
+
   drawMatrices();
+  // assuming custom matrix is showing initially, watch changes to it.
   watchCustomMatrixForChanges();
 });
 
 function removeTableEntries() {
   document.getElementById("dynamic23TvTable")!.replaceChildren();
   document.getElementById("faussurierTvTable")!.replaceChildren();
-  document.getElementById("customTvTable")!.replaceChildren();
+  document.getElementById("selectableTvTable")!.replaceChildren();
   document.getElementById("dynamic23VijTable")!.replaceChildren();
   document.getElementById("faussurierVijTable")!.replaceChildren();
-  document.getElementById("customVijTable")!.replaceChildren();
+  document.getElementById("selectableVijTable")!.replaceChildren();
   document.getElementById("dynamic23TotalEnergy")!.replaceChildren();
   document.getElementById("faussurierTotalEnergy")!.replaceChildren();
-  document.getElementById("customTotalEnergy")!.replaceChildren();
+  document.getElementById("selectableTotalEnergy")!.replaceChildren();
 }
 
-/*
- * Main function
- * Check if element is already in display:
- *      Removes it if present
- *      Appends it if absent
- */
 function toggleElement(e: Event): void {
   // Erase tables and values from previously selected element.
   removeTableEntries();
@@ -116,7 +132,7 @@ function elementBox(selected: HTMLElement): void {
   const aSymbol = document.createElement("div");
   const aName = document.createElement("div");
   const aMass = document.createElement("div");
-  const textInput = document.createElement("div");
+  const electronConfig = document.createElement("div");
 
   // assign classes to elements
   div.classList.add("showcase", selected.classList[2]);
@@ -124,21 +140,21 @@ function elementBox(selected: HTMLElement): void {
   aSymbol.classList.add("aSymbol");
   aName.classList.add("aName");
   aMass.classList.add("aMass");
-  textInput.classList.add("textInput");
+  electronConfig.classList.add("textInput");
 
   // add text content
   aNumber.textContent = String(selectedElement.number);
   aSymbol.textContent = selectedElement.symbol;
   aName.textContent = selectedElement.name;
   aMass.textContent = String(selectedElement.aMass);
-  textInput.textContent = selectedElement.eConfig;
+  electronConfig.innerHTML = convertElectronConfigToHTML(selectedElement.eConfig);
 
   // append elements
   div.appendChild(aNumber);
   div.appendChild(aSymbol);
   div.appendChild(aName);
   div.appendChild(aMass);
-  div.appendChild(textInput);
+  div.appendChild(electronConfig);
   document.getElementById("details")!.appendChild(div);
   //configParser(selectedElement.eConfig);
 }
@@ -146,18 +162,37 @@ function elementBox(selected: HTMLElement): void {
 // draw the matrices in the middle of the screen. These are not
 // based on the selected element, energy units selection, etc.
 function drawMatrices(): void {
-  drawMatrix("dynamic23Matrix", dynamic23Matrix);
-  drawMatrix("faussurierMatrix", faussurierMatrix);
-  drawMatrix("customMatrix", customMatrix);
+
+  // clean up previous elements
+  document.getElementById("dynamic23Matrix")!.replaceChildren();
+  document.getElementById("faussurierMatrix")!.replaceChildren();
+  document.getElementById('selectableMatrix')!.replaceChildren();
+
+  drawMatrix("dynamic23", dynamic23Matrix);
+  drawMatrix("faussurier", faussurierMatrix);
+  if (selectedMatrixName === 'custom') {
+    drawMatrix("custom", customMatrix, 'selectableMatrix');
+  } else if (selectedMatrixName === 'row23ArgonOnly') {
+    drawMatrix("row23ArgonOnly", row23ArgonOnlyMatrix, 'selectableMatrix');
+  } else if (selectedMatrixName === 'row23Frozen') {
+    drawMatrix("row23Frozen", row23FrozenMatrix, 'selectableMatrix');
+  }
 }
 
-function drawMatrix(id: string, matrix: number[][]): void {
-  let tableElem = document.getElementById(id)!;
-  const eLevels = ["1s", "2s", "2p", "3s", "3p"];
+function drawMatrix(id: string, matrix: number[][], overrideMatrixId = ''): void {
+  const elemId = overrideMatrixId || (id + "Matrix");
+  const tableElem = document.getElementById(elemId)!;
 
   const capElem = document.createElement("caption");
-  capElem.textContent = id;
-  tableElem.appendChild(capElem);
+  if (id === 'faussurier') {
+    capElem.innerHTML = `<a target="_blank" href='https://doi.org/10.1016/S0022-4073(97)00018-6'>${id}</a>`;
+  } else {
+    capElem.innerHTML = id;
+  }
+  // No caption on the selectable matrix, as the select/option make a good caption.
+  if (overrideMatrixId !== 'selectableMatrix') {
+    tableElem.appendChild(capElem);
+  }
 
   // use <= because always subtracting 1 from the indices, and
   // 0th column/row are headers.
@@ -165,7 +200,7 @@ function drawMatrix(id: string, matrix: number[][]): void {
     const tableRow = document.createElement("tr");
 
     // label the customMatrix data rows so we can get the values out later
-    if (id === 'customMatrix' && i !== 0) {
+    if (id === 'custom' && i !== 0) {
       tableRow.classList.add('customMatrixDataRow');
     }
     for (let j = 0; j <= eLevels.length; j++) {
@@ -180,7 +215,7 @@ function drawMatrix(id: string, matrix: number[][]): void {
         tableHeader.textContent = eLevels[i - 1];
         tableRow.appendChild(tableHeader);
       } else {
-        const cellEditable = id === 'customMatrix';
+        const cellEditable = id === 'custom';
         tableData.contentEditable = String(cellEditable);   // "true" or "false"
         tableData.textContent = matrix[i - 1][j - 1].toString();
         tableRow.appendChild(tableData);
@@ -198,17 +233,24 @@ function calculateEnergies(): void {
   const energies: string[][] = [];
   energies.push(calculateEnergy("dynamic23", dynamic23Matrix));
   energies.push(calculateEnergy("faussurier", faussurierMatrix));
-  energies.push(calculateEnergy("custom", customMatrix));
 
-  drawDiagram(selectedElement.eConfig, energies, ["dynamic23", "faussurier", "custom"]);
+  if (selectedMatrixName === 'custom') {
+    energies.push(calculateEnergy("custom", customMatrix, 'selectable'));
+  } else if (selectedMatrixName === 'row23ArgonOnly') {
+    energies.push(calculateEnergy("row23ArgonOnly", row23ArgonOnlyMatrix, 'selectable'));
+  } else if (selectedMatrixName === 'row23Frozen') {
+    energies.push(calculateEnergy("row23Frozen", row23FrozenMatrix, 'selectable'));
+  }
+
+  drawDiagram(selectedElement.eConfig, energies, ["dynamic23", "faussurier", selectedMatrixName]);
 }
 
 
 // return the computed total energies in strings
-function calculateEnergy(matrixName: string, matrix: number[][]): string[] {
+function calculateEnergy(matrixName: string, matrix: number[][], overrideMatrixId = ''): string[] {
 
   const sigfig = 3;
-  const totalEnergyElemId = matrixName + "TotalEnergy";
+  const totalEnergyElemId = (overrideMatrixId || matrixName) + "TotalEnergy";
   const totalEnergyBox = document.getElementById(totalEnergyElemId)!;
   let totalText: string = "";
 
@@ -216,8 +258,8 @@ function calculateEnergy(matrixName: string, matrix: number[][]): string[] {
   const unitSelect = (
     document.getElementById("unitSelector") as HTMLSelectElement
   ).value;
-  if (unitSelect === "hr") {
-    totalText = `${String(energyResult[0].toFixed(sigfig))} hr`;
+  if (unitSelect === "Ha") {
+    totalText = `${String(energyResult[0].toFixed(sigfig))} Ha`;
   } else if (unitSelect === "Ry") {
     totalText = `${String((energyResult[0] * 2).toFixed(sigfig))} Ry`;
   } else if (unitSelect === "eV") {
@@ -237,8 +279,8 @@ function calculateEnergy(matrixName: string, matrix: number[][]): string[] {
 
   let convertedEnergy: string[] = [];
   for (let i = 1; i < energyResult.length; i++) {
-    if (unitSelect === "hr") {
-      convertedEnergy.push(`${String(energyResult[i].toFixed(sigfig))} hr`);
+    if (unitSelect === "Ha") {
+      convertedEnergy.push(`${String(energyResult[i].toFixed(sigfig))} Ha`);
     } else if (unitSelect === "Ry") {
       convertedEnergy.push(
         `${String((energyResult[i] * 2).toFixed(sigfig))} Ry`
@@ -259,20 +301,20 @@ function calculateEnergy(matrixName: string, matrix: number[][]): string[] {
   }
 
 
-  energyComponentsTable(matrixName, matrix);
+  energyComponentsTable(matrixName, matrix, overrideMatrixId);
 
   return convertedEnergy;
 }
 
-function energyComponentsTable(matrixName: string, matrix: number[][]) {
+function energyComponentsTable(matrixName: string, matrix: number[][], overrideMatrixId: string) {
   const energyDict = energyComponents(eConfigInput.value, matrix);
 
   const tiValues = energyDict["t_i"];
   const viValues = energyDict["v_i"];
   const vijValues = energyDict["v_ij"];
 
-  const tvTableHTMLId = matrixName + 'TvTable';
-  const vijTableHTMLId = matrixName + 'VijTable';
+  const tvTableHTMLId = (overrideMatrixId || matrixName) + 'TvTable';
+  const vijTableHTMLId = (overrideMatrixId || matrixName) + 'VijTable';
 
   const tvTableElem = document.getElementById(tvTableHTMLId)!;
   const vijTableElem = document.getElementById(vijTableHTMLId)!;
@@ -283,8 +325,6 @@ function energyComponentsTable(matrixName: string, matrix: number[][]) {
   const capElem2 = document.createElement("caption");
   capElem2.textContent = matrixName;
   vijTableElem.appendChild(capElem2);
-
-  const eLevels = ["1s", "2s", "2p", "3s", "3p"];
 
   // t(i) and v(i) table
 
@@ -347,10 +387,16 @@ function energyComponentsTable(matrixName: string, matrix: number[][]) {
 
 let prevCustomMatrixChanged = false;
 let customMatrixChanged = false;
+let intervalHandle: NodeJS.Timeout;
 
 // Every 1 second, check if the user is still changing the matrix contents.
 // When the user stops changing it, then recompute energies, etc.
 function checkIfChangesHaveStopped() {
+  // user switched away from showing the custom matrix, so stop watching it.
+  if (selectedMatrixName !== 'custom') {
+    clearInterval(intervalHandle);
+    return;
+  }
   // User was changing value but didn't in the last 1 second...
   if (prevCustomMatrixChanged && !customMatrixChanged) {
     console.log("Recompute now!");
@@ -366,9 +412,9 @@ function checkIfChangesHaveStopped() {
 
 function watchCustomMatrixForChanges() {
 
-  setInterval(checkIfChangesHaveStopped, 1000);
+  intervalHandle = setInterval(checkIfChangesHaveStopped, 1000);
 
-  let custMatTableElem = document.getElementById('customMatrix')!;
+  let custMatTableElem = document.getElementById('selectableMatrix')!;
 
   const mutationOptions: MutationObserverInit = {
     childList: true,
@@ -397,22 +443,17 @@ function getCustomMatrixValuesFromDOM() {
     }
     row++;
   }
-  // console.table(customMatrix);
 }
 
-/* TO DO LIST!
- * Handle selecting elements after Kr
- * Handle selecting Transition metals
- * Figure out fractional electrons
- * Populate matrices with correct values
- * Unable to change electron config if matrix 1 or 2 is selected
- * Matrix beautification
- * Get num electrons in each orbital
- * Invalid electron configuration
- *
- * Questions for prof:
- * Clarification on equations - relationship btn J and K terms, and why they don't show up in total energy equation
- * alpha beta name?
- * Display canonical orbital energy?
- * Link to how the matrices were generated?
- */
+// Take the electron configuration, e.g., '1s2, 2s2 2p6', and convert to
+// HTML with the number after the s or p a superscript.
+function convertElectronConfigToHTML(elecConf: string): string {
+  const groups = elecConf.split(" ");
+  let htmlRes = '';
+  for (const group of groups) {
+    const re = /(\d+[sp])(\d+)/;
+    const matches = group.match(re)!;
+     htmlRes += `${matches[1]}<sup>${matches[2]}</sup> `;
+  }
+  return htmlRes;
+}

@@ -27,14 +27,13 @@ window.addEventListener("load", () => {
     pTableElements[i].addEventListener("click", toggleElement);
   }
 
-  const unitSelect = document.getElementById(
-    "unitSelector"
-  ) as HTMLSelectElement;
+  const unitSelect = document.getElementById("unitSelector") as HTMLSelectElement;
   unitSelect.addEventListener("change", () => {
     calculateEnergies();
   });
 
   drawMatrices();
+  watchCustomMatrixForChanges();
 });
 
 function removeTableEntries() {
@@ -71,7 +70,6 @@ function toggleElement(e: Event): void {
     target.classList.remove("clicked");
 
     detailsElem.replaceChildren();
-    // tODO: WHAT IS THIS?
     document.getElementById("energyLevels")!.replaceChildren();
     document.getElementById("eLevelsID")!.replaceChildren();
 
@@ -155,7 +153,6 @@ function drawMatrices(): void {
 
 function drawMatrix(id: string, matrix: number[][]): void {
   let tableElem = document.getElementById(id)!;
-  //const eLevels = ["1s", "2s", "2p", "3s", "3p", "3d", "4s"];
   const eLevels = ["1s", "2s", "2p", "3s", "3p"];
 
   const capElem = document.createElement("caption");
@@ -165,7 +162,12 @@ function drawMatrix(id: string, matrix: number[][]): void {
   // use <= because always subtracting 1 from the indices, and
   // 0th column/row are headers.
   for (let i = 0; i <= eLevels.length; i++) {
-    let tableRow = document.createElement("tr");
+    const tableRow = document.createElement("tr");
+
+    // label the customMatrix data rows so we can get the values out later
+    if (id === 'customMatrix' && i !== 0) {
+      tableRow.classList.add('customMatrixDataRow');
+    }
     for (let j = 0; j <= eLevels.length; j++) {
       let tableData = document.createElement("td");
       let tableHeader = document.createElement("th");
@@ -178,13 +180,15 @@ function drawMatrix(id: string, matrix: number[][]): void {
         tableHeader.textContent = eLevels[i - 1];
         tableRow.appendChild(tableHeader);
       } else {
-        tableData.contentEditable = id === 'customMatrix' ? "true" : "false";
+        const cellEditable = id === 'customMatrix';
+        tableData.contentEditable = String(cellEditable);   // "true" or "false"
         tableData.textContent = matrix[i - 1][j - 1].toString();
         tableRow.appendChild(tableData);
       }
     }
     tableElem.appendChild(tableRow);
   }
+
 }
 
 function calculateEnergies(): void {
@@ -339,6 +343,61 @@ function energyComponentsTable(matrixName: string, matrix: number[][]) {
     }
     vijTableElem.appendChild(tableRow);
   }
+}
+
+let prevCustomMatrixChanged = false;
+let customMatrixChanged = false;
+
+// Every 1 second, check if the user is still changing the matrix contents.
+// When the user stops changing it, then recompute energies, etc.
+function checkIfChangesHaveStopped() {
+  // User was changing value but didn't in the last 1 second...
+  if (prevCustomMatrixChanged && !customMatrixChanged) {
+    console.log("Recompute now!");
+    if (selectedElement) {
+      getCustomMatrixValuesFromDOM();
+      calculateEnergies();
+    }
+  }
+
+  prevCustomMatrixChanged = customMatrixChanged;
+  customMatrixChanged = false;
+}
+
+function watchCustomMatrixForChanges() {
+
+  setInterval(checkIfChangesHaveStopped, 1000);
+
+  let custMatTableElem = document.getElementById('customMatrix')!;
+
+  const mutationOptions: MutationObserverInit = {
+    childList: true,
+    subtree: true,
+    characterData: true
+  };
+
+  function callback(_mutations: MutationRecord[]) {
+    customMatrixChanged = true;
+  }
+
+  const observer = new MutationObserver(callback);
+  observer.observe(custMatTableElem, mutationOptions);
+}
+
+function getCustomMatrixValuesFromDOM() {
+  const dataRowElems = document.getElementsByClassName('customMatrixDataRow');
+  let row = 0;
+  for (const rowElem of dataRowElems) {
+    let col = 0;
+    for (const child of rowElem.children) {
+      if (child.tagName === 'TD') {   // skip th elements
+        customMatrix[row][col] = Number(child.textContent);
+        col++;
+      }
+    }
+    row++;
+  }
+  // console.table(customMatrix);
 }
 
 /* TO DO LIST!

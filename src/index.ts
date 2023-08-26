@@ -295,19 +295,19 @@ function energyComponentsTable(matrixName: string, matrix: number[][], overrideM
   for (let i = 0; i <= tiValues.length; i++) {
     let tableRow = document.createElement("tr");
 
-    for (let j = 0; j < 2; j++) {
+    for (let j = 0; j <= 2; j++) {
       const tableData = document.createElement("td");
 
       if (j === 0 && i === 0) {
         // Top left corner: empty cell
         tableRow.appendChild(tableData);
       } else if (i === 0) {
-        // first row, 2nd column
+        // first row: headers.
         const tableHeader = document.createElement("th");
         tableHeader.textContent = j === 1 ? "t(i)" : "v(en)";
         tableRow.appendChild(tableHeader);
       } else if (j === 0) {
-        // First column of each row.
+        // First column of each row: headers.
         const tableHeader = document.createElement("th");
         tableHeader.textContent = eLevels[i - 1];
         tableRow.appendChild(tableHeader);

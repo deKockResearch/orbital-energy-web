@@ -249,57 +249,19 @@ function calculateEnergies(): void {
 // return the computed total energies in strings
 function calculateEnergy(matrixName: string, matrix: number[][], overrideMatrixId = ''): string[] {
 
-  const sigfig = 3;
   const totalEnergyElemId = (overrideMatrixId || matrixName) + "TotalEnergy";
   const totalEnergyBox = document.getElementById(totalEnergyElemId)!;
-  let totalText: string = "";
 
   const energyResult = totalOrbitalEnergy(eConfigInput.value, matrix);
   const unitSelect = (
     document.getElementById("unitSelector") as HTMLSelectElement
   ).value;
-  if (unitSelect === "Ha") {
-    totalText = `${String(energyResult[0].toFixed(sigfig))} Ha`;
-  } else if (unitSelect === "Ry") {
-    totalText = `${String((energyResult[0] * 2).toFixed(sigfig))} Ry`;
-  } else if (unitSelect === "eV") {
-    totalText = `${String(
-      (energyResult[0] * 27.211386245988).toFixed(sigfig)
-    )} eV`;
-  } else if (unitSelect === "J") {
-    totalText = `${String(
-      (((energyResult[0] * 4.3597447222071) / 10) ^ 18).toFixed(sigfig)
-    )} J`;
-  } else if (unitSelect === "Cal") {
-    totalText = `${String(energyResult[0].toFixed(sigfig))} Cal`;
-  } else {
-    console.log(unitSelect);
-  }
-  totalEnergyBox.textContent = totalText;
+  totalEnergyBox.textContent = energyToUnitsAsString(energyResult[0], unitSelect);
 
   let convertedEnergy: string[] = [];
   for (let i = 1; i < energyResult.length; i++) {
-    if (unitSelect === "Ha") {
-      convertedEnergy.push(`${String(energyResult[i].toFixed(sigfig))} Ha`);
-    } else if (unitSelect === "Ry") {
-      convertedEnergy.push(
-        `${String((energyResult[i] * 2).toFixed(sigfig))} Ry`
-      );
-    } else if (unitSelect === "eV") {
-      convertedEnergy.push(
-        `${String((energyResult[i] * 27.211386245988).toFixed(sigfig))} eV`
-      );
-    } else if (unitSelect === "J") {
-      convertedEnergy.push(
-        `${String(
-          (((energyResult[i] * 4.3597447222071) / 10) ^ 18).toFixed(sigfig)
-        )} J`
-      );
-    } else if (unitSelect === "Cal") {
-      convertedEnergy.push(`${String(energyResult[i].toFixed(sigfig))} Cal`);
-    }
+    convertedEnergy.push(energyToUnitsAsString(energyResult[i], unitSelect));
   }
-
 
   energyComponentsTable(matrixName, matrix, overrideMatrixId);
 
@@ -453,7 +415,25 @@ function convertElectronConfigToHTML(elecConf: string): string {
   for (const group of groups) {
     const re = /(\d+[sp])(\d+)/;
     const matches = group.match(re)!;
-     htmlRes += `${matches[1]}<sup>${matches[2]}</sup> `;
+    htmlRes += `${matches[1]}<sup>${matches[2]}</sup> `;
   }
   return htmlRes;
+}
+
+// convert 1 hartree to the given unit -- Ry, eV, etc.
+// the 2nd value is the conversion factor.
+const conversions = new Map([
+  ['Ha', 1],
+  ['Ry', 2],
+  ['eV', 27.211386245988],
+  ['J', 4.3597447222071E-18],
+  ['cal', 1.042E-18],
+  ['kJ/mol', 2625.5],
+  ['kcal/mol', 627.5],
+  ['cm-1', 219474.6],
+]);
+
+function energyToUnitsAsString(energy: number, units: string): string {
+  const res = energy * conversions.get(units)!;
+  return `${res.toExponential(3)} ${units}`;
 }

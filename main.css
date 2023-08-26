@@ -12,6 +12,10 @@ body {
     color: black;
 }
 
+.version {
+    font-size: small;
+}
+
 h1 {
     text-align: center;
     font-size: 2.5rem;

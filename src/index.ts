@@ -435,5 +435,9 @@ const conversions = new Map([
 
 function energyToUnitsAsString(energy: number, units: string): string {
   const res = energy * conversions.get(units)!;
-  return `${res.toExponential(3)} ${units}`;
+  if (Math.abs(res) < 0.0001) {   // if number is really small.
+    return `${res.toExponential(3)} ${units}`;
+  } else {
+    return `${res.toFixed(3)} ${units}`;  // 3 sigfigs
+  }
 }

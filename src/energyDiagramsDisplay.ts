@@ -2,61 +2,67 @@ import p5 from "p5";
 
 export function drawDiagram(eConfig: string, calcEnergies: string[][], matrixNames: string[]): void {
   let sketch = (p: p5) => {
+    const UNIT_L = 40;
+
+    // max # of electrons in each orbital.
+    const FULL_ORBITAL_CTS = [2, 2, 6, 2, 6];
+
     class SZlevel {
+
       constructor() { }
 
       // Make a singular orbital
-      makeOrbital(eCount: number, center: number[], unitL: number) {
+      makeOrbital(isFullOrbital: boolean, centerX: number, centerY: number) {
+
         // main orbital line
-        p.line(center[0] - unitL / 2, center[1], center[0] + unitL / 2, center[1]);
-        const disp = unitL / 6;
+        p.drawingContext.setLineDash([]);  // solid line
+        p.line(centerX - UNIT_L / 2, centerY, centerX + UNIT_L / 2, centerY);
+        const DISP = UNIT_L / 6;
 
-        if (eCount >= 1) {
-          // first electron arrow
-          p.line(center[0] - disp, center[1] - unitL / 2, center[0] - disp, center[1] + unitL / 2);
-
-          // Arrowhead
-          p.line(center[0] - disp, center[1] - unitL / 2, center[0], center[1] - (disp * 3) / 2);
-          p.line(center[0] - disp, center[1] - unitL / 2, center[0] - 2 * disp, center[1] - (disp * 3) / 2);
+        // make dashed line if the orbital is not full.
+        if (! isFullOrbital) {
+          p.drawingContext.setLineDash([5, 5]);
         }
-        if (eCount === 2) {
-          // second electron arrow
-          p.line(center[0] + disp, center[1] - unitL / 2, center[0] + disp, center[1] + unitL / 2);
 
-          // Arrowhead
-          p.line(center[0] + disp, center[1] + unitL / 2, center[0], center[1] + (disp * 3) / 2);
-          p.line(center[0] + disp, center[1] + unitL / 2, center[0] + 2 * disp, center[1] + (disp * 3) / 2);
-        }
+        // first electron arrow
+        p.line(centerX - DISP, centerY - UNIT_L / 2, centerX - DISP, centerY + UNIT_L / 2);
+        // Arrowhead
+        p.line(centerX - DISP, centerY - UNIT_L / 2, centerX, centerY - (DISP * 3) / 2);
+        p.line(centerX - DISP, centerY - UNIT_L / 2, centerX - 2 * DISP, centerY - (DISP * 3) / 2);
+
+        // second electron arrow
+        p.line(centerX + DISP, centerY - UNIT_L / 2, centerX + DISP, centerY + UNIT_L / 2);
+        // Arrowhead
+        p.line(centerX + DISP, centerY + UNIT_L / 2, centerX, centerY + (DISP * 3) / 2);
+        p.line(centerX + DISP, centerY + UNIT_L / 2, centerX + 2 * DISP, centerY + (DISP * 3) / 2);
+
       }
 
-      makeLevel(orbName: string, center: number[], unitL: number) {
-        if (orbName.charAt(1) === "s") {
-          // 1s2
-          this.makeOrbital(Number(orbName.slice(2)), [center[0] + (unitL * 5) / 4, center[1]], unitL);
-        } else if (orbName.charAt(1) === "p") {
-          // draw three lines and then populate it based off the electrons in the orbital
-          let eLoc = [0, 0, 0];
-          let eCount = Number(orbName.slice(2));
-          for (let i = 0; eCount > 0; i++) {
-            eLoc[i % 3] += 1;
-            eCount--;
-          }
-
-          this.makeOrbital(eLoc[0], center, unitL);
-          this.makeOrbital(eLoc[1], [center[0] + (unitL * 5) / 4, center[1]], unitL);
-          this.makeOrbital(eLoc[2], [center[0] + (unitL * 5) / 2, center[1]], unitL);
+      makeLevel(orbName: string, level: number, centerX: number, centerY: number) {
+        p.text(`${orbName} Energy: `, centerX - 100, centerY + UNIT_L / 8);
+        const eCount = Number(orbName.slice(2));
+        if (FULL_ORBITAL_CTS[level] === 2) {
+          // if only 1 pair, it goes in the middle horizontally.
+          this.makeOrbital(eCount === FULL_ORBITAL_CTS[level], centerX + (UNIT_L / 4 * 5), centerY);
         } else {
-          console.log("Unsupported orbital type: ", orbName.charAt(1));
+          // there is an orbital for every pair of electrons, so divide by 2
+          for (let i = 0; i < FULL_ORBITAL_CTS[level] / 2; i++) {
+            this.makeOrbital(eCount === FULL_ORBITAL_CTS[level], centerX + (UNIT_L / 4 * (i * 5)), centerY);
+          }
+        }
+        // If the level is not full, add a message above.
+        if (eCount !== FULL_ORBITAL_CTS[level]) {
+          p.text(`occupied by ${eCount}/${FULL_ORBITAL_CTS[level]} of an electron`, centerX - 30, centerY - 30);
         }
       }
 
-      makeAxis(center: number[], unitL: number) {
-        const lineStart = [100, center[1]];
-        p.line(lineStart[0], lineStart[1], lineStart[0], lineStart[1] - unitL * 6);
-        p.line(lineStart[0] - unitL / 6, lineStart[1] - unitL / 4 - (unitL * 11) / 2, lineStart[0], lineStart[1] - unitL / 2 - (unitL * 11) / 2);
-        p.line(lineStart[0] + unitL / 6, lineStart[1] - unitL / 4 - (unitL * 11) / 2, lineStart[0], lineStart[1] - unitL / 2 - (unitL * 11) / 2);
-        p.text("Energy", lineStart[0] - unitL * 2, lineStart[1] - unitL * 3);
-        p.text("Not to scale", lineStart[0] - unitL * 1.5, lineStart[1] - unitL / 2 - (unitL * 11.5) / 2);
+      makeAxis(_centerX: number, centerY: number) {
+        const lineStart = [90, centerY];
+        p.line(lineStart[0], lineStart[1], lineStart[0], lineStart[1] - UNIT_L * 6);
+        p.line(lineStart[0] - UNIT_L / 6, lineStart[1] - UNIT_L / 4 - (UNIT_L * 11) / 2, lineStart[0], lineStart[1] - UNIT_L / 2 - (UNIT_L * 11) / 2);
+        p.line(lineStart[0] + UNIT_L / 6, lineStart[1] - UNIT_L / 4 - (UNIT_L * 11) / 2, lineStart[0], lineStart[1] - UNIT_L / 2 - (UNIT_L * 11) / 2);
+        p.text("Energy", lineStart[0] - UNIT_L * 1.5, lineStart[1] - UNIT_L * 3);
+        p.text("Not to scale", lineStart[0] - UNIT_L * 1.5, lineStart[1] - UNIT_L / 2 - (UNIT_L * 11.5) / 2);
       }
     }
 
@@ -74,30 +80,37 @@ export function drawDiagram(eConfig: string, calcEnergies: string[][], matrixNam
     // Instructions to draw orbitals
     p.draw = () => {
       let newSZLevel = new SZlevel();
-      let unitL = 40;
+      // const unitL = 40;
       let eList = eConfig.split(" ");
 
       // Set text size
-      p.textSize(unitL / 3);
+      p.textSize(UNIT_L / 3);
 
       // Create y-axis
-      let centerP = [200, CANV_H - 20];
-      newSZLevel.makeAxis(centerP, unitL);
+      let centerX = 200;
+      let centerY = CANV_H - 20;
+      newSZLevel.makeAxis(centerX, centerY);
+
+      // Draw orbitals lowest to highest
+      for (let i = 0; i < eList.length; i++) {
+        newSZLevel.makeLevel(eList[i], i, centerX, centerY);
+        centerY = centerY - (UNIT_L * 5) / 4;   // subtracting from last position each time.
+      }
 
       // for each set of computed energies:
       let horizOffset = 0;
       for (let calcEnIdx = 0; calcEnIdx < calcEnergies.length; calcEnIdx++) {
         const calcEnergy = calcEnergies[calcEnIdx];
-        let centerP = [200, CANV_H - 20];
+        centerX = 200;
+        centerY = CANV_H - 20;
 
-        // Draw orbitals lowest to highest
+        // print energy values
         for (let i = 0; i < eList.length; i++) {
-          newSZLevel.makeLevel(eList[i], centerP, unitL);
-          p.text(`${eList[i].slice(0, 2)} Energy: ${calcEnergy[i]}`, horizOffset + centerP[0] + unitL * 5, centerP[1] + unitL / 8);
-          centerP = [200, centerP[1] - (unitL * 5) / 4];   // subtracting from last position each time.
+          p.text(`${calcEnergy[i]}`, horizOffset + centerX + UNIT_L * 5, centerY + UNIT_L / 8);
+          centerY = centerY - (UNIT_L * 5) / 4;   // subtracting from last position each time.
         }
         // Draw label on top
-        p.text(matrixNames[calcEnIdx], horizOffset + centerP[0] + unitL * 5, centerP[1] - (unitL * 5) / 4);
+        p.text(matrixNames[calcEnIdx], horizOffset + centerX + UNIT_L * 5, centerY - (UNIT_L * 5) / 4);
         horizOffset += 200;
       }
     };

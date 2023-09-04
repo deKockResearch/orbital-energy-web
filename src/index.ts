@@ -6,9 +6,12 @@ import {
   row23ArgonOnlyMatrix,
   row23FrozenMatrix,
 } from "./matrices.js";
+import { atomicSize, electronAffinity, polarizability, unweightedIonizationEnergy, weightedIonizationEnergy } from "./graphData.js";
 import { drawDiagram } from "./energyDiagramsDisplay.js";
 import { totalOrbitalEnergy, energyComponents } from "./orbitalEnergy.js";
+import { Chart } from "chart.js/auto";
 
+console.table(atomicSize);
 
 // Global variables
 let selectedElement: ElementType;
@@ -18,6 +21,8 @@ const eLevels = ["1s", "2s", "2p", "3s", "3p"];
 
 // The user can select a 3rd matrix to display. We default to 'custom'.
 let selectedMatrixName = 'custom';
+
+let unitSelectValue: string = 'Ha';
 
 function getElementByAtomicNumber(atomicNumber: number): ElementType {
   return elements.find((element) => element.number === atomicNumber)!;
@@ -32,13 +37,13 @@ window.addEventListener("load", () => {
 
   const unitSelect = document.getElementById("unitSelector") as HTMLSelectElement;
   unitSelect.addEventListener("change", () => {
+    unitSelectValue = unitSelect.value;   // update global variable
     calculateEnergies();
+    updateChartScales();
   });
 
   const matrixSelect = (document.getElementById("matrixSelector") as HTMLSelectElement);
   matrixSelect.addEventListener("change", () => {
-
-
     // switched from some matrix to showing custom matrix, so start watching for
     // changes to it.
     if (selectedMatrixName !== 'custom' && matrixSelect.value === 'custom') {
@@ -50,12 +55,14 @@ window.addEventListener("load", () => {
       // element has been selected.
       calculateEnergies();
     }
-
   });
 
   drawMatrices();
   // assuming custom matrix is showing initially, watch changes to it.
   watchCustomMatrixForChanges();
+
+  drawCharts();
+
 });
 
 function removeTableEntries() {
@@ -107,6 +114,7 @@ function toggleElement(e: Event): void {
     elementBox(target);
     calculateEnergies();
   }
+
 }
 
 /*
@@ -227,6 +235,10 @@ function drawMatrix(id: string, matrix: number[][], overrideMatrixId = ''): void
 }
 
 function calculateEnergies(): void {
+  // no element has been selected yet.
+  if (!eConfigInput) {
+    return;
+  }
   // remove table contents
   removeTableEntries();
 
@@ -253,14 +265,11 @@ function calculateEnergy(matrixName: string, matrix: number[][], overrideMatrixI
   const totalEnergyBox = document.getElementById(totalEnergyElemId)!;
 
   const energyResult = totalOrbitalEnergy(eConfigInput.value, matrix);
-  const unitSelect = (
-    document.getElementById("unitSelector") as HTMLSelectElement
-  ).value;
-  totalEnergyBox.textContent = energyToUnitsAsString(energyResult[0], unitSelect);
+  totalEnergyBox.textContent = energyToUnitsAsString(energyResult[0], unitSelectValue);
 
   let convertedEnergy: string[] = [];
   for (let i = 1; i < energyResult.length; i++) {
-    convertedEnergy.push(energyToUnitsAsString(energyResult[i], unitSelect));
+    convertedEnergy.push(energyToUnitsAsString(energyResult[i], unitSelectValue));
   }
 
   energyComponentsTable(matrixName, matrix, overrideMatrixId);
@@ -440,4 +449,115 @@ function energyToUnitsAsString(energy: number, units: string): string {
   } else {
     return `${res.toFixed(3)} ${units}`;  // 3 sigfigs
   }
+}
+
+let atomicSizeChart: Chart;
+let electronAffinityChart: Chart;
+let polarizabilityChart: Chart;
+let ionizationEnergyChart: Chart;
+
+function drawCharts() {
+
+  const options = {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  };
+
+  const ctx = document.getElementById('atomicSizeChartCanv')! as HTMLCanvasElement;
+  atomicSizeChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
+        'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'],
+      datasets: [{
+        label: `Atomic Size (${unitSelectValue})`,
+        data: [...atomicSize],
+        borderWidth: 1
+      }]
+    },
+    options,
+  });
+
+  const ctx2 = document.getElementById('electronAffinityChartCanv')! as HTMLCanvasElement;
+  electronAffinityChart = new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels: ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
+        'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'],
+      datasets: [{
+        label: `Electron Affinity (${unitSelectValue})`,
+        data: [...electronAffinity],
+        borderWidth: 1
+      }]
+    },
+    options,
+  });
+  const ctx3 = document.getElementById('polarizabilityChartCanv')! as HTMLCanvasElement;
+  polarizabilityChart = new Chart(ctx3, {
+    type: 'line',
+    data: {
+      labels: ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
+        'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'],
+      datasets: [{
+        label: `Polarizability (${unitSelectValue})`,
+        data: [...polarizability],
+        borderWidth: 1
+      }]
+    },
+    options,
+  });
+  const ctx4 = document.getElementById('ionizationEnergyChartCanv')! as HTMLCanvasElement;
+  ionizationEnergyChart = new Chart(ctx4, {
+    type: 'line',
+    data: {
+      labels: ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
+        'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'],
+      datasets: [
+        {
+          label: `Unweighted Ionization Energy (${unitSelectValue})`,
+          data: [...unweightedIonizationEnergy],
+          borderWidth: 1
+        },
+        {
+          label: `Weighted Ionization Energy (${unitSelectValue})`,
+          data: [...weightedIonizationEnergy],
+          borderWidth: 1
+        },
+      ]
+    },
+    options,
+  });
+}
+
+// The unit selector was changed so update the charts to show using the
+// new scale (Ha, Ry, cal, etc.)
+function updateChartScales() {
+  for (let i = 0; i < atomicSizeChart.data.datasets[0].data.length; i++) {
+    atomicSizeChart.data.datasets[0].data[i] = atomicSize[i] * conversions.get(unitSelectValue)!;
+  }
+  atomicSizeChart.data.datasets[0].label = `Atomic Size (${unitSelectValue})`;
+  atomicSizeChart.update();
+
+  for (let i = 0; i < electronAffinityChart.data.datasets[0].data.length; i++) {
+    electronAffinityChart.data.datasets[0].data[i] = electronAffinity[i] * conversions.get(unitSelectValue)!;
+  }
+  electronAffinityChart.data.datasets[0].label = `Electron Affinity (${unitSelectValue})`;
+  electronAffinityChart.update();
+
+  for (let i = 0; i < polarizabilityChart.data.datasets[0].data.length; i++) {
+    polarizabilityChart.data.datasets[0].data[i] = polarizability[i] * conversions.get(unitSelectValue)!;
+  }
+  polarizabilityChart.data.datasets[0].label = `Polarizability (${unitSelectValue})`;
+  polarizabilityChart.update();
+
+  for (let i = 0; i < ionizationEnergyChart.data.datasets[0].data.length; i++) {
+    ionizationEnergyChart.data.datasets[0].data[i] = unweightedIonizationEnergy[i] * conversions.get(unitSelectValue)!;
+    ionizationEnergyChart.data.datasets[1].data[i] = weightedIonizationEnergy[i] * conversions.get(unitSelectValue)!;
+  }
+  ionizationEnergyChart.data.datasets[0].label = `Unweighted Ionization Energy (${unitSelectValue})`;
+  ionizationEnergyChart.data.datasets[1].label = `Weighted Ionization Energy (${unitSelectValue})`;
+  ionizationEnergyChart.update();
 }

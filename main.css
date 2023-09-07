@@ -38,11 +38,8 @@ h1 {
 }
 
 .not-clickable {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
+    color: transparent;
+    filter: blur(3px);
 }
 
 .key {
@@ -325,6 +322,19 @@ td {
     height: fit-content;
 }
 
+
+.charts-area {
+    display: flex;
+    flex-direction: row;
+}
+
 #charts-wrapper {
+    width: 30%;
+}
+
+#energy-info-for-element {
+    margin-left: 5vw;
+    display: inline-block;
     width: 50%;
+    border: 1px solid red;
 }

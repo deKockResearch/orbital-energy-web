@@ -11,10 +11,8 @@ import { drawDiagram } from "./energyDiagramsDisplay.js";
 import { totalOrbitalEnergy, energyComponents } from "./orbitalEnergy.js";
 import { Chart } from "chart.js/auto";
 
-console.table(atomicSize);
-
 // Global variables
-let selectedElement: ElementType;
+let selectedElement: ElementType | null;
 let eConfigInput: HTMLInputElement;
 
 const eLevels = ["1s", "2s", "2p", "3s", "3p"];
@@ -40,6 +38,7 @@ window.addEventListener("load", () => {
     unitSelectValue = unitSelect.value;   // update global variable
     calculateEnergies();
     updateChartScales();
+    updateEnergiesBox();
   });
 
   const matrixSelect = (document.getElementById("matrixSelector") as HTMLSelectElement);
@@ -96,6 +95,8 @@ function toggleElement(e: Event): void {
     document.getElementById("energyLevels")!.replaceChildren();
     document.getElementById("eLevelsID")!.replaceChildren();
 
+    selectedElement = null;
+
     // place instruction text in detailedView div
     const div = document.createElement("div");
     div.id = "tempText";
@@ -113,8 +114,9 @@ function toggleElement(e: Event): void {
     document.getElementById("energyLevels")?.replaceChildren();
     elementBox(target);
     calculateEnergies();
+    updateChartsPoints();
+    updateEnergiesBox();
   }
-
 }
 
 /*
@@ -164,7 +166,6 @@ function elementBox(selected: HTMLElement): void {
   div.appendChild(aMass);
   div.appendChild(electronConfig);
   document.getElementById("details")!.appendChild(div);
-  //configParser(selectedElement.eConfig);
 }
 
 // draw the matrices in the middle of the screen. These are not
@@ -254,7 +255,7 @@ function calculateEnergies(): void {
     energies.push(calculateEnergy("row23Frozen", row23FrozenMatrix, 'selectable'));
   }
 
-  drawDiagram(selectedElement.eConfig, energies, ["dynamic23", "faussurier", selectedMatrixName]);
+  drawDiagram(selectedElement!.eConfig, energies, ["dynamic23", "faussurier", selectedMatrixName]);
 }
 
 
@@ -370,7 +371,6 @@ function checkIfChangesHaveStopped() {
   }
   // User was changing value but didn't in the last 1 second...
   if (prevCustomMatrixChanged && !customMatrixChanged) {
-    console.log("Recompute now!");
     if (selectedElement) {
       getCustomMatrixValuesFromDOM();
       calculateEnergies();
@@ -451,6 +451,14 @@ function energyToUnitsAsString(energy: number, units: string): string {
   }
 }
 
+
+function calcPointRadius(context: { dataIndex: number }) {
+  if (!selectedElement) {
+    return 5;
+  }
+  return context.dataIndex === selectedElement!.number - 1 ? 10 : 5;
+}
+
 let atomicSizeChart: Chart;
 let electronAffinityChart: Chart;
 let polarizabilityChart: Chart;
@@ -465,17 +473,19 @@ function drawCharts() {
       }
     }
   };
+  const labels = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
+    'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'];
 
   const ctx = document.getElementById('atomicSizeChartCanv')! as HTMLCanvasElement;
   atomicSizeChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
-        'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'],
+      labels,
       datasets: [{
-        label: `Atomic Size (${unitSelectValue})`,
+        label: `Atomic Size (bohr)`,
         data: [...atomicSize],
-        borderWidth: 1
+        borderWidth: 1,
+        pointRadius: calcPointRadius,
       }]
     },
     options,
@@ -485,12 +495,12 @@ function drawCharts() {
   electronAffinityChart = new Chart(ctx2, {
     type: 'line',
     data: {
-      labels: ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
-        'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'],
+      labels,
       datasets: [{
         label: `Electron Affinity (${unitSelectValue})`,
         data: [...electronAffinity],
-        borderWidth: 1
+        borderWidth: 1,
+        pointRadius: calcPointRadius,
       }]
     },
     options,
@@ -499,12 +509,12 @@ function drawCharts() {
   polarizabilityChart = new Chart(ctx3, {
     type: 'line',
     data: {
-      labels: ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
-        'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'],
+      labels,
       datasets: [{
-        label: `Polarizability (${unitSelectValue})`,
+        label: `Polarizability (bohrs)`,
         data: [...polarizability],
-        borderWidth: 1
+        borderWidth: 1,
+        pointRadius: calcPointRadius,
       }]
     },
     options,
@@ -513,18 +523,19 @@ function drawCharts() {
   ionizationEnergyChart = new Chart(ctx4, {
     type: 'line',
     data: {
-      labels: ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
-        'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'],
+      labels,
       datasets: [
         {
           label: `Unweighted Ionization Energy (${unitSelectValue})`,
           data: [...unweightedIonizationEnergy],
-          borderWidth: 1
+          borderWidth: 1,
+          pointRadius: calcPointRadius,
         },
         {
           label: `Weighted Ionization Energy (${unitSelectValue})`,
           data: [...weightedIonizationEnergy],
-          borderWidth: 1
+          borderWidth: 1,
+          pointRadius: calcPointRadius,
         },
       ]
     },
@@ -535,11 +546,11 @@ function drawCharts() {
 // The unit selector was changed so update the charts to show using the
 // new scale (Ha, Ry, cal, etc.)
 function updateChartScales() {
-  for (let i = 0; i < atomicSizeChart.data.datasets[0].data.length; i++) {
-    atomicSizeChart.data.datasets[0].data[i] = atomicSize[i] * conversions.get(unitSelectValue)!;
-  }
-  atomicSizeChart.data.datasets[0].label = `Atomic Size (${unitSelectValue})`;
-  atomicSizeChart.update();
+  // for (let i = 0; i < atomicSizeChart.data.datasets[0].data.length; i++) {
+  //   atomicSizeChart.data.datasets[0].data[i] = atomicSize[i] * conversions.get(unitSelectValue)!;
+  // }
+  // atomicSizeChart.data.datasets[0].label = `Atomic Size (${unitSelectValue})`;
+  // atomicSizeChart.update();
 
   for (let i = 0; i < electronAffinityChart.data.datasets[0].data.length; i++) {
     electronAffinityChart.data.datasets[0].data[i] = electronAffinity[i] * conversions.get(unitSelectValue)!;
@@ -547,11 +558,11 @@ function updateChartScales() {
   electronAffinityChart.data.datasets[0].label = `Electron Affinity (${unitSelectValue})`;
   electronAffinityChart.update();
 
-  for (let i = 0; i < polarizabilityChart.data.datasets[0].data.length; i++) {
-    polarizabilityChart.data.datasets[0].data[i] = polarizability[i] * conversions.get(unitSelectValue)!;
-  }
-  polarizabilityChart.data.datasets[0].label = `Polarizability (${unitSelectValue})`;
-  polarizabilityChart.update();
+  // for (let i = 0; i < polarizabilityChart.data.datasets[0].data.length; i++) {
+  //   polarizabilityChart.data.datasets[0].data[i] = polarizability[i];
+  // }
+  // polarizabilityChart.data.datasets[0].label = `Polarizability (bohrs)`;
+  // polarizabilityChart.update();
 
   for (let i = 0; i < ionizationEnergyChart.data.datasets[0].data.length; i++) {
     ionizationEnergyChart.data.datasets[0].data[i] = unweightedIonizationEnergy[i] * conversions.get(unitSelectValue)!;
@@ -560,4 +571,28 @@ function updateChartScales() {
   ionizationEnergyChart.data.datasets[0].label = `Unweighted Ionization Energy (${unitSelectValue})`;
   ionizationEnergyChart.data.datasets[1].label = `Weighted Ionization Energy (${unitSelectValue})`;
   ionizationEnergyChart.update();
+}
+
+function updateChartsPoints() {
+  atomicSizeChart.update();
+  electronAffinityChart.update();
+  polarizabilityChart.update();
+  ionizationEnergyChart.update();
+}
+
+// this box appears next to the charts and summarizes the energies
+// for the element that has been selected.
+function updateEnergiesBox() {
+  const atomicNumIndex = selectedElement!.number - 1;
+  const een = document.getElementById('energy-element-name')! as HTMLCanvasElement;
+  een.innerHTML = "Name: " + selectedElement!.name;
+  const eas = document.getElementById('energy-atomic-size')! as HTMLCanvasElement;
+  eas.innerHTML = "Atomic Size: " + atomicSize[atomicNumIndex] + " bohrs";
+  const eea = document.getElementById('energy-electron-affinity')! as HTMLCanvasElement;
+  eea.innerHTML = "Electron Affinity: " + energyToUnitsAsString(electronAffinity[atomicNumIndex], unitSelectValue);
+  const ep = document.getElementById('energy-polarizability')! as HTMLCanvasElement;
+  ep.innerHTML = "Polarizablity: " + polarizability[atomicNumIndex] + " bohrs";
+  const eie = document.getElementById('energy-ionization-energy')! as HTMLCanvasElement;
+  eie.innerHTML = "Weighted Ionization: " + energyToUnitsAsString(weightedIonizationEnergy[atomicNumIndex], unitSelectValue);
+
 }

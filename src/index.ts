@@ -33,6 +33,28 @@ window.addEventListener("load", () => {
     pTableElements[i].addEventListener("click", toggleElement);
   }
 
+  // handle switching tabs.
+  const tabs = document.querySelectorAll('.tab');
+  const tabContents = document.querySelectorAll('.tab-panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = document.querySelector(tab.dataset.target);
+
+      // clear all is-active classes on tab-panels.
+      tabContents.forEach(tc => tc.classList.remove('is-active'));
+      // make the one selected tab-panel active.
+      target.classList.add('is-active');
+
+      // clear the coloring on the tabs
+      tabs.forEach(t => t.classList.remove('is-active'));
+      // make the selected tab colored
+      tab.classList.add('is-active');
+    });
+  });
+
+
+
   const unitSelect = document.getElementById("unitSelector") as HTMLSelectElement;
   unitSelect.addEventListener("change", () => {
     unitSelectValue = unitSelect.value;   // update global variable
@@ -511,7 +533,7 @@ function drawCharts() {
     data: {
       labels,
       datasets: [{
-        label: `Polarizability (bohrs)`,
+        label: `Polarizability (bohr)`,
         data: [...polarizability],
         borderWidth: 1,
         pointRadius: calcPointRadius,
@@ -561,7 +583,7 @@ function updateChartScales() {
   // for (let i = 0; i < polarizabilityChart.data.datasets[0].data.length; i++) {
   //   polarizabilityChart.data.datasets[0].data[i] = polarizability[i];
   // }
-  // polarizabilityChart.data.datasets[0].label = `Polarizability (bohrs)`;
+  // polarizabilityChart.data.datasets[0].label = `Polarizability (bohr)`;
   // polarizabilityChart.update();
 
   for (let i = 0; i < ionizationEnergyChart.data.datasets[0].data.length; i++) {
@@ -587,11 +609,11 @@ function updateEnergiesBox() {
   const een = document.getElementById('energy-element-name')! as HTMLCanvasElement;
   een.innerHTML = "Name: " + selectedElement!.name;
   const eas = document.getElementById('energy-atomic-size')! as HTMLCanvasElement;
-  eas.innerHTML = "Atomic Size: " + atomicSize[atomicNumIndex] + " bohrs";
+  eas.innerHTML = "Atomic Size: " + atomicSize[atomicNumIndex] + " bohr";
   const eea = document.getElementById('energy-electron-affinity')! as HTMLCanvasElement;
   eea.innerHTML = "Electron Affinity: " + energyToUnitsAsString(electronAffinity[atomicNumIndex], unitSelectValue);
   const ep = document.getElementById('energy-polarizability')! as HTMLCanvasElement;
-  ep.innerHTML = "Polarizablity: " + polarizability[atomicNumIndex] + " bohrs";
+  ep.innerHTML = "Polarizablity: " + polarizability[atomicNumIndex] + " bohr";
   const eie = document.getElementById('energy-ionization-energy')! as HTMLCanvasElement;
   eie.innerHTML = "Weighted Ionization: " + energyToUnitsAsString(weightedIonizationEnergy[atomicNumIndex], unitSelectValue);
 

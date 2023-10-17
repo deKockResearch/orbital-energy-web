@@ -280,7 +280,7 @@ h1 {
     color: #34495e;
 }
 
-#tab1:checked~nav .tab1 label,
+/* #tab1:checked~nav .tab1 label,
 #tab2:checked~nav .tab2 label,
 #tab3:checked~nav .tab3 label {
     background: white;
@@ -299,6 +299,46 @@ h1 {
     background: #ffffff;
     left: 0;
     bottom: -1px;
+} */
+
+.tabs-wrapper {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 2px 1px 20px #ddd;
+    /* height: 300px; */
+    /* max-width: 500px; */
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+.nav-tabs {
+    display: flex;
+}
+
+.nav-tabs li {
+    border: 1px solid #ddd;
+}
+
+.nav-tabs li.tab {
+    padding: 0.5rem 1.5rem;
+    border-radius: 5px;
+    margin-right: .5rem;
+    font-weight: 500;
+}
+
+.nav-tabs .tab.is-active {
+    background-color: #4060ff;
+    color: white;
+}
+
+.tab-panel {
+    display: none;
+}
+.tab-panel.is-active {
+    display: block;
 }
 
 .horizontal-flex {

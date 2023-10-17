@@ -253,58 +253,87 @@
         </div>
       </div>
 
-      <div id="eConfigInputBox">
-        <input type="text" id="eConfigInput"></input>
-      </div>
-      <div id="energy-box" style="border: 1px black solid;">
-        <h3>Calculated energy in
-          <select name="unitSelector" id="unitSelector">
-            <option value="Ha">hartrees (Ha)</option>
-            <option value="Ry">rydbergs (Ry)</option>
-            <option value="eV">electron volts (eV)</option>
-            <option value="J">joules (J)</option>
-            <option value="cal">calories (cal)</option>
-            <option value="kJ/mol">kJ/mol</option>
-            <option value="kcal/mol">kcal/mol</option>
-            <option value="cm-1">wavenumbers (cm-1)</option>
-          </select>
-        </h3>
-        <div id="eLevelsID"></div>
-        <h4>tvTable</h4>
-        <div id="tvTables" class="horizontal-flex">
-          <table id="dynamic23TvTable"></table>
-          <table id="faussurierTvTable"></table>
-          <table id="selectableTvTable"></table>
-        </div>
-        <h4>vijTable</h4>
-        <div id="vijTables" class="horizontal-flex">
-          <table id="dynamic23VijTable"></table>
-          <table id="faussurierVijTable"></table>
-          <table id="selectableVijTable"></table>
-        </div>
-        <h4> Total:
-          <div id="totalEnergies" class="horizontal-flex">
-            <span id="dynamic23TotalEnergy"></span>
-            <span id="faussurierTotalEnergy"></span>
-            <span id="selectableTotalEnergy"></span>
+      <!-- Rest of page is in multiple tabs -->
+      <div class="tabs-wrapper">
+        <ul class="nav-tabs">
+          <li class="tab is-active" data-target="#tab1">Tab 1</li>
+          <li class="tab" data-target="#tab2">Tab 2</li>
+          <li class="tab" data-target="#tab3">Tab 3</li>
+        </ul>
+        <div class="tab-contents">
+          <div class="tab-panel is-active" id="tab1">
+            <h1>Tab 1</h1>
+            <div id="eConfigInputBox">
+              <input type="text" id="eConfigInput"></input>
+            </div>
+            <div id="energy-box" style="border: 1px black solid;">
+              <h3>Calculated energy in
+                <select name="unitSelector" id="unitSelector">
+                  <option value="Ha">hartrees (Ha)</option>
+                  <option value="Ry">rydbergs (Ry)</option>
+                  <option value="eV">electron volts (eV)</option>
+                  <option value="J">joules (J)</option>
+                  <option value="cal">calories (cal)</option>
+                  <option value="kJ/mol">kJ/mol</option>
+                  <option value="kcal/mol">kcal/mol</option>
+                  <option value="cm-1">wavenumbers (cm-1)</option>
+                </select>
+              </h3>
+              <div id="eLevelsID"></div>
+              <h4>tvTable</h4>
+              <div id="tvTables" class="horizontal-flex">
+                <table id="dynamic23TvTable"></table>
+                <table id="faussurierTvTable"></table>
+                <table id="selectableTvTable"></table>
+              </div>
+              <h4>vijTable</h4>
+              <div id="vijTables" class="horizontal-flex">
+                <table id="dynamic23VijTable"></table>
+                <table id="faussurierVijTable"></table>
+                <table id="selectableVijTable"></table>
+              </div>
+              <h4> Total:
+                <div id="totalEnergies" class="horizontal-flex">
+                  <span id="dynamic23TotalEnergy"></span>
+                  <span id="faussurierTotalEnergy"></span>
+                  <span id="selectableTotalEnergy"></span>
+                </div>
+            </div>
           </div>
+        </div>
+        <div class="tab-panel" id="tab2">
+          <h1>Tab 2</h1>
+          <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempora ipsam veritatis ex a quibusdam, ad unde
+            iusto
+            commodi, nisi vel aut dolores. Adipisci dolor quibusdam excepturi id velit eius qui.</p>
+        </div>
+        <div class="tab-panel" id="tab3">
+          <h1>Tab 3</h1>
+          <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempora ipsam veritatis ex a quibusdam, ad unde
+            iusto
+            commodi, nisi vel aut dolores. Adipisci dolor quibusdam excepturi id velit eius qui.</p>
+        </div>
+      </div>
+
+
+
+      <div class="charts-area">
+         <div id="charts-wrapper">
+          <canvas id="atomicSizeChartCanv"></canvas>
+          <canvas id="electronAffinityChartCanv"></canvas>
+          <canvas id="polarizabilityChartCanv"></canvas>
+          <canvas id="ionizationEnergyChartCanv"></canvas>
+        </div>
+        <div id="energy-info-for-element">
+          <div id="energy-element-name"></div>
+          <div id="energy-atomic-size"></div>
+          <div id="energy-electron-affinity"></div>
+          <div id="energy-polarizability"></div>
+          <div id="energy-ionization-energy"></div>
+        </div>
       </div>
     </div>
-    <div class="charts-area">
-      <div id="charts-wrapper">
-        <canvas id="atomicSizeChartCanv"></canvas>
-        <canvas id="electronAffinityChartCanv"></canvas>
-        <canvas id="polarizabilityChartCanv"></canvas>
-        <canvas id="ionizationEnergyChartCanv"></canvas>
-      </div>
-      <div id="energy-info-for-element">
-        <div id="energy-element-name"></div>
-        <div id="energy-atomic-size"></div>
-        <div id="energy-electron-affinity"></div>
-        <div id="energy-polarizability"></div>
-        <div id="energy-ionization-energy"></div>
-      </div>
-    </div>
+
   </main>
 
 </body>

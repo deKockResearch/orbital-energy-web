@@ -256,13 +256,13 @@
       <!-- Rest of page is in multiple tabs -->
       <div class="tabs-wrapper">
         <ul class="nav-tabs">
-          <li class="tab is-active" data-target="#tab1">Tab 1</li>
+          <li class="tab is-active" data-target="#tab1">Energies</li>
           <li class="tab" data-target="#tab2">Tab 2</li>
-          <li class="tab" data-target="#tab3">Tab 3</li>
+          <li class="tab" data-target="#tab3">Graphs</li>
         </ul>
         <div class="tab-contents">
           <div class="tab-panel is-active" id="tab1">
-            <h1>Tab 1</h1>
+            <h2>Energies</h2>
             <div id="eConfigInputBox">
               <input type="text" id="eConfigInput"></input>
             </div>
@@ -302,36 +302,33 @@
           </div>
         </div>
         <div class="tab-panel" id="tab2">
-          <h1>Tab 2</h1>
+          <h2>Tab 2</h2>
           <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempora ipsam veritatis ex a quibusdam, ad unde
             iusto
             commodi, nisi vel aut dolores. Adipisci dolor quibusdam excepturi id velit eius qui.</p>
         </div>
         <div class="tab-panel" id="tab3">
-          <h1>Tab 3</h1>
-          <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempora ipsam veritatis ex a quibusdam, ad unde
-            iusto
-            commodi, nisi vel aut dolores. Adipisci dolor quibusdam excepturi id velit eius qui.</p>
+          <h2>Graphs</h2>
+          <div class="charts-area">
+            <div id="charts-wrapper">
+              <canvas id="atomicSizeChartCanv"></canvas>
+              <canvas id="electronAffinityChartCanv"></canvas>
+              <canvas id="polarizabilityChartCanv"></canvas>
+              <canvas id="ionizationEnergyChartCanv"></canvas>
+            </div>
+            <div id="energy-info-for-element">
+              <div id="energy-element-name"></div>
+              <div id="energy-atomic-size"></div>
+              <div id="energy-electron-affinity"></div>
+              <div id="energy-polarizability"></div>
+              <div id="energy-ionization-energy"></div>
+            </div>
+          </div>
         </div>
       </div>
 
 
 
-      <div class="charts-area">
-         <div id="charts-wrapper">
-          <canvas id="atomicSizeChartCanv"></canvas>
-          <canvas id="electronAffinityChartCanv"></canvas>
-          <canvas id="polarizabilityChartCanv"></canvas>
-          <canvas id="ionizationEnergyChartCanv"></canvas>
-        </div>
-        <div id="energy-info-for-element">
-          <div id="energy-element-name"></div>
-          <div id="energy-atomic-size"></div>
-          <div id="energy-electron-affinity"></div>
-          <div id="energy-polarizability"></div>
-          <div id="energy-ionization-energy"></div>
-        </div>
-      </div>
     </div>
 
   </main>

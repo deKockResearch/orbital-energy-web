@@ -39,7 +39,7 @@ h1 {
 
 .not-clickable {
     color: transparent;
-    filter: blur(3px);
+    filter: opacity(20%);
 }
 
 .key {

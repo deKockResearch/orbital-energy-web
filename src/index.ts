@@ -33,13 +33,14 @@ window.addEventListener("load", () => {
     pTableElements[i].addEventListener("click", toggleElement);
   }
 
-  // handle switching tabs.
+  // handle switching tabs.  https://www.youtube.com/watch?v=Nestt4vagvM&t=56s
   const tabs = document.querySelectorAll('.tab');
   const tabContents = document.querySelectorAll('.tab-panel');
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
-      const target = document.querySelector(tab.dataset.target);
+
+      const target = document.querySelector((tab as any).dataset.target);
 
       // clear all is-active classes on tab-panels.
       tabContents.forEach(tc => tc.classList.remove('is-active'));
@@ -216,7 +217,7 @@ function drawMatrix(id: string, matrix: number[][], overrideMatrixId = ''): void
 
   const capElem = document.createElement("caption");
   if (id === 'faussurier') {
-    capElem.innerHTML = `<a target="_blank" href='https://doi.org/10.1016/S0022-4073(97)00018-6'>${id}</a>`;
+    capElem.innerHTML = `<a target="_blank" href='https://doi.org/10.1016/S0022-4073(97)00018-6'>Faussurier</a>`;
   } else {
     capElem.innerHTML = id;
   }
@@ -613,7 +614,7 @@ function updateEnergiesBox() {
   const eea = document.getElementById('energy-electron-affinity')! as HTMLCanvasElement;
   eea.innerHTML = "Electron Affinity: " + energyToUnitsAsString(electronAffinity[atomicNumIndex], unitSelectValue);
   const ep = document.getElementById('energy-polarizability')! as HTMLCanvasElement;
-  ep.innerHTML = "Polarizablity: " + polarizability[atomicNumIndex] + " bohr";
+  ep.innerHTML = "Polarizability: " + polarizability[atomicNumIndex] + " bohr";
   const eie = document.getElementById('energy-ionization-energy')! as HTMLCanvasElement;
   eie.innerHTML = "Weighted Ionization: " + energyToUnitsAsString(weightedIonizationEnergy[atomicNumIndex], unitSelectValue);
 

@@ -16,6 +16,8 @@ let selectedElement: ElementType | null;
 let eConfigInput: HTMLInputElement;
 
 const eLevels = ["1s", "2s", "2p", "3s", "3p"];
+// max # of electrons in each orbital.
+const FULL_ORBITAL_CTS = [2, 2, 6, 2, 6];
 
 // The user can select a 3rd matrix to display. We default to 'custom'.
 let selectedMatrixName = 'custom';
@@ -99,6 +101,9 @@ function removeTableEntries() {
   document.getElementById("selectableTotalEnergy")!.replaceChildren();
 }
 
+//
+// Called when an element is selected
+//
 function toggleElement(e: Event): void {
   // Erase tables and values from previously selected element.
   removeTableEntries();
@@ -139,6 +144,8 @@ function toggleElement(e: Event): void {
     calculateEnergies();
     updateChartsPoints();
     updateEnergiesBox();
+
+    populateIonEnergyTables();
   }
 }
 
@@ -617,5 +624,70 @@ function updateEnergiesBox() {
   ep.innerHTML = "Polarizability: " + polarizability[atomicNumIndex] + " bohr";
   const eie = document.getElementById('energy-ionization-energy')! as HTMLCanvasElement;
   eie.innerHTML = "Weighted Ionization: " + energyToUnitsAsString(weightedIonizationEnergy[atomicNumIndex], unitSelectValue);
+
+}
+
+
+/* Code for computing information in Ionization Energy Tab */
+
+
+
+// Take the electron configuration, e.g., '1s2, 2s2 2p6', and extract the number
+// of electrons in each orbital. Return that array.
+function getElectronsFromElectronConfig(elecConf: string): number[] {
+  const groups = elecConf.split(" ");
+  let res = [];
+  for (const group of groups) {
+    const re = /(\d+[sp])(\d+)/;
+    const matches = group.match(re)!;
+    res.push(Number(matches[2]));
+  }
+  return res;
+}
+
+function populateIonEnergyTables() {
+
+  const leftTableNumElectronsRow = document.getElementsByClassName('ion-energy-econfig-static-row')[0];
+  leftTableNumElectronsRow.replaceChildren();
+
+  let cell = document.createElement('td');
+  cell.innerText = "# of electrons";
+  leftTableNumElectronsRow.appendChild(cell);
+
+  // add cells with # of electrons for selected element
+  let electrons = getElectronsFromElectronConfig(selectedElement!.eConfig);
+  // pad to 5 values, using 0s at end.
+  electrons = electrons.concat(Array(5 - electrons.length).fill(0));
+
+  electrons.forEach((e) => {
+    cell = document.createElement('td');
+    cell.innerText = `${e}`;
+    leftTableNumElectronsRow.appendChild(cell);
+  });
+
+  // the right table has dropdown selectors for electron #s.
+  const rightTableNumElectronsRow = document.getElementsByClassName('ion-energy-econfig-dyn-row')[0];
+  rightTableNumElectronsRow.replaceChildren();
+
+  cell = document.createElement('td');
+  cell.innerText = "# of electrons";
+  rightTableNumElectronsRow.appendChild(cell);
+
+  // add cells with # of electrons for selected element
+  // allow user to choose the dropdown to change # of ions in that orbital
+  electrons.forEach((eCount, index) => {
+    cell = document.createElement('td');
+    const selectCell = document.createElement('select');
+    cell.appendChild(selectCell);
+    for (let i = 0; i <= FULL_ORBITAL_CTS[index]; i++) {
+      const optionCell = document.createElement('option');
+      optionCell.value = `${i}`;
+      optionCell.innerText = `${i}`;
+      selectCell.appendChild(optionCell);
+    }
+    // set the default value for the dropdown
+    selectCell.value = `${eCount}`;
+    rightTableNumElectronsRow.appendChild(cell);
+  });
 
 }

@@ -384,3 +384,18 @@ td {
     width: 50%;
     border: 1px solid red;
 }
+
+/* Ionization Energy tab */
+.ion-energy-area {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.ion-energy-left-table {
+    width: 50%;
+}
+
+.ion-energy-econfig-static-row {
+}
+

@@ -1,19 +1,16 @@
-export function totalOrbitalEnergy(eConfig: string, mx: number[][]) {
-  const orbitalList = eConfig.split(" ");
-  let atomicNumber = 0;
-  for (let num = 0; num < orbitalList.length; num++) {
-    atomicNumber += Number(orbitalList[num].slice(2));
-  }
+import { Orbital } from ".";
+
+export function totalOrbitalEnergy(atomicNumber: number, orbitalList: Orbital[], mx: number[][]) {
 
   let energy = 0;
   let energyArray = [];
   for (let i = 0; i < orbitalList.length; i++) {
-    let n_i = Number(orbitalList[i].charAt(0));
-    let N_i = Number(orbitalList[i].slice(2));
+    let n_i = orbitalList[i].level;
+    let N_i = orbitalList[i].numElectrons;
 
     let Z_i = atomicNumber;
     for (let j = 0; j < orbitalList.length; j++) {
-      Z_i -= (Number(orbitalList[j].slice(2)) - (i === j ? 1 : 0)) * mx[i][j];
+      Z_i -= (orbitalList[j].numElectrons - (i === j ? 1 : 0)) * mx[i][j];
     }
     energyArray.push(0 - (Z_i * Z_i) / (2 * n_i * n_i));
     energy -= N_i * ((Z_i * Z_i) / (2 * n_i * n_i));
@@ -22,9 +19,7 @@ export function totalOrbitalEnergy(eConfig: string, mx: number[][]) {
   return energyArray;
 }
 
-export function energyComponents(atomicNumber: number, eConfig: string, mx: number[][]) {
-  const orbitalList = eConfig.split(" ");
-
+export function energyComponents(atomicNumber: number, orbs: Orbital[], mx: number[][]) {
   let returnDict: {
     t_i: number[],
     v_i: number[],
@@ -35,19 +30,20 @@ export function energyComponents(atomicNumber: number, eConfig: string, mx: numb
     v_ij: []
   };
 
-  const Zlst = computeZis(atomicNumber, eConfig, mx);
+  const Zlst = computeZis(atomicNumber, orbs, mx);
 
-  for (let i = 0; i < orbitalList.length; i++) {
-    let n_i = Number(orbitalList[i].charAt(0));
+  for (let i = 0; i < orbs.length; i++) {
+    let n_i = orbs[i].level;
     returnDict.t_i.push((Zlst[i] * Zlst[i]) / (2 * n_i * n_i));
     returnDict.v_i.push(0 - (atomicNumber * Zlst[i]) / (n_i * n_i));
   }
 
   for (let i in Zlst) {
-    const n_i = Number(orbitalList[i].charAt(0));
+    const n_i = orbs[i].level;
+
     const tempArray: number[] = [];
     for (let j in Zlst) {
-      const n_j = Number(orbitalList[j].charAt(0));
+      const n_j = orbs[j].level;
       tempArray.push(
         (Zlst[i] * mx[i][j]) / (n_i * n_i) + (Zlst[j] * mx[j][i]) / (n_j * n_j)
       )
@@ -58,14 +54,13 @@ export function energyComponents(atomicNumber: number, eConfig: string, mx: numb
 }
 
 
-export function computeZis(atomicNumber: number, eConfig: string, mx: number[][]) {
-  const orbitalList = eConfig.split(" ");
+export function computeZis(atomicNumber: number, orbsList: Orbital[], mx: number[][]) {
 
   let Zlst = [];
-  for (let i = 0; i < orbitalList.length; i++) {
+  for (let i = 0; i < orbsList.length; i++) {
     let Z_i = atomicNumber;
-    for (let j = 0; j < orbitalList.length; j++) {
-      Z_i -= (Number(orbitalList[j].slice(2)) - (i === j ? 1 : 0)) * mx[i][j];
+    for (let j = 0; j < orbsList.length; j++) {
+      Z_i -= (orbsList[j].numElectrons - (i === j ? 1 : 0)) * mx[i][j];
     }
     Zlst.push(Z_i);
   }

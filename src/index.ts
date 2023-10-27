@@ -15,8 +15,17 @@ import {
 } from "./orbitalEnergy";
 import { Chart } from "chart.js/auto";
 
+
+// for an orbital like 1s2, break into parts.
+export interface Orbital {
+  level: number;
+  sOrP: string;
+  numElectrons: number;
+}
+
 // Global variables
 let selectedElement: ElementType | null;
+let selectedElemOrbitals: Orbital[] = [];
 let eConfigInput: HTMLInputElement;
 
 const eLevels = ["1s", "2s", "2p", "3s", "3p"];
@@ -142,9 +151,11 @@ function toggleElement(e: Event): void {
     for (let i = 0; i < pTableElements.length; i++) {
       pTableElements[i].classList.remove("clicked");
     }
+
     detailsElem.replaceChildren();
     document.getElementById("energyLevels")?.replaceChildren();
     elementBox(target);
+    selectedElemOrbitals = computeOrbitals(eConfigInput.value);
     calculateEnergies();
     updateChartsPoints();
     updateEnergiesBox();
@@ -191,7 +202,7 @@ function elementBox(selected: HTMLElement): void {
   aSymbol.textContent = selectedElement.symbol;
   aName.textContent = selectedElement.name;
   aMass.textContent = String(selectedElement.aMass);
-  electronConfig.innerHTML = convertElectronConfigToHTML(selectedElement.eConfig);
+  electronConfig.innerHTML = convertElectronConfigToHTML();
 
   // append elements
   div.appendChild(aNumber);
@@ -299,7 +310,7 @@ function calculateEnergy(matrixName: string, matrix: number[][], overrideMatrixI
   const totalEnergyElemId = (overrideMatrixId || matrixName) + "TotalEnergy";
   const totalEnergyBox = document.getElementById(totalEnergyElemId)!;
 
-  const energyResult = totalOrbitalEnergy(eConfigInput.value, matrix);
+  const energyResult = totalOrbitalEnergy(selectedElement!.number, selectedElemOrbitals, matrix);
   totalEnergyBox.textContent = energyToUnitsAsString(energyResult[0], unitSelectValue);
 
   let convertedEnergy: string[] = [];
@@ -313,7 +324,7 @@ function calculateEnergy(matrixName: string, matrix: number[][], overrideMatrixI
 }
 
 function energyComponentsTable(matrixName: string, matrix: number[][], overrideMatrixId: string) {
-  const energyDict = energyComponents(selectedElement!.number, eConfigInput.value, matrix);
+  const energyDict = energyComponents(selectedElement!.number, selectedElemOrbitals, matrix);
 
   const tiValues = energyDict["t_i"];
   const viValues = energyDict["v_i"];
@@ -452,13 +463,10 @@ function getCustomMatrixValuesFromDOM() {
 
 // Take the electron configuration, e.g., '1s2, 2s2 2p6', and convert to
 // HTML with the number after the s or p a superscript.
-function convertElectronConfigToHTML(elecConf: string): string {
-  const groups = elecConf.split(" ");
+function convertElectronConfigToHTML(): string {
   let htmlRes = '';
-  for (const group of groups) {
-    const re = /(\d+[sp])(\d+)/;
-    const matches = group.match(re)!;
-    htmlRes += `${matches[1]}<sup>${matches[2]}</sup> `;
+  for (const orb of selectedElemOrbitals) {
+    htmlRes += `${orb.level}${orb.sOrP}<sup>${orb.numElectrons}</sup> `;
   }
   return htmlRes;
 }
@@ -632,21 +640,31 @@ function updateEnergiesBox() {
 }
 
 
+function computeOrbitals(eConfigStr: string) {
+  const res: Orbital[] = [];
+  const groups = eConfigStr.split(" ");
+  for (const group of groups) {
+    const re = /(\d+)([sp])(\d+)/;
+    const matches = group.match(re)!;
+    res.push({
+      level: Number(matches[1]),
+      sOrP: matches[2],
+      numElectrons: Number(matches[3]),
+    });
+  }
+  return res;
+}
+
+
+
 /* Code for computing information in Ionization Energy Tab */
 
 
 
 // Take the electron configuration, e.g., '1s2, 2s2 2p6', and extract the number
 // of electrons in each orbital. Return that array.
-function getElectronsFromElectronConfig(elecConf: string): number[] {
-  const groups = elecConf.split(" ");
-  let res = [];
-  for (const group of groups) {
-    const re = /(\d+[sp])(\d+)/;
-    const matches = group.match(re)!;
-    res.push(Number(matches[2]));
-  }
-  return res;
+function getElectronsFromElectronConfig(): number[] {
+  return selectedElemOrbitals.map(o => o.numElectrons);
 }
 
 function populateIonEnergyTables() {
@@ -659,7 +677,7 @@ function populateIonEnergyTables() {
   leftTableNumElectronsRow.appendChild(cell);
 
   // add cells with # of electrons for selected element
-  let electrons = getElectronsFromElectronConfig(selectedElement!.eConfig);
+  let electrons = getElectronsFromElectronConfig();
   // pad to 5 values, putting 0s at end.
   electrons = electrons.concat(Array(5 - electrons.length).fill(0));
 
@@ -676,7 +694,7 @@ function populateIonEnergyTables() {
   cell.innerHTML = 'Z<sub>e</sub>';
   leftTableZesRow.appendChild(cell);
 
-  const Zlst = computeZis(selectedElement!.number, eConfigInput.value, dynamic23Matrix);
+  const Zlst = computeZis(selectedElement!.number, selectedElemOrbitals, dynamic23Matrix);
   electrons.forEach((e, index) => {
     cell = document.createElement('td');
     cell.innerText = `${e === 0 ? 0 : Zlst[index].toFixed(3)}`;

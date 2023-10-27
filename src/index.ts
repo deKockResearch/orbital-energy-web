@@ -8,7 +8,11 @@ import {
 } from "./matrices.js";
 import { atomicSize, electronAffinity, polarizability, unweightedIonizationEnergy, weightedIonizationEnergy } from "./graphData.js";
 import { drawDiagram } from "./energyDiagramsDisplay.js";
-import { totalOrbitalEnergy, energyComponents } from "./orbitalEnergy.js";
+import {
+  totalOrbitalEnergy,
+  energyComponents,
+  computeZis,
+} from "./orbitalEnergy";
 import { Chart } from "chart.js/auto";
 
 // Global variables
@@ -309,7 +313,7 @@ function calculateEnergy(matrixName: string, matrix: number[][], overrideMatrixI
 }
 
 function energyComponentsTable(matrixName: string, matrix: number[][], overrideMatrixId: string) {
-  const energyDict = energyComponents(eConfigInput.value, matrix);
+  const energyDict = energyComponents(selectedElement!.number, eConfigInput.value, matrix);
 
   const tiValues = energyDict["t_i"];
   const viValues = energyDict["v_i"];
@@ -656,7 +660,7 @@ function populateIonEnergyTables() {
 
   // add cells with # of electrons for selected element
   let electrons = getElectronsFromElectronConfig(selectedElement!.eConfig);
-  // pad to 5 values, using 0s at end.
+  // pad to 5 values, putting 0s at end.
   electrons = electrons.concat(Array(5 - electrons.length).fill(0));
 
   electrons.forEach((e) => {
@@ -664,6 +668,24 @@ function populateIonEnergyTables() {
     cell.innerText = `${e}`;
     leftTableNumElectronsRow.appendChild(cell);
   });
+
+  const leftTableZesRow = document.getElementsByClassName('ion-energy-z_es-static-row')[0];
+  leftTableZesRow.replaceChildren();
+
+  cell = document.createElement('td');
+  cell.innerHTML = 'Z<sub>e</sub>';
+  leftTableZesRow.appendChild(cell);
+
+  const Zlst = computeZis(selectedElement!.number, eConfigInput.value, dynamic23Matrix);
+  electrons.forEach((e, index) => {
+    cell = document.createElement('td');
+    cell.innerText = `${e === 0 ? 0 : Zlst[index].toFixed(3)}`;
+    leftTableZesRow.appendChild(cell);
+  });
+
+
+
+  // ------------------- now, right-hand side table ----------------
 
   // the right table has dropdown selectors for electron #s.
   const rightTableNumElectronsRow = document.getElementsByClassName('ion-energy-econfig-dyn-row')[0];

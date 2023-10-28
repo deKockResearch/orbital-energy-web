@@ -694,7 +694,7 @@ function populateIonEnergyTables() {
   cell.innerHTML = 'Z<sub>e</sub>';
   leftTableZesRow.appendChild(cell);
 
-  const Zlst = computeZis(selectedElement!.number, selectedElemOrbitals, dynamic23Matrix);
+  let Zlst = computeZis(selectedElement!.number, selectedElemOrbitals, dynamic23Matrix);
   electrons.forEach((e, index) => {
     cell = document.createElement('td');
     cell.innerText = `${e === 0 ? 0 : Zlst[index].toFixed(3)}`;
@@ -703,10 +703,13 @@ function populateIonEnergyTables() {
 
 
 
+
   // ------------------- now, right-hand side table ----------------
 
   // the right table has dropdown selectors for electron #s.
   const rightTableNumElectronsRow = document.getElementsByClassName('ion-energy-econfig-dyn-row')[0];
+  const rightTableZesRow = document.getElementsByClassName('ion-energy-z_es-dyn-row')[0];
+
   rightTableNumElectronsRow.replaceChildren();
 
   cell = document.createElement('td');
@@ -727,7 +730,57 @@ function populateIonEnergyTables() {
     }
     // set the default value for the dropdown
     selectCell.value = `${eCount}`;
+    const selectorName = `ion-energy-num-ions-selected-${index}`;
+    selectCell.setAttribute("id", selectorName);
+    selectCell.setAttribute("name", selectorName);
+    selectCell.setAttribute("class", "ion-energy-econfig-select");
+    selectCell.addEventListener("change",
+      () => handleNumElectronsChangedByUser(rightTableZesRow));
+
     rightTableNumElectronsRow.appendChild(cell);
+  });
+
+  rightTableZesRow.replaceChildren();
+
+  cell = document.createElement('td');
+  cell.innerHTML = 'Z<sub>e</sub>';
+  rightTableZesRow.appendChild(cell);
+
+  electrons.forEach((e, index) => {
+    cell = document.createElement('td');
+    cell.innerText = `${e === 0 ? 0 : Zlst[index].toFixed(3)}`;
+    rightTableZesRow.appendChild(cell);
+  });
+}
+
+
+function handleNumElectronsChangedByUser(rightTableZesRow: Element) {
+  rightTableZesRow.replaceChildren();
+  const cell = document.createElement('td');
+  cell.innerHTML = 'Z<sub>e</sub>';
+  rightTableZesRow.appendChild(cell);
+
+  // Iterate over all electron selectors and get their values. Build
+  // a list of Orbitals from the default/original list.
+  const newOrbitals = [...selectedElemOrbitals];
+  const selectors = document.querySelectorAll(".ion-energy-econfig-select");
+  selectors.forEach((cell: any) => {
+    // cell.id is ion-energy-num-ions-selected-#. Lop off everything except the number
+    const index = Number(cell.id.charAt(cell.id.length - 1));
+    // newOrbitals may only be 1, 2, 3, etc. in length for low-numbered elements.
+    // but we have 5 selectors. only update if necessary.
+    if (index < newOrbitals.length) {
+      newOrbitals[index].numElectrons = Number(cell.value);
+    }
+  });
+  // console.table(newOrbitals);
+
+  // Update the values in the Z_i row in the right hand table.
+  let Zlst = computeZis(selectedElement!.number, newOrbitals, dynamic23Matrix);
+  selectors.forEach((_, index) => {
+    const cell = document.createElement('td');
+    cell.innerText = `${index >= Zlst.length ? 0 : Zlst[index].toFixed(3)}`;
+    rightTableZesRow.appendChild(cell);
   });
 
 }

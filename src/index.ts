@@ -154,8 +154,17 @@ function toggleElement(e: Event): void {
 
     detailsElem.replaceChildren();
     document.getElementById("energyLevels")?.replaceChildren();
-    elementBox(target);
+
+    // retrieve element information
+    const elementID = target.textContent!.replace(/\D/g, "");
+    selectedElement = getElementByAtomicNumber(parseInt(elementID));
+
+    eConfigInput = <HTMLInputElement>document.getElementById("eConfigInput");
+    eConfigInput.value = selectedElement!.eConfig;
+
     selectedElemOrbitals = computeOrbitals(eConfigInput.value);
+
+    elementBox(target);
     calculateEnergies();
     updateChartsPoints();
     updateEnergiesBox();
@@ -170,13 +179,10 @@ function toggleElement(e: Event): void {
  * Output: element data with thatomic number given
  */
 function elementBox(selected: HTMLElement): void {
-  // retrieve element information
-  const elementID = selected.textContent!.replace(/\D/g, "");
-  selectedElement = getElementByAtomicNumber(parseInt(elementID));
 
-  // temporary spot to update eConfigInput
-  eConfigInput = <HTMLInputElement>document.getElementById("eConfigInput");
-  eConfigInput.value = selectedElement.eConfig;
+  if (!selectedElement) {
+    return;
+  }
 
   // add clicked class to element
   selected.classList.add("clicked");

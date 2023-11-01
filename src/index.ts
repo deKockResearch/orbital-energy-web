@@ -808,7 +808,7 @@ function handleNumElectronsChangedByUser(rightTableZesRow: Element) {
   // console.table(newOrbitals);
 
   // Update the values in the Z_i row in the right hand table.
-  let zandVLst = computeZisAndVaeos(selectedElement!.number, newOrbitals, dynamic23Matrix);
+  let zandVLst: ZisAndVaoes[] = computeZisAndVaeos(selectedElement!.number, newOrbitals, dynamic23Matrix);
   selectors.forEach((_, index) => {
     const cell = document.createElement('td');
     cell.innerText = `${index >= zandVLst.length ? 0 : zandVLst[index].z_i.toFixed(3)}`;

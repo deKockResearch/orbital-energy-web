@@ -11,7 +11,8 @@ import { drawDiagram } from "./energyDiagramsDisplay.js";
 import {
   totalOrbitalEnergy,
   energyComponents,
-  computeZis,
+  computeZisAndVaeos,
+  ZisAndVaoes,
 } from "./orbitalEnergy";
 import { Chart } from "chart.js/auto";
 
@@ -700,14 +701,25 @@ function populateIonEnergyTables() {
   cell.innerHTML = 'Z<sub>e</sub>';
   leftTableZesRow.appendChild(cell);
 
-  let Zlst = computeZis(selectedElement!.number, selectedElemOrbitals, dynamic23Matrix);
+  const zAndVaoeLst = computeZisAndVaeos(selectedElement!.number, selectedElemOrbitals, dynamic23Matrix);
   electrons.forEach((e, index) => {
     cell = document.createElement('td');
-    cell.innerText = `${e === 0 ? 0 : Zlst[index].toFixed(3)}`;
+    cell.innerText = `${e === 0 ? 0 : zAndVaoeLst[index].z_i.toFixed(3)}`;
     leftTableZesRow.appendChild(cell);
   });
 
+  const leftTableVaoeRow = document.getElementsByClassName('ion-energy-vaoe-static-row')[0];
+  leftTableVaoeRow.replaceChildren();
 
+  cell = document.createElement('td');
+  cell.innerHTML = "VAOE";
+  leftTableVaoeRow.appendChild(cell);
+
+  electrons.forEach((e, index) => {
+    cell = document.createElement('td');
+    cell.innerText = `${e === 0 ? 0 : zAndVaoeLst[index].vaoe.toFixed(3)}`;
+    leftTableVaoeRow.appendChild(cell);
+  });
 
 
   // ------------------- now, right-hand side table ----------------
@@ -754,9 +766,23 @@ function populateIonEnergyTables() {
 
   electrons.forEach((e, index) => {
     cell = document.createElement('td');
-    cell.innerText = `${e === 0 ? 0 : Zlst[index].toFixed(3)}`;
+    cell.innerText = `${e === 0 ? 0 : zAndVaoeLst[index].z_i.toFixed(3)}`;
     rightTableZesRow.appendChild(cell);
   });
+
+  const rightTableVaoeRow = document.getElementsByClassName('ion-energy-vaoe-dyn-row')[0];
+  rightTableVaoeRow.replaceChildren();
+
+  cell = document.createElement('td');
+  cell.innerHTML = "VAOE";
+  rightTableVaoeRow.appendChild(cell);
+
+  electrons.forEach((e, index) => {
+    cell = document.createElement('td');
+    cell.innerText = `${e === 0 ? 0 : zAndVaoeLst[index].vaoe.toFixed(3)}`;
+    rightTableVaoeRow.appendChild(cell);
+  });
+
 }
 
 
@@ -782,10 +808,10 @@ function handleNumElectronsChangedByUser(rightTableZesRow: Element) {
   // console.table(newOrbitals);
 
   // Update the values in the Z_i row in the right hand table.
-  let Zlst = computeZis(selectedElement!.number, newOrbitals, dynamic23Matrix);
+  let zandVLst = computeZisAndVaeos(selectedElement!.number, newOrbitals, dynamic23Matrix);
   selectors.forEach((_, index) => {
     const cell = document.createElement('td');
-    cell.innerText = `${index >= Zlst.length ? 0 : Zlst[index].toFixed(3)}`;
+    cell.innerText = `${index >= zandVLst.length ? 0 : zandVLst[index].z_i.toFixed(3)}`;
     rightTableZesRow.appendChild(cell);
   });
 

@@ -1,5 +1,10 @@
 import { Orbital } from ".";
 
+export interface ZisAndVaoes {
+  z_i: number;
+  vaoe: number;
+}
+
 export function totalOrbitalEnergy(atomicNumber: number, orbitalList: Orbital[], mx: number[][]) {
 
   let energy = 0;
@@ -30,7 +35,7 @@ export function energyComponents(atomicNumber: number, orbs: Orbital[], mx: numb
     v_ij: []
   };
 
-  const Zlst = computeZis(atomicNumber, orbs, mx);
+  const Zlst = computeZisAndVaeos(atomicNumber, orbs, mx).map(x => x.z_i);
 
   for (let i = 0; i < orbs.length; i++) {
     let n_i = orbs[i].level;
@@ -54,15 +59,24 @@ export function energyComponents(atomicNumber: number, orbs: Orbital[], mx: numb
 }
 
 
-export function computeZis(atomicNumber: number, orbsList: Orbital[], mx: number[][]) {
+export function computeZisAndVaeos(atomicNumber: number, orbsList: Orbital[], mx: number[][]): ZisAndVaoes[] {
 
-  let Zlst = [];
+  // e -= (N_i * (Z_i * Z_i) / (2 * n_i * n_i))
+
+  let resLst: ZisAndVaoes[] = [];
+  let vaoe_i = 0;
   for (let i = 0; i < orbsList.length; i++) {
     let Z_i = atomicNumber;
+    const N_i = orbsList[i].numElectrons;
     for (let j = 0; j < orbsList.length; j++) {
+      const n_i = orbsList[i].level;
       Z_i -= (orbsList[j].numElectrons - (i === j ? 1 : 0)) * mx[i][j];
+      vaoe_i -= (N_i * (Z_i * Z_i) / (2 * n_i * n_i));
     }
-    Zlst.push(Z_i);
+    resLst.push({
+      z_i: Z_i,
+      vaoe: vaoe_i,
+    });
   }
-  return Zlst;
+  return resLst;
 }

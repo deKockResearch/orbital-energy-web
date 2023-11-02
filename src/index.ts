@@ -667,10 +667,11 @@ function computeOrbitals(eConfigStr: string) {
 
 
 
-// Take the electron configuration, e.g., '1s2, 2s2 2p6', and extract the number
-// of electrons in each orbital. Return that array.
+// Take the electron configuration, e.g., '1s2 2s2 2p6', and extract the number
+// of electrons in each orbital. Pad the array with 0s out to 5 elements.
 function getElectronsFromElectronConfig(): number[] {
-  return selectedElemOrbitals.map(o => o.numElectrons);
+  let ret = selectedElemOrbitals.map(o => o.numElectrons);
+  return ret.concat(Array(5 - ret.length).fill(0));
 }
 
 function populateIonEnergyTables() {
@@ -684,8 +685,6 @@ function populateIonEnergyTables() {
 
   // add cells with # of electrons for selected element
   let electrons = getElectronsFromElectronConfig();
-  // pad to 5 values, putting 0s at end.
-  electrons = electrons.concat(Array(5 - electrons.length).fill(0));
 
   electrons.forEach((e) => {
     cell = document.createElement('td');
@@ -801,15 +800,22 @@ function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
     // but we have 5 selectors. only update if necessary.
     if (index < newOrbitals.length) {
       newOrbitals[index].numElectrons = Number(cell.value);
+    } else {
+      // add a new orbital record to the end with the # of electrons.
+      newOrbitals.push({
+        level: index,     // does not matter
+        sOrP: 'p',        // does not matter
+        numElectrons: Number(cell.value),
+      });
     }
   });
 
 
   // Update the values in the Z_i row in the right hand table.
   let Zlst = computeZis(selectedElement!.number, newOrbitals, dynamic23Matrix);
-  selectors.forEach((_, index) => {
+  Zlst.forEach((z) => {
     const cell = document.createElement('td');
-    cell.innerText = `${index >= Zlst.length ? 0 : Zlst[index].toFixed(3)}`;
+    cell.innerText = `${z.toFixed(3)}`;
     rightTableZesRow.appendChild(cell);
   });
 
@@ -824,9 +830,9 @@ function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
   cell.innerHTML = "VAOE";
   rightTableVaoeRow.appendChild(cell);
 
-  selectors.forEach((e, index) => {
+  orbitalEnergies.forEach((e) => {
     cell = document.createElement('td');
-    cell.innerText = `${index >= orbitalEnergies.length ? 0 : orbitalEnergies[index].toFixed(3)}`;
+    cell.innerText = `${e.toFixed(3)}`;
     rightTableVaoeRow.appendChild(cell);
   });
 
@@ -837,10 +843,9 @@ function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
   cell.innerHTML = "E<sub>t</sub>";
   rightTableEtRow.appendChild(cell);
 
-  selectors.forEach((e, index) => {
+  orbitalEnergies.forEach((e, index) => {
     cell = document.createElement('td');
-    cell.innerText = `${index >= orbitalEnergies.length ? 0 :
-      (orbitalEnergies[index] * newOrbitals[index].numElectrons).toFixed(3)}`;
+    cell.innerText = `${(e * newOrbitals[index].numElectrons).toFixed(3)}`;
     rightTableEtRow.appendChild(cell);
   });
 

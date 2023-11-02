@@ -724,13 +724,22 @@ function populateIonEnergyTables() {
     leftTableVaoeRow.appendChild(cell);
   });
 
+  const leftTableEtRow = document.getElementsByClassName('ion-energy-et-static-row')[0];
+  leftTableEtRow.replaceChildren();
+  cell = document.createElement('td');
+  cell.innerHTML = "E<sub>t</sub>";
+  leftTableEtRow.appendChild(cell);
+
+  electrons.forEach((e, index) => {
+    cell = document.createElement('td');
+    cell.innerText = `${e === 0 ? 0 : (orbitalEnergies[index] * electrons[index]).toFixed(3)}`;
+    leftTableEtRow.appendChild(cell);
+  });
 
   // ------------------- now, right-hand side table ----------------
 
   // the right table has dropdown selectors for electron #s.
   const rightTableNumElectronsRow = document.getElementsByClassName('ion-energy-econfig-dyn-row')[0];
-  const rightTableZesRow = document.getElementsByClassName('ion-energy-z_es-dyn-row')[0];
-  const rightTableVaoeRow = document.getElementsByClassName('ion-energy-vaoe-dyn-row')[0];
 
   rightTableNumElectronsRow.replaceChildren();
 
@@ -757,17 +766,22 @@ function populateIonEnergyTables() {
     selectCell.setAttribute("name", selectorName);
     selectCell.setAttribute("class", "ion-energy-econfig-select");
     selectCell.addEventListener("change",
-      () => handleNumElectronsChangedByUser(rightTableZesRow, rightTableVaoeRow));
+      () => handleNumElectronsChangedByUser());
 
     rightTableNumElectronsRow.appendChild(cell);
   });
 
   // Populate the right table rows with default values.
-  handleNumElectronsChangedByUser(rightTableZesRow, rightTableVaoeRow);
+  handleNumElectronsChangedByUser();
 }
 
 
-function handleNumElectronsChangedByUser(rightTableZesRow: Element, rightTableVaoeRow: Element) {
+function handleNumElectronsChangedByUser() {
+
+  const rightTableZesRow = document.getElementsByClassName('ion-energy-z_es-dyn-row')[0];
+  const rightTableVaoeRow = document.getElementsByClassName('ion-energy-vaoe-dyn-row')[0];
+  const rightTableEtRow = document.getElementsByClassName('ion-energy-et-dyn-row')[0];
+
   rightTableZesRow.replaceChildren();
   let cell = document.createElement('td');
   cell.innerHTML = 'Z<sub>e</sub>';
@@ -811,5 +825,19 @@ function handleNumElectronsChangedByUser(rightTableZesRow: Element, rightTableVa
     cell = document.createElement('td');
     cell.innerText = `${index >= orbitalEnergies.length ? 0 : orbitalEnergies[index].toFixed(3)}`;
     rightTableVaoeRow.appendChild(cell);
+  });
+
+  // Update Et row: each value is VAOE value * # of electrons
+  rightTableEtRow.replaceChildren();
+
+  cell = document.createElement('td');
+  cell.innerHTML = "E<sub>t</sub>";
+  rightTableEtRow.appendChild(cell);
+
+  selectors.forEach((e, index) => {
+    cell = document.createElement('td');
+    cell.innerText = `${index >= orbitalEnergies.length ? 0 :
+      (orbitalEnergies[index] * newOrbitals[index].numElectrons).toFixed(3)}`;
+    rightTableEtRow.appendChild(cell);
   });
 }

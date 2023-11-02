@@ -736,6 +736,9 @@ function populateIonEnergyTables() {
     leftTableEtRow.appendChild(cell);
   });
 
+  const totalEnergyCell = document.getElementById('ion-energy-left-table-total-energy');
+  totalEnergyCell!.innerText = `${totalOE!.toFixed(3)}`;
+
   // ------------------- now, right-hand side table ----------------
 
   // the right table has dropdown selectors for electron #s.
@@ -766,17 +769,17 @@ function populateIonEnergyTables() {
     selectCell.setAttribute("name", selectorName);
     selectCell.setAttribute("class", "ion-energy-econfig-select");
     selectCell.addEventListener("change",
-      () => handleNumElectronsChangedByUser());
+      () => handleNumElectronsChangedByUser(totalOE!));
 
     rightTableNumElectronsRow.appendChild(cell);
   });
 
   // Populate the right table rows with default values.
-  handleNumElectronsChangedByUser();
+  handleNumElectronsChangedByUser(totalOE!);
 }
 
 
-function handleNumElectronsChangedByUser() {
+function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
 
   const rightTableZesRow = document.getElementsByClassName('ion-energy-z_es-dyn-row')[0];
   const rightTableVaoeRow = document.getElementsByClassName('ion-energy-vaoe-dyn-row')[0];
@@ -840,4 +843,12 @@ function handleNumElectronsChangedByUser() {
       (orbitalEnergies[index] * newOrbitals[index].numElectrons).toFixed(3)}`;
     rightTableEtRow.appendChild(cell);
   });
+
+  const totalEnergyCell = document.getElementById('ion-energy-right-table-total-energy');
+  totalEnergyCell!.innerText = `${totalOE!.toFixed(3)}`;
+
+  const ionizationEnergyCell = document.getElementById('ion-energy-ionization-energy');
+  const ionEnergy = Math.abs(groundStateTotalEnergy - totalOE!);
+  ionizationEnergyCell!.innerText = `${ionEnergy.toFixed(3)}`;
+
 }

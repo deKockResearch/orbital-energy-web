@@ -107,7 +107,6 @@ function configParser(eConfig) {
     eCount = parseInt(configList[i - 1].substr(2));
     orbital = configList[i - 1].substr(0, 2);
     subShell = orbital.substr(1);
-    console.log(subShell);
     switch (subShell) {
       case "s":
         imgCount = 1;

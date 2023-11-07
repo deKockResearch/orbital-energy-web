@@ -511,6 +511,7 @@ let atomicSizeChart: Chart;
 let electronAffinityChart: Chart;
 let polarizabilityChart: Chart;
 let ionizationEnergyChart: Chart;
+let weightedIonizationEnergyChart: Chart;
 
 function drawCharts() {
 
@@ -551,7 +552,16 @@ function drawCharts() {
         pointRadius: calcPointRadius,
       }]
     },
-    options,
+    options: {
+      ...options,
+      plugins: {
+        title: {
+          text: "https://cccbdb.nist.gov/elecaff1x.asp",
+          display: true,
+          position: "bottom",
+        },
+      },
+    },
   });
   const ctx3 = document.getElementById('polarizabilityChartCanv')! as HTMLCanvasElement;
   polarizabilityChart = new Chart(ctx3, {
@@ -574,11 +584,30 @@ function drawCharts() {
       labels,
       datasets: [
         {
-          label: `Unweighted Ionization Energy (${unitSelectValue})`,
+          label: `Ionization Energy (${unitSelectValue})`,
           data: [...unweightedIonizationEnergy],
           borderWidth: 1,
           pointRadius: calcPointRadius,
         },
+      ]
+    },
+    options: {
+      ...options,
+      plugins: {
+        title: {
+          text: ["Kramida, A., Ralchenko, Yu., Reader, J., and NIST ASD Team (2014). NIST Atomic Spectra Database (ver. 5.2),", "[Online]. Available: http://physics.nist.gov/asd [2016, February 22]. National Institute of Standards and Technology, Gaithersburg, MD."],
+          display: true,
+          position: "bottom",
+        },
+      },
+    },
+  });
+  const ctx5 = document.getElementById('weightedIonizationEnergyChartCanv')! as HTMLCanvasElement;
+  weightedIonizationEnergyChart = new Chart(ctx5, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
         {
           label: `Weighted Ionization Energy (${unitSelectValue})`,
           data: [...weightedIonizationEnergy],
@@ -587,18 +616,22 @@ function drawCharts() {
         },
       ]
     },
-    options,
+    options: {
+      ...options,
+      plugins: {
+        title: {
+          text: ["Kramida, A., Ralchenko, Yu., Reader, J., and NIST ASD Team (2014). NIST Atomic Spectra Database (ver. 5.2),", "[Online]. Available: http://physics.nist.gov/asd [2016, February 22]. National Institute of Standards and Technology, Gaithersburg, MD."],
+          display: true,
+          position: "bottom",
+        },
+      },
+    },
   });
 }
 
 // The unit selector was changed so update the charts to show using the
 // new scale (Ha, Ry, cal, etc.)
 function updateChartScales() {
-  // for (let i = 0; i < atomicSizeChart.data.datasets[0].data.length; i++) {
-  //   atomicSizeChart.data.datasets[0].data[i] = atomicSize[i] * conversions.get(unitSelectValue)!;
-  // }
-  // atomicSizeChart.data.datasets[0].label = `Atomic Size (${unitSelectValue})`;
-  // atomicSizeChart.update();
 
   for (let i = 0; i < electronAffinityChart.data.datasets[0].data.length; i++) {
     electronAffinityChart.data.datasets[0].data[i] = electronAffinity[i] * conversions.get(unitSelectValue)!;
@@ -606,19 +639,17 @@ function updateChartScales() {
   electronAffinityChart.data.datasets[0].label = `Electron Affinity (${unitSelectValue})`;
   electronAffinityChart.update();
 
-  // for (let i = 0; i < polarizabilityChart.data.datasets[0].data.length; i++) {
-  //   polarizabilityChart.data.datasets[0].data[i] = polarizability[i];
-  // }
-  // polarizabilityChart.data.datasets[0].label = `Polarizability (bohr)`;
-  // polarizabilityChart.update();
-
   for (let i = 0; i < ionizationEnergyChart.data.datasets[0].data.length; i++) {
     ionizationEnergyChart.data.datasets[0].data[i] = unweightedIonizationEnergy[i] * conversions.get(unitSelectValue)!;
-    ionizationEnergyChart.data.datasets[1].data[i] = weightedIonizationEnergy[i] * conversions.get(unitSelectValue)!;
   }
-  ionizationEnergyChart.data.datasets[0].label = `Unweighted Ionization Energy (${unitSelectValue})`;
-  ionizationEnergyChart.data.datasets[1].label = `Weighted Ionization Energy (${unitSelectValue})`;
+  ionizationEnergyChart.data.datasets[0].label = `Ionization Energy (${unitSelectValue})`;
   ionizationEnergyChart.update();
+
+  for (let i = 0; i < weightedIonizationEnergyChart.data.datasets[0].data.length; i++) {
+    weightedIonizationEnergyChart.data.datasets[1].data[i] = weightedIonizationEnergy[i] * conversions.get(unitSelectValue)!;
+  }
+  weightedIonizationEnergyChart.data.datasets[1].label = `Weighted Ionization Energy (${unitSelectValue})`;
+  weightedIonizationEnergyChart.update();
 }
 
 function updateChartsPoints() {

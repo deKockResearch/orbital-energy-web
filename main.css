@@ -373,6 +373,7 @@ td {
 .charts-area {
     display: flex;
     flex-direction: row;
+    min-height: 500px;
 }
 
 #charts-wrapper {

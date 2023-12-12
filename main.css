@@ -60,7 +60,7 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex: 5vw;
+    flex: 5vw;    /* NOT CORRECT */
     color: black;
     box-sizing: border-box;
     border-radius: 3px;
@@ -354,6 +354,7 @@ ul {
     padding-bottom: 8px;
     margin: 8px;
     border: 1px black solid;
+    font-size: 1.15vw;
 }
 
 table,

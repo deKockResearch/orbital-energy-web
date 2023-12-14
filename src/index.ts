@@ -31,6 +31,8 @@ let eConfigInput: HTMLInputElement;
 const eLevels = ["1s", "2s", "2p", "3s", "3p"];
 // max # of electrons in each orbital.
 const FULL_ORBITAL_CTS = [2, 2, 6, 2, 6];
+// just the first digits from the orbitals.
+const LEVELS = [1, 2, 2, 3, 3];
 
 // The user can select a 3rd matrix to display. We default to 'custom'.
 let selectedMatrixName = 'custom';
@@ -834,8 +836,8 @@ function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
     } else {
       // add a new orbital record to the end with the # of electrons.
       newOrbitals.push({
-        level: index,     // does not matter
-        sOrP: 'p',        // does not matter
+        level: LEVELS[index],
+        sOrP: 'p',    // not used in the calculation, so value does not matter.
         numElectrons: Number(cell.value),
       });
     }

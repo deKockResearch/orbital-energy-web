@@ -843,12 +843,12 @@ function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
     }
   });
 
-
   // Update the values in the Z_i row in the right hand table.
   let Zlst = computeZis(selectedElement!.number, newOrbitals, dynamic23Matrix);
-  Zlst.forEach((z) => {
+  Zlst.forEach((z, index) => {
     const cell = document.createElement('td');
-    cell.innerText = `${z.toFixed(3)}`;
+    // if the occupancy of the orbital is 0, make the value 0 instead of the computed energy.
+    cell.innerText = newOrbitals[index].numElectrons === 0 ? "0.000" : `${z.toFixed(3)}`;
     rightTableZesRow.appendChild(cell);
   });
 

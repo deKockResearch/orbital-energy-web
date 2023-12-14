@@ -735,7 +735,7 @@ function populateIonEnergyTables() {
   const zLst = computeZis(selectedElement!.number, selectedElemOrbitals, dynamic23Matrix);
   electrons.forEach((e, index) => {
     cell = document.createElement('td');
-    cell.innerText = `${e === 0 ? 0 : zLst[index].toFixed(3)}`;
+    cell.innerText = `${e === 0 ? "0.000" : zLst[index].toFixed(3)}`;
     leftTableZesRow.appendChild(cell);
   });
 
@@ -752,7 +752,7 @@ function populateIonEnergyTables() {
 
   electrons.forEach((e, index) => {
     cell = document.createElement('td');
-    cell.innerText = `${e === 0 ? 0 : orbitalEnergies[index].toFixed(3)}`;
+    cell.innerText = `${e === 0 ? "0.000" : orbitalEnergies[index].toFixed(3)}`;
     leftTableVaoeRow.appendChild(cell);
   });
 
@@ -764,7 +764,7 @@ function populateIonEnergyTables() {
 
   electrons.forEach((e, index) => {
     cell = document.createElement('td');
-    cell.innerText = `${e === 0 ? 0 : (orbitalEnergies[index] * electrons[index]).toFixed(3)}`;
+    cell.innerText = `${e === 0 ? "0.000" : (orbitalEnergies[index] * electrons[index]).toFixed(3)}`;
     leftTableEtRow.appendChild(cell);
   });
 
@@ -863,9 +863,11 @@ function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
   cell.innerHTML = "VAOE";
   rightTableVaoeRow.appendChild(cell);
 
-  orbitalEnergies.forEach((e) => {
+  console.log('newOrbitals = ', newOrbitals);
+  orbitalEnergies.forEach((e, index) => {
     cell = document.createElement('td');
-    cell.innerText = `${e.toFixed(3)}`;
+    // if the occupancy of the orbital is 0, make the value 0 instead of the computed energy.
+    cell.innerText = newOrbitals[index].numElectrons === 0 ? "0.000" : `${e.toFixed(3)}`;
     rightTableVaoeRow.appendChild(cell);
   });
 
@@ -878,6 +880,7 @@ function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
 
   orbitalEnergies.forEach((e, index) => {
     cell = document.createElement('td');
+    // if the occupancy of the orbital is 0, make the value 0 instead of the computed energy.
     cell.innerText = `${(e * newOrbitals[index].numElectrons).toFixed(3)}`;
     rightTableEtRow.appendChild(cell);
   });

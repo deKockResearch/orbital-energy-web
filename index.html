@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Periodic Table</title>
+  <title>Orbital Energy</title>
   <link rel="stylesheet" type="text/css" href="main.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script type="module" src="/src/index.ts"></script>
@@ -11,16 +11,9 @@
 
 <body>
   <main>
-    <span class="version"> Version 12-14-23</span>
+    <span class="version"> Version 12-18-23</span>
     <h1>Orbital Energy</h1>
-    <!--
-            Periodic table of elements.
-            Uses a pseudo-grid table to display the elements
-                - Uses CSS to limit the number of <div> per line to 18
-                - Empty elements in place to represent the gaps
-                - "href" tag not in use at the moment
-                - classes give color, hover behavior and selection status
-        -->
+
     <div class="wrapper">
       <div class="innerTop">
         <div class="elements">
@@ -274,6 +267,7 @@
           <li class="tab" data-target="#tab3">Ionization Energy</li>
         </ul>
         <div class="tab-contents">
+
           <div class="tab-panel is-active" id="tab1">
             <h2>VAO Energy</h2>
             <div id="eConfigInputBox">
@@ -302,129 +296,132 @@
                 </div>
             </div>
           </div>
-        </div>
-        <div class="tab-panel" id="tab2">
-          <h2>Graphs</h2>
-          <div class="charts-area">
-            <div id="charts-wrapper">
-              <canvas id="atomicSizeChartCanv"></canvas>
-              <canvas id="electronAffinityChartCanv"></canvas>
-              <canvas id="polarizabilityChartCanv"></canvas>
-              <canvas id="ionizationEnergyChartCanv"></canvas>
-              <canvas id="weightedIonizationEnergyChartCanv"></canvas>
-            </div>
-            <div id="energy-info-for-element">
-              <div id="energy-element-name"></div>
-              <div id="energy-atomic-size"></div>
-              <div id="energy-electron-affinity"></div>
-              <div id="energy-polarizability"></div>
-              <div id="energy-ionization-energy"></div>
+
+
+          <div class="tab-panel" id="tab2">
+            <h2>Graphs</h2>
+            <div class="charts-area">
+              <div id="charts-wrapper">
+                <canvas id="atomicSizeChartCanv"></canvas>
+                <canvas id="electronAffinityChartCanv"></canvas>
+                <canvas id="polarizabilityChartCanv"></canvas>
+                <canvas id="ionizationEnergyChartCanv"></canvas>
+                <canvas id="weightedIonizationEnergyChartCanv"></canvas>
+              </div>
+              <div id="energy-info-for-element">
+                <div id="energy-element-name"></div>
+                <div id="energy-atomic-size"></div>
+                <div id="energy-electron-affinity"></div>
+                <div id="energy-polarizability"></div>
+                <div id="energy-ionization-energy"></div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="tab-panel" id="tab3">
-          <h2>Ionization Energy</h2>
-          <!-- <div style="height: 300px"> -->
-          <div class="ion-energy-area">
-            <div id="ion-energy-left-table">
-              Ground state
-              <table>
-                <thead>
-                  <th></th>
-                  <th>1s</th>
-                  <th>2s</th>
-                  <th>2p</th>
-                  <th>3s</th>
-                  <th>3p</th>
-                </thead>
-                <tbody>
-                  <tr class="ion-energy-econfig-static-row">
-                    <td># of electrons</td>
-                    <!-- Values in rows below will be based on selected element -->
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                  </tr>
-                  <tr class="ion-energy-z_es-static-row">
-                    <td>Z<sub>e</sub></td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                  </tr>
-                  <tr class="ion-energy-vaoe-static-row">
-                    <td>VAOE</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                  </tr>
-                  <tr class="ion-energy-et-static-row">
-                    <td>E<sub>t</sub></td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                  </tr>
-                </tbody>
-              </table>
-              Total Energy: <span id="ion-energy-left-table-total-energy"></span>
-            </div>
-            <div id="ion-energy-right-table">
-              Modify to see energy changes
-              <table>
-                <thead>
-                  <th></th>
-                  <th>1s</th>
-                  <th>2s</th>
-                  <th>2p</th>
-                  <th>3s</th>
-                  <th>3p</th>
-                </thead>
-                <tbody>
-                  <tr class="ion-energy-econfig-dyn-row">
-                    <td># of electrons</td>
-                    <!-- Values in rows below will be based on selected element -->
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                  </tr>
-                  <tr class="ion-energy-z_es-dyn-row">
-                    <td>Z<sub>e</sub></td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                  </tr>
-                  <tr class="ion-energy-vaoe-dyn-row">
-                    <td>VAOE</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                  </tr>
-                  <tr class="ion-energy-et-dyn-row">
-                    <td>E<sub>t</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                  </tr>
-                </tbody>
-              </table>
-              Total Energy: <span id="ion-energy-right-table-total-energy"></span>
-              <div style="color: red">
-                Ionization Energy: <span id="ion-energy-ionization-energy"></span>
+
+          <div class="tab-panel" id="tab3">
+            <h2>Ionization Energy</h2>
+            <!-- <div style="height: 300px"> -->
+            <div class="ion-energy-area">
+              <div id="ion-energy-left-table">
+                Ground state
+                <table>
+                  <thead>
+                    <th></th>
+                    <th>1s</th>
+                    <th>2s</th>
+                    <th>2p</th>
+                    <th>3s</th>
+                    <th>3p</th>
+                  </thead>
+                  <tbody>
+                    <tr class="ion-energy-econfig-static-row">
+                      <td># of electrons</td>
+                      <!-- Values in rows below will be based on selected element -->
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </tr>
+                    <tr class="ion-energy-z_es-static-row">
+                      <td>Z<sub>e</sub></td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </tr>
+                    <tr class="ion-energy-vaoe-static-row">
+                      <td>VAOE</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </tr>
+                    <tr class="ion-energy-et-static-row">
+                      <td>E<sub>t</sub></td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </tr>
+                  </tbody>
+                </table>
+                Total Energy: <span id="ion-energy-left-table-total-energy"></span>
+              </div>
+              <div id="ion-energy-right-table">
+                Modify to see energy changes
+                <table>
+                  <thead>
+                    <th></th>
+                    <th>1s</th>
+                    <th>2s</th>
+                    <th>2p</th>
+                    <th>3s</th>
+                    <th>3p</th>
+                  </thead>
+                  <tbody>
+                    <tr class="ion-energy-econfig-dyn-row">
+                      <td># of electrons</td>
+                      <!-- Values in rows below will be based on selected element -->
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </tr>
+                    <tr class="ion-energy-z_es-dyn-row">
+                      <td>Z<sub>e</sub></td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </tr>
+                    <tr class="ion-energy-vaoe-dyn-row">
+                      <td>VAOE</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </tr>
+                    <tr class="ion-energy-et-dyn-row">
+                      <td>E<sub>t</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </tr>
+                  </tbody>
+                </table>
+                Total Energy: <span id="ion-energy-right-table-total-energy"></span>
+                <div style="color: red">
+                  Ionization Energy: <span id="ion-energy-ionization-energy"></span>
+                </div>
               </div>
             </div>
           </div>

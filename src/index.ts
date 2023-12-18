@@ -784,14 +784,15 @@ function populateIonEnergyTables() {
 
   // add cells with # of electrons for selected element
   // allow user to choose the dropdown to change # of electrons in that orbital
+  // Do not show options which would make the total # of electrons be greater than
+  // the number of protons (atomic number).
   electrons.forEach((eCount, index) => {
     cell = document.createElement('td');
     const selectCell = document.createElement('select');
     cell.appendChild(selectCell);
-    for (let i = 0; i <= FULL_ORBITAL_CTS[index]; i++) {
+    for (let i = 0; i <= eCount; i++) {
       const optionCell = document.createElement('option');
-      optionCell.value = `${i}`;
-      optionCell.innerText = `${i}`;
+      optionCell.innerText = optionCell.value = `${i}`;
       selectCell.appendChild(optionCell);
     }
     // set the default value for the dropdown
@@ -813,6 +814,7 @@ function populateIonEnergyTables() {
 
 function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
 
+  const rightTableNumElectronsRow = document.getElementsByClassName('ion-energy-econfig-dyn-row')[0];
   const rightTableZesRow = document.getElementsByClassName('ion-energy-z_es-dyn-row')[0];
   const rightTableVaoeRow = document.getElementsByClassName('ion-energy-vaoe-dyn-row')[0];
   const rightTableEtRow = document.getElementsByClassName('ion-energy-et-dyn-row')[0];
@@ -863,7 +865,7 @@ function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
   cell.innerHTML = "VAOE";
   rightTableVaoeRow.appendChild(cell);
 
-  console.log('newOrbitals = ', newOrbitals);
+  // console.log('newOrbitals = ', newOrbitals);
   orbitalEnergies.forEach((e, index) => {
     cell = document.createElement('td');
     // if the occupancy of the orbital is 0, make the value 0 instead of the computed energy.
@@ -891,5 +893,24 @@ function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
   const ionizationEnergyCell = document.getElementById('ion-energy-ionization-energy');
   const ionEnergy = Math.abs(groundStateTotalEnergy - totalOE!);
   ionizationEnergyCell!.innerText = `${ionEnergy.toFixed(3)}`;
+
+  // Change the selectors so that they do not allow the user to create anions --
+  // the total # of electrons must be <= total # of protons (atomic number).
+  // To do this, add options to selectors so that if the total number of selected electrons
+  // is less than the max, selectors will allow the number to go back up to the max.
+  const selectorCells = rightTableNumElectronsRow.querySelectorAll('select');
+  const totalElectronsInNewOrbitals = newOrbitals.reduce((acc, currVal) => {
+    return acc + currVal.numElectrons;
+  }, 0);
+  const numElectronsBelowMax = selectedElement!.number - totalElectronsInNewOrbitals;
+  selectorCells.forEach((selCell, index) => {
+    selCell.replaceChildren();      // remove all options (0, 1, 2, 3, ...)
+    for (let i = 0; i <= Math.min(FULL_ORBITAL_CTS[index], newOrbitals[index].numElectrons + numElectronsBelowMax); i++) {
+      const optionCell = document.createElement('option');
+      optionCell.innerText = optionCell.value = `${i}`;
+      selCell.appendChild(optionCell);
+    }
+    selCell.value = `${newOrbitals[index].numElectrons}`;
+  });
 
 }

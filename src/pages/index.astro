@@ -1,0 +1,61 @@
+---
+import GraphsTab from "../components/GraphsTab.astro";
+import IntegralsTab from "../components/IntegralsTab.astro";
+import IonizationEnergyTab from "../components/IonizationEnergyTab.astro";
+import Matrix from "../components/Matrix.astro";
+import SelectableMatrix from "../components/SelectableMatrix.astro";
+import TopTable from "../components/TopTable.astro";
+import UnitsSelector from "../components/UnitsSelector.astro";
+import VAOEnergyTab from "../components/VAOEnergyTab.astro";
+import Layout from "../layouts/Layout.astro";
+import { dynamic23Matrix, faussurierMatrix } from "../scripts/matrices";
+---
+
+<Layout title="Orbital Energy">
+  <main>
+    <span class="version"> Version 31 Jan 2024</span>
+    <h1>Orbital Energy</h1>
+
+    <TopTable />
+
+    <div id="matrices" class="horizontal-flex">
+      <!-- <table id="dynamic23Matrix"></table>
+			 -->
+      <Matrix id="dynamic23" matrix={dynamic23Matrix} />
+      <Matrix id="faussurier" matrix={faussurierMatrix} />
+      <SelectableMatrix />
+    </div>
+
+    <!-- I think this is not used. <div class="energyLevels" id="energyLevels"></div> -->
+
+    <UnitsSelector />
+
+    <div class="tabs-wrapper">
+      <ul class="nav-tabs">
+        <li class="tab is-active" data-target="#tab1">VAO Energy</li>
+        <li class="tab" data-target="#tab2">Graphs</li>
+        <li class="tab" data-target="#tab3">Ionization Energy</li>
+        <li class="tab" data-target="#tab4">Integrals</li>
+      </ul>
+      <VAOEnergyTab />
+      <GraphsTab />
+      <IonizationEnergyTab />
+      <IntegralsTab />
+    </div>
+  </main>
+
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700);
+    @import url(https://fonts.googleapis.com/css?family=Raleway:100,400,700);
+
+    .version {
+      font-size: small;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      color: #fff;
+    }
+  </style>
+</Layout>

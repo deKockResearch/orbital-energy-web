@@ -1,0 +1,8 @@
+---
+const { tabName, id, isActive = false } = Astro.props;
+---
+
+<div class:list={["tab-panel", { "is-active": isActive }]} id={id}>
+  <h2>{tabName}</h2>
+  <slot />
+</div>

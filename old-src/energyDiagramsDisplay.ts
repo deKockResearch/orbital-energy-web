@@ -20,7 +20,7 @@ export function drawDiagram(eConfig: string, calcEnergies: string[][], matrixNam
         const DISP = UNIT_L / 6;
 
         // make dashed line if the orbital is not full.
-        if (! isFullOrbital) {
+        if (!isFullOrbital) {
           p.drawingContext.setLineDash([5, 5]);
         }
 
@@ -79,6 +79,8 @@ export function drawDiagram(eConfig: string, calcEnergies: string[][], matrixNam
 
     // Instructions to draw orbitals
     p.draw = () => {
+
+      console.log(calcEnergies);
       let newSZLevel = new SZlevel();
       // const unitL = 40;
       let eList = eConfig.split(" ");

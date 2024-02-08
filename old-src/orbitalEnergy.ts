@@ -19,7 +19,7 @@ export function totalOrbitalEnergy(atomicNumber: number, orbitalList: Orbital[],
     energy -= N_i * ((Z_i * Z_i) / (2 * n_i * n_i));
   }
 
-  energyArray.unshift(energy);
+  energyArray = [energy, ...energyArray];
   return energyArray;
 }
 

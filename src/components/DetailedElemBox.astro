@@ -1,0 +1,58 @@
+<div class="detailedView" id="details">
+  <div id="detailsTempText">
+    <p>Select an element from the periodic table for more details</p>
+  </div>
+  <!-- the following is hidden until an element is selected -->
+  <div id="detailsElemBox" class="showcase" style="display: none">
+    <div class="aNumber"></div>
+    <div class="aSymbol"></div>
+    <div class="aName"></div>
+    <div class="aMass"></div>
+    <div class="aEconfig"></div>
+  </div>
+</div>
+<script>
+  import "../scripts/detailedElemBox";
+</script>
+
+<style>
+  .showcase {
+    text-align: center;
+    color: black;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    text-decoration: none;
+    aspect-ratio: 1;
+  }
+
+  .detailedView {
+    padding: 4%;
+    width: 20%;
+    display: inline-block;
+    font-family: "Times New Roman", Times, serif;
+    .aNumber {
+      font-size: 2.4vw;
+      margin-top: 7%;
+    }
+    .aName {
+      font-size: 2.5vw;
+      margin: 2%;
+    }
+    .aSymbol {
+      font-size: 4vw;
+      font-weight: bold;
+      margin: 2%;
+    }
+    .aMass {
+      font-size: 2vw;
+      margin: 2%;
+    }
+    .aEconfig {
+      font-size: 1.2vw;
+      margin: 2%;
+    }
+  }
+</style>

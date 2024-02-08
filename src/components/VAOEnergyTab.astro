@@ -1,0 +1,41 @@
+---
+import TabLayout from "../layouts/TabLayout.astro";
+---
+
+<TabLayout tabName="VAO Energy" id="tab1" isActive="true">
+  <div id="energy-box">
+    <!-- next element is where canvas gets attached -->
+    <div id="eLevelsID"></div>
+
+    <h4>Total:</h4>
+    <div id="totalEnergies" class="horizontal-flex">
+      <span id="dynamic23TotalEnergy"></span>
+      <span id="faussurierTotalEnergy"></span>
+      <span id="selectableTotalEnergy"></span>
+    </div>
+    <h4>tvTable</h4>
+    <div id="tvTables" class="horizontal-flex">
+      <table id="dynamic23TvTable"></table>
+      <table id="faussurierTvTable"></table>
+      <table id="selectableTvTable"></table>
+    </div>
+    <h4>vijTable</h4>
+    <div id="vijTables" class="horizontal-flex">
+      <table id="dynamic23VijTable"></table>
+      <table id="faussurierVijTable"></table>
+      <table id="selectableVijTable"></table>
+    </div>
+  </div>
+</TabLayout>
+
+<script>
+  import "../scripts/vaoEnergyTab";
+  import "../scripts/energyTables";
+  import "../scripts/energyDiagramsDisplay";
+</script>
+
+<style>
+  #energy-box {
+    border: 1px black solid;
+  }
+</style>

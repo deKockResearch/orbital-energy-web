@@ -1,0 +1,32 @@
+---
+import { eLevels } from "../scripts/types";
+import { customMatrix } from "../scripts/matrices";
+---
+
+<div>
+  <select name="matrixSelector" id="matrixSelector" autocomplete="off">
+    <option value="custom" id="custom" selected>custom</option>
+    <option value="row23ArgonOnly" id="row23ArgonOnly">row23ArgonOnly</option>
+    <option value="row23Frozen" id="row23Frozen">row23Frozen</option>
+  </select>
+  <table id="selectableMatrix">
+    <tr>
+      <th></th>
+      {eLevels.map((l) => <th>{l}</th>)}
+    </tr>
+    {
+      // customMatrix is 5x5 matrix of 0s.
+      customMatrix.map((row, index) => (
+        <tr class="selectableMatrixRow">
+          <th>{eLevels[index]}</th>
+          {row.map((val) => (
+            <td class="selectableMatrixCell" contenteditable="true">
+              {val}
+            </td>
+          ))}
+        </tr>
+      ))
+    }
+    <tr> </tr>
+  </table>
+</div>

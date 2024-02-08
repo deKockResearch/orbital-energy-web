@@ -1,0 +1,42 @@
+---
+import { eLevels } from "../scripts/types";
+interface Props {
+  id: string;
+  matrix: number[][];
+}
+const { id, matrix } = Astro.props;
+---
+
+<table id={id}>
+  {
+    (
+      <caption>
+        {id === "faussurier" ? (
+          <a
+            target="_blank"
+            href="https://doi.org/10.1016/S0022-4073(97)00018-6"
+          >
+            Faussurier
+          </a>
+        ) : (
+          id
+        )}
+      </caption>
+    )
+  }
+  <tr>
+    <th></th>
+    {eLevels.map((l) => <th>{l}</th>)}
+  </tr>
+  {
+    matrix.map((row, index) => (
+      <tr>
+        <th>{eLevels[index]}</th>
+        {row.map((val) => (
+          <td>{val}</td>
+        ))}
+      </tr>
+    ))
+  }
+  <tr> </tr>
+</table>

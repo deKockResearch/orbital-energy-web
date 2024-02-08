@@ -1,0 +1,72 @@
+---
+import TabLayout from "../layouts/TabLayout.astro";
+
+const items = await Astro.glob("../scripts/integrals/*.md");
+---
+
+<TabLayout tabName="Integrals" id="tab4">
+  <button id="download-info">
+    <a download href="integrals.xlsx">Download data for all elements (.xlsx)</a>
+  </button>
+
+  <div>
+    <!-- There is only one item in the items array. -->
+    {
+      items.map(({ Content }) => (
+        <>
+          <Content />
+        </>
+      ))
+    }
+    <div style="display: none" id="no-integrals-tables-to-show">
+      No Integrals Info available.
+    </div>
+  </div>
+  <p></p>
+</TabLayout>
+
+<script>
+  import { selectedElement$ } from "../scripts/stores";
+  selectedElement$.subscribe((selElem) => {
+    const elemNum = selElem.selectedElementInfo?.number;
+    // Hide all Integral Tables information except for the ones for the selected element.
+    const allIntTables =
+      document.querySelectorAll<HTMLElement>(".grid-wrapper");
+    let match = false;
+    allIntTables.forEach((elemIntTables) => {
+      if (elemIntTables.id === `integrals-table-${elemNum}`) {
+        elemIntTables.style.display = "grid";
+        match = true;
+      } else {
+        elemIntTables.style.display = "none";
+      }
+    });
+    const noInfoToShowElem = document.getElementById(
+      "no-integrals-tables-to-show"
+    )!;
+    if (match) {
+      noInfoToShowElem.style.display = "none";
+    } else {
+      // No tables are shown -- all are hidden. Could be because the user
+      // selected an element above Ne -- the last element we show in for.
+      noInfoToShowElem.style.display = "block";
+      if (!elemNum) {
+        noInfoToShowElem.textContent = "Select an element to see this info.";
+      } else if (elemNum > 10) {
+        noInfoToShowElem.textContent =
+          "No Integrals information available for elements above Ne.";
+      }
+    }
+  });
+
+  //
+</script>
+
+<style>
+  button {
+    margin-bottom: 2rem;
+  }
+  a {
+    text-decoration: none;
+  }
+</style>

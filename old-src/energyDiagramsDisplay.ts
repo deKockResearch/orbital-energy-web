@@ -80,7 +80,6 @@ export function drawDiagram(eConfig: string, calcEnergies: string[][], matrixNam
     // Instructions to draw orbitals
     p.draw = () => {
 
-      console.log(calcEnergies);
       let newSZLevel = new SZlevel();
       // const unitL = 40;
       let eList = eConfig.split(" ");

@@ -19,7 +19,6 @@ function updateDiagram(compEnergies: readonly EnergyComponents[]) {
   const energies: string[][] = compEnergies.map((c) => (
     convert2Strings(c.totalEnergies).slice(1)
   ));
-  console.log('vaoEnergyTab.updateDiagram: energies = ', JSON.stringify(energies, null, 2));
   drawDiagram(econfig, energies, ["dynamic23", "faussurier", matrixSelection$.get()]);
 }
 

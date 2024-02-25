@@ -16,6 +16,7 @@ export function handleTabSwitching() {
       tabs.forEach(t => t.classList.remove('is-active'));
       // make the selected tab colored
       tab.classList.add('is-active');
+
     });
   });
 }

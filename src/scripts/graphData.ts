@@ -171,9 +171,9 @@ function updateChartScales() {
   ionizationEnergyChart.update();
 
   for (let i = 0; i < weightedIonizationEnergyChart.data.datasets[0].data.length; i++) {
-    weightedIonizationEnergyChart.data.datasets[1].data[i] = weightedIonizationEnergy[i] * conversions.get(unitSelectValue)!;
+    weightedIonizationEnergyChart.data.datasets[0].data[i] = weightedIonizationEnergy[i] * conversions.get(unitSelectValue)!;
   }
-  weightedIonizationEnergyChart.data.datasets[1].label = `Weighted Ionization Energy (${unitSelectValue})`;
+  weightedIonizationEnergyChart.data.datasets[0].label = `Weighted Ionization Energy (${unitSelectValue})`;
   weightedIonizationEnergyChart.update();
 }
 
@@ -210,6 +210,7 @@ function updateEverything() {
     return;
   }
   updateChartsPoints();
+  updateChartScales();
   updateEnergiesBox();
 }
 

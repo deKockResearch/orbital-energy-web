@@ -1,8 +1,18 @@
 ---
 import TabLayout from "../layouts/TabLayout.astro";
+import { dynamic23Matrix, faussurierMatrix } from "../scripts/matrices";
+import ElementsTable from "./ElementsTable.astro";
+import IonizationEnergy from "./IonizationEnergy.astro";
+import Matrix from "./Matrix.astro";
+import SelectableMatrix from "./SelectableMatrix.astro";
+import UnitsSelector from "./UnitsSelector.astro";
 ---
 
-<TabLayout tabName="VAO Energy" id="tab1" isActive="true">
+<TabLayout tabName="Virial AOs" id="virialaos-tab">
+  <ElementsTable id="virialaos" />
+
+  <UnitsSelector />
+
   <div id="energy-box">
     <!-- next element is where canvas gets attached -->
     <div id="eLevelsID"></div>
@@ -26,6 +36,14 @@ import TabLayout from "../layouts/TabLayout.astro";
       <table id="selectableVijTable"></table>
     </div>
   </div>
+
+  <div id="matrices" class="horizontal-flex">
+    <Matrix id="dynamic23" matrix={dynamic23Matrix} />
+    <Matrix id="faussurier" matrix={faussurierMatrix} />
+    <SelectableMatrix />
+  </div>
+
+  <IonizationEnergy />
 </TabLayout>
 
 <script>

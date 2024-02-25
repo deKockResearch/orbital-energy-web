@@ -1,8 +1,13 @@
 ---
 import TabLayout from "../layouts/TabLayout.astro";
+import ElementsTable from "./ElementsTable.astro";
+import UnitsSelector from "./UnitsSelector.astro";
 ---
 
-<TabLayout tabName="Graphs" id="tab2">
+<TabLayout tabName="Graphs" id="graphs-tab">
+  <ElementsTable id="graphs" />
+  <UnitsSelector />
+
   <div class="charts-area">
     <div id="charts-wrapper">
       <canvas id="atomicSizeChartCanv"></canvas>

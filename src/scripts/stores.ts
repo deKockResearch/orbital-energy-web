@@ -71,7 +71,6 @@ export const energies$ = computed(
       v_ij: energyComps.v_ij,
       totalEnergies,
     }];
-    console.log(`energies$ computed results are  `, JSON.stringify(result, null, 2));
     return result;
   });
 

@@ -166,6 +166,8 @@ function toggleElement(e: Event): void {
 
     selectedElemOrbitals = computeOrbitals(eConfigInput.value);
 
+    console.log('HELLO', target.innerHTML);
+
     elementBox(target);
     calculateEnergies();
     updateChartsPoints();

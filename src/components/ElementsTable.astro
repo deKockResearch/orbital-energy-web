@@ -1,8 +1,12 @@
 ---
 import DetailedElemBox from "./DetailedElemBox.astro";
+
+// used to make the elements table ids different in the different tabs. (ids should
+// be unique.)
+const { id } = Astro.props;
 ---
 
-<div class="wrapper">
+<div id={id + "-elements-table"} class="elements-table wrapper">
   <div class="innerTop">
     <div class="elements">
       <div class="row clickable">
@@ -208,7 +212,7 @@ import DetailedElemBox from "./DetailedElemBox.astro";
         </div>
       </div>
     </div>
-    <DetailedElemBox />
+    <DetailedElemBox id={id} />
   </div>
 </div>
 

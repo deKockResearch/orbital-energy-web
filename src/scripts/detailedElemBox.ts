@@ -17,27 +17,30 @@ function convertElectronConfigToHTML(): string {
  * Displays a box with the element's data
  */
 function displayDetailedElementBox(): void {
-  const detailsElemBox = document.getElementById("detailsElemBox")!;
-
   const selectedElement = selectedElement$.get().selectedElementInfo;
   if (!selectedElement) {
     return;
   }
+
+  const detailsElemBoxes = document.getElementsByClassName("detailsElemBox")!;
   const selectedHTMLElem = selectedElement$.get().selectedHTMLElement!;
 
-  detailsElemBox.className = ""; // remove all classes.
-  // add "showcase" and copy the color styling (e.g., group-nm) to the details box.
-  detailsElemBox.classList.add("showcase", selectedHTMLElem.classList[2]);
+  for (let detailsElemBox of detailsElemBoxes) {
 
-  const aNumber = detailsElemBox.querySelector(".aNumber")!;
-  const aSymbol = detailsElemBox.querySelector(".aSymbol")!;
-  const aName = detailsElemBox.querySelector(".aName")!;
-  const aMass = detailsElemBox.querySelector(".aMass")!;
-  const aEconfig = detailsElemBox.querySelector(".aEconfig")!;
+    detailsElemBox.className = ""; // remove all classes.
+    // add "detailsElemBox", "showcase", and copy the color styling (e.g., group-nm) to the details box.
+    detailsElemBox.classList.add("detailsElemBox", "showcase", selectedHTMLElem.classList[2]);
 
-  aNumber.textContent = String(selectedElement.number);
-  aSymbol.textContent = selectedElement.symbol;
-  aName.textContent = selectedElement.name;
-  aMass.textContent = String(selectedElement.aMass);
-  aEconfig.innerHTML = convertElectronConfigToHTML();
+    const aNumber = detailsElemBox.querySelector(".aNumber")!;
+    const aSymbol = detailsElemBox.querySelector(".aSymbol")!;
+    const aName = detailsElemBox.querySelector(".aName")!;
+    const aMass = detailsElemBox.querySelector(".aMass")!;
+    const aEconfig = detailsElemBox.querySelector(".aEconfig")!;
+
+    aNumber.textContent = String(selectedElement.number);
+    aSymbol.textContent = selectedElement.symbol;
+    aName.textContent = selectedElement.name;
+    aMass.textContent = String(selectedElement.aMass);
+    aEconfig.innerHTML = convertElectronConfigToHTML();
+  }
 }

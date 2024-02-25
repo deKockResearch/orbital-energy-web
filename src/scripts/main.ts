@@ -32,10 +32,7 @@ window.addEventListener("load", () => {
   });
 
   handleTabSwitching();
-
   drawCharts();
-
-
 });
 
 function getElementByAtomicNumber(atomicNumber: number): ElementType {
@@ -58,21 +55,33 @@ function computeOrbitals(eConfigStr: string): Orbital[] {
 }
 
 function toggleElement(e: Event): void {
-  const detailsTempText = document.getElementById("detailsTempText")!;
-  const detailsElemBox = document.getElementById("detailsElemBox")!;
+  const detailsTempTexts = document.getElementsByClassName("detailsTempText")!;
+  const detailsElemBoxes = document.getElementsByClassName("detailsElemBox")!;
 
   const target =
     (e.target as HTMLElement).nodeName === "A"
       ? (e.target as HTMLElement)!
       : (e.target as HTMLElement).parentElement!;
 
+  // User clicked on the already-selected element...
   if (target.classList.contains("clicked")) {
-    // remove selected element if already displayed
-    target.classList.remove("clicked");
 
-    // detailsElem.replaceChildren();
-    detailsTempText.style.display = "block";
-    detailsElemBox.style.display = "none";
+    // Remove 'clicked' to all the elements with the same innerHTML as the actual
+    // clicked element. (Necessary because we have the ElementTable in multiple
+    // tabs).
+    const pTableElements = document.getElementsByClassName("element ptable");
+    for (let pTableElem of pTableElements) {
+      if (pTableElem.classList.contains("clicked")) {
+        pTableElem.classList.remove("clicked");
+      }
+    }
+
+    for (let detailsTempText of detailsTempTexts) {
+      (<HTMLElement>detailsTempText).style.display = "block";
+      for (let detailsElemBox of detailsElemBoxes) {
+        (<HTMLElement>detailsElemBox).style.display = "none";
+      }
+    }
 
     // clear the values changed when changing elements.
     selectedElement$.set({
@@ -82,18 +91,20 @@ function toggleElement(e: Event): void {
     });
 
   } else {
-
-    // TODO: can we improve this? Do we have the old "target"?
+    // User clicked on an element (and perhaps another element was already clicked).
+    // So, they are switching target elements.
     const pTableElements = document.getElementsByClassName("element ptable");
-    for (let i = 0; i < pTableElements.length; i++) {
-      pTableElements[i].classList.remove("clicked");
+    for (let pTableElem of pTableElements) {
+      if (pTableElem.classList.contains("clicked")) {
+        pTableElem.classList.remove("clicked");
+      }
+      // Add clicked to all the elements with the same innerHTML as the actual
+      // clicked element. (Necessary because we have the ElementTable in multiple
+      // tabs).
+      if (pTableElem.innerHTML === target.innerHTML) {
+        pTableElem.classList.add("clicked");
+      }
     }
-
-    // add clicked class to element
-    target.classList.add("clicked");
-
-    // detailsElem.replaceChildren();
-    // document.getElementById("energyLevels")?.replaceChildren();
 
     // retrieve element information
     const elementID = target.textContent!.replace(/\D/g, "");
@@ -105,8 +116,12 @@ function toggleElement(e: Event): void {
     const selectedElemOrbitals = computeOrbitals(selectedElementInfo!.eConfig);
 
     // hide information and show element details.
-    detailsTempText.style.display = "none";
-    detailsElemBox.style.display = "block";
+    for (let detailsTempText of detailsTempTexts) {
+      (<HTMLElement>detailsTempText).style.display = "none";
+    }
+    for (let detailsElemBox of detailsElemBoxes) {
+      (<HTMLElement>detailsElemBox).style.display = "block";
+    }
 
     // Set the state, which will trigger dependent components to update.
     selectedElement$.set({

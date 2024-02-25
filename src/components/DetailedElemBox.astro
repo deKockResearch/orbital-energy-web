@@ -1,9 +1,14 @@
-<div class="detailedView" id="details">
-  <div id="detailsTempText">
+---
+// Used to keep the detailed element box ids unique in the multiple tabs.
+const { id } = Astro.props;
+---
+
+<div class="detailedView" id={id + "-details"}>
+  <div class="detailsTempText">
     <p>Select an element from the periodic table for more details</p>
   </div>
   <!-- the following is hidden until an element is selected -->
-  <div id="detailsElemBox" class="showcase" style="display: none">
+  <div class="detailsElemBox showcase" style="display: none">
     <div class="aNumber"></div>
     <div class="aSymbol"></div>
     <div class="aName"></div>

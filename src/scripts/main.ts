@@ -1,5 +1,5 @@
 import { elements } from './elements';
-import { selectedElement$, matrixSelection$ } from './stores';
+import { selectedElement$, matrixSelection$, unitsSelection$ } from './stores';
 import { updateSelectableMatrixContents, watchCustomMatrixForChanges } from './selectableMatrix';
 import { handleTabSwitching } from './tabHandling';
 import { drawCharts } from './graphData';
@@ -28,6 +28,21 @@ window.addEventListener("load", () => {
     updateSelectableMatrixContents(sel);
     if (sel === 'custom') {
       watchCustomMatrixForChanges();
+    }
+  });
+
+  // We have the unitSelector drop down in multiple places. We'll register call listeners here.
+  // A change to any changes the store.
+  const unitSelectors = document.getElementsByClassName("unit-selector") as HTMLCollectionOf<HTMLSelectElement>;
+  for (let unitSelect of unitSelectors) {
+    unitSelect.addEventListener("change", () => {
+      unitsSelection$.set(unitSelect.value);
+    });
+  };
+  // When the store changes, update all the selectors to show the new value.
+  unitsSelection$.listen(us => {
+    for (let unitSelect of unitSelectors) {
+      unitSelect.value = us;
     }
   });
 

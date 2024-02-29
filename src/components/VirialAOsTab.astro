@@ -1,59 +1,24 @@
 ---
 import TabLayout from "../layouts/TabLayout.astro";
-import { dynamic23Matrix, faussurierMatrix } from "../scripts/matrices";
 import ElementsTable from "./ElementsTable.astro";
 import IonizationEnergy from "./IonizationEnergy.astro";
-import Matrix from "./Matrix.astro";
-import SelectableMatrix from "./SelectableMatrix.astro";
 import UnitsSelector from "./UnitsSelector.astro";
+import VAOEnergyTab from "./VAOEnergyTab.astro";
 ---
 
-<TabLayout tabName="Virial AOs" id="virialaos-tab">
+<TabLayout tabName="Virial Atomic Orbitals" id="virialaos-tab">
+  <UnitsSelector />
   <ElementsTable id="virialaos" />
 
-  <UnitsSelector />
-
-  <div id="energy-box">
-    <!-- next element is where canvas gets attached -->
-    <div id="eLevelsID"></div>
-
-    <h4>Total:</h4>
-    <div id="totalEnergies" class="horizontal-flex">
-      <span id="dynamic23TotalEnergy"></span>
-      <span id="faussurierTotalEnergy"></span>
-      <span id="selectableTotalEnergy"></span>
-    </div>
-    <h4>tvTable</h4>
-    <div id="tvTables" class="horizontal-flex">
-      <table id="dynamic23TvTable"></table>
-      <table id="faussurierTvTable"></table>
-      <table id="selectableTvTable"></table>
-    </div>
-    <h4>vijTable</h4>
-    <div id="vijTables" class="horizontal-flex">
-      <table id="dynamic23VijTable"></table>
-      <table id="faussurierVijTable"></table>
-      <table id="selectableVijTable"></table>
-    </div>
+  <!-- sub tabs -->
+  <div class="tabs-wrapper">
+    <ul class="nav-tabs">
+      <li class="tab is-active" data-target="#vaoenergy-tab">VAO Energy</li>
+      <li class="tab" data-target="#ionization-energy-tab">
+        Ionization Energy
+      </li>
+    </ul>
+    <VAOEnergyTab />
+    <IonizationEnergy />
   </div>
-
-  <div id="matrices" class="horizontal-flex">
-    <Matrix id="dynamic23" matrix={dynamic23Matrix} />
-    <Matrix id="faussurier" matrix={faussurierMatrix} />
-    <SelectableMatrix />
-  </div>
-
-  <IonizationEnergy />
 </TabLayout>
-
-<script>
-  import "../scripts/vaoEnergyTab";
-  import "../scripts/energyTables";
-  import "../scripts/energyDiagramsDisplay";
-</script>
-
-<style>
-  #energy-box {
-    border: 1px black solid;
-  }
-</style>

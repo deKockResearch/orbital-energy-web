@@ -1,14 +1,27 @@
 ---
 import TabLayout from "../layouts/TabLayout.astro";
+import CAOEnergyTab from "./CAOEnergyTab.astro";
 import ElementsTable from "./ElementsTable.astro";
 import Integrals from "./Integrals.astro";
+import IonizationEnergy from "./IonizationEnergy.astro";
 import UnitsSelector from "./UnitsSelector.astro";
 ---
 
 <TabLayout tabName="Canonical Atomic Orbitals" id="canonicalaos-tab">
-  <ElementsTable id="canonaicalaos" />
-
+  <ElementsTable id="canonicalaos" />
   <UnitsSelector />
 
-  <Integrals />
+  <!-- sub tabs -->
+  <div class="tabs-wrapper">
+    <ul class="nav-tabs">
+      <li class="tab is-active" data-target="#caoenergy-tab">CAO Energy</li>
+      <li class="tab" data-target="#ionization-energy-tab">
+        Ionization Energy
+      </li>
+      <li class="tab" data-target="#integrals-tab">Integrals</li>
+    </ul>
+    <CAOEnergyTab />
+    <IonizationEnergy />
+    <Integrals />
+  </div>
 </TabLayout>

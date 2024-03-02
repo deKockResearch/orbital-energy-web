@@ -1,7 +1,14 @@
 ---
 import TabLayout from "../layouts/TabLayout.astro";
+const items = await Astro.glob("../pages/intro.md");
 ---
 
 <TabLayout tabName="Introduction" id="intro-tab" isActive="true">
-  <h2>Lots of words here.</h2>
+  {
+    items.map(({ Content }) => (
+      <>
+        <Content />
+      </>
+    ))
+  }
 </TabLayout>

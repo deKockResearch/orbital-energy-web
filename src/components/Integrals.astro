@@ -1,25 +1,26 @@
 ---
+import TabLayout from "../layouts/TabLayout.astro";
+
 const items = await Astro.glob("../scripts/integrals/*.md");
 ---
 
-<button id="download-info">
-  <a download href="integrals.xlsx">Download data for all elements (.xlsx)</a>
-</button>
+<TabLayout tabName="Integrals" id="integrals-tab">
+  <button id="download-info">
+    <a download href="integrals.xlsx">Download data for all elements (.xlsx)</a>
+  </button>
 
-<div>
-  <!-- There is only one item in the items array. -->
-  {
-    items.map(({ Content }) => (
-      <>
-        <Content />
-      </>
-    ))
-  }
-  <div style="display: none" id="no-integrals-tables-to-show">
-    No Integrals Info available.
+  <div class="integrals-info">
+    <!-- There is only one item in the items array. -->
+    {
+      items.map(({ Content }) => (
+        <>
+          <Content />
+        </>
+      ))
+    }
+    <div id="no-integrals-tables-to-show"></div>
   </div>
-</div>
-<p></p>
+</TabLayout>
 
 <script>
   import { selectedElement$ } from "../scripts/stores";
@@ -64,5 +65,11 @@ const items = await Astro.glob("../scripts/integrals/*.md");
   }
   a {
     text-decoration: none;
+  }
+  #no-integrals-tables-to-show {
+    display: none;
+  }
+  .integrals-info {
+    padding-bottom: 1rem;
   }
 </style>

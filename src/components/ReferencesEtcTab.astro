@@ -1,7 +1,14 @@
 ---
 import TabLayout from "../layouts/TabLayout.astro";
+const items = await Astro.glob("../pages/references.md");
 ---
 
 <TabLayout tabName="References, etc." id="references-tab">
-  <h2>References, links, About information, etc</h2>
+  {
+    items.map(({ Content }) => (
+      <>
+        <Content />
+      </>
+    ))
+  }
 </TabLayout>

@@ -60,7 +60,8 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex: 5vw;    /* NOT CORRECT */
+    flex: 5vw;
+    /* NOT CORRECT */
     color: black;
     box-sizing: border-box;
     border-radius: 3px;
@@ -336,6 +337,7 @@ ul {
 .nav-tabs .tab {
     background-color: #888;
 }
+
 .nav-tabs .tab.is-active {
     background-color: transparent;
 }
@@ -343,6 +345,7 @@ ul {
 .tab-panel {
     display: none;
 }
+
 .tab-panel.is-active {
     display: block;
 }

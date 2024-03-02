@@ -68,6 +68,7 @@ import Layout from "../layouts/Layout.astro";
       margin-top: 0px;
     }
     .tabs-wrapper {
+      margin-top: 1rem;
       border-radius: 0.5rem;
       box-shadow: 2px 1px 20px #888;
     }
@@ -113,6 +114,14 @@ import Layout from "../layouts/Layout.astro";
       padding-top: 0px;
       padding-left: 8px;
       border-radius: 0 10px 10px 10px;
+    }
+
+    /* for sub-tabs, make color even lighter */
+    .tabs-wrapper .tabs-wrapper .tab-panel.is-active {
+      background-color: #dadada;
+    }
+    .tabs-wrapper .tabs-wrapper .nav-tabs .tab.is-active {
+      background-color: #dadada;
     }
   </style>
 </Layout>

@@ -17,7 +17,7 @@ import TabLayout from "../layouts/TabLayout.astro";
         </thead>
         <tbody>
           <tr class="ion-energy-econfig-static-row">
-            <td># of electrons</td>
+            <th># of electrons</th>
             <!-- Values in rows below will be based on selected element -->
             <td>0</td>
             <td>0</td>
@@ -25,16 +25,73 @@ import TabLayout from "../layouts/TabLayout.astro";
             <td>0</td>
             <td>0</td>
           </tr>
-          <tr class="ion-energy-z_es-static-row">
-            <td>Z<sub>e</sub></td>
+          <tr class="ion-energy-z_e-static-row">
+            <th>Z<sub>e</sub></th>
             <td>0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
           </tr>
+          <tr class="ion-energy-t_i-static-row">
+            <th>t<sub>i</sub></th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr class="ion-energy-v_en-static-row fat-bottom-sep">
+            <th>v<sub>en</sub></th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr class="ion-energy-v_ee-static-row">
+            <th>V<sub>ee</sub> 1s</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr class="ion-energy-v_ee-static-row">
+            <th>V<sub>ee</sub> 2s</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr class="ion-energy-v_ee-static-row">
+            <th>V<sub>ee</sub> 2p</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr class="ion-energy-v_ee-static-row">
+            <th>V<sub>ee</sub> 3s</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr class="ion-energy-v_ee-static-row fat-bottom-sep">
+            <th>V<sub>ee</sub> 3p</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+
           <tr class="ion-energy-vaoe-static-row">
-            <td>VAOE</td>
+            <th>VAOE</th>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -42,7 +99,7 @@ import TabLayout from "../layouts/TabLayout.astro";
             <td>0</td>
           </tr>
           <tr class="ion-energy-et-static-row">
-            <td>E<sub>t</sub></td>
+            <th>E<sub>t</sub></th>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -53,6 +110,8 @@ import TabLayout from "../layouts/TabLayout.astro";
       </table>
       Total Energy: <span id="ion-energy-left-table-total-energy"></span>
     </div>
+
+    <!-- Right side table starts here -->
     <div id="ion-energy-right-table">
       Modify to see energy changes
       <table>
@@ -66,7 +125,7 @@ import TabLayout from "../layouts/TabLayout.astro";
         </thead>
         <tbody>
           <tr class="ion-energy-econfig-dyn-row">
-            <td># of electrons</td>
+            <th># of electrons</th>
             <!-- Values in rows below will be based on selected element -->
             <td>0</td>
             <td>0</td>
@@ -75,7 +134,7 @@ import TabLayout from "../layouts/TabLayout.astro";
             <td>0</td>
           </tr>
           <tr class="ion-energy-z_es-dyn-row">
-            <td>Z<sub>e</sub></td>
+            <th>Z<sub>e</sub></th>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -83,7 +142,7 @@ import TabLayout from "../layouts/TabLayout.astro";
             <td>0</td>
           </tr>
           <tr class="ion-energy-vaoe-dyn-row">
-            <td>VAOE</td>
+            <th>VAOE</th>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -91,14 +150,12 @@ import TabLayout from "../layouts/TabLayout.astro";
             <td>0</td>
           </tr>
           <tr class="ion-energy-et-dyn-row">
-            <td
-              >E<sub>t</sub>
-              <td>0</td>
-              <td>0</td>
-              <td>0</td>
-              <td>0</td>
-              <td>0</td>
-            </td>
+            <th>E<sub>t</sub></th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
           </tr>
         </tbody>
       </table>
@@ -107,8 +164,15 @@ import TabLayout from "../layouts/TabLayout.astro";
         Ionization Energy: <span id="ion-energy-ionization-energy"></span>
       </div>
     </div>
+
+    <script>
+      import "../scripts/ionizationEnergy";
+    </script>
+
+    <style>
+      .fat-bottom-sep {
+        border-bottom: 2px solid black;
+      }
+    </style>
   </div>
 </TabLayout>
-<script>
-  import "../scripts/ionizationEnergy";
-</script>

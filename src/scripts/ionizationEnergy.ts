@@ -16,69 +16,70 @@ export function populateIonEnergyTables() {
     return;
   }
 
-  const leftTableNumElectronsRow = document.getElementsByClassName('ion-energy-econfig-static-row')[0];
-  leftTableNumElectronsRow.replaceChildren();
-
-  let cell = document.createElement('td');
-  cell.innerText = "# of electrons";
-  leftTableNumElectronsRow.appendChild(cell);
-
   // add cells with # of electrons for selected element
-  let electrons = getElectronsFromElectronConfig();
+  const electrons = getElectronsFromElectronConfig();
 
-  electrons.forEach((e) => {
-    cell = document.createElement('td');
-    cell.innerText = `${e}`;
-    leftTableNumElectronsRow.appendChild(cell);
+  const leftTableNumElectronsRow = document.getElementsByClassName('ion-energy-econfig-static-row')[0];
+  const cells: Element[] = [...leftTableNumElectronsRow.getElementsByTagName('TD')];
+
+  electrons.forEach((e, index) => {
+    cells[index].innerHTML = `${e}`;
   });
 
-  const leftTableZesRow = document.getElementsByClassName('ion-energy-z_es-static-row')[0];
-  leftTableZesRow.replaceChildren();
-
-  cell = document.createElement('td');
-  cell.innerHTML = 'Z<sub>e</sub>';
-  leftTableZesRow.appendChild(cell);
-
+  // Ze row
   const selectedElemNum = selectedElement$.get().selectedElementInfo!.number;
   const selectedElemOrbitals = selectedElement$.get().selectedElemOrbitals!;
   const zLst = computeZis(selectedElemNum, selectedElemOrbitals, dynamic23Matrix);
-  electrons.forEach((e, index) => {
-    cell = document.createElement('td');
-    cell.innerText = `${e === 0 ? "0.000" : zLst[index].toFixed(3)}`;
-    leftTableZesRow.appendChild(cell);
-  });
+  updateRow(electrons, 'ion-energy-z_e-static-row', zLst);
 
+  // t(i) row
+  updateRow(electrons, 'ion-energy-t_i-static-row', energies$.get()[0].t_i);
+
+  // v(en) row
+  updateRow(electrons, 'ion-energy-v_en-static-row', energies$.get()[0].v_i);
+
+  // Vee rows
+  // 5 vee rows, one for each orbital
+  const veeRows = document.getElementsByClassName('ion-energy-v_ee-static-row');
+
+  const veeCells: Element[][] = [];
+  for (const row of veeRows) {
+    const cells = [...row.getElementsByTagName('TD')];
+    veeCells.push(cells);
+  }
+  const v_ij = energies$.get()[0].v_ij;
+
+  for (let row = 0; row < electrons.length; row++) {
+    for (let col = 0; col < electrons.length; col++) {
+      if (row > col) {
+        // bottom half of the table has empty cells.
+        veeCells[row][col].innerHTML = "";
+      } else {
+        // if occupancy is 0, then all values in the column are 0.
+        if (electrons[col] === 0) {
+          veeCells[row][col].innerHTML = "0.000";
+        } else if (electrons[col] === 1 && row === col) {
+          // if occupancy is 1, then diagonal value is 0.
+          veeCells[row][col].innerHTML = "0.000";
+        } else {
+          // value comes from v_ij table.
+          veeCells[row][col].innerHTML = `${v_ij[row][col].toFixed(3)}`;
+        }
+      }
+    }
+  }
+
+  // VAOE row
   const [totalOE, ...orbitalEnergies] = energies$.get()[0].totalEnergies;
+  updateRow(electrons, 'ion-energy-vaoe-static-row', orbitalEnergies);
 
-  const leftTableVaoeRow = document.getElementsByClassName('ion-energy-vaoe-static-row')[0];
-  leftTableVaoeRow.replaceChildren();
-
-  cell = document.createElement('td');
-  cell.innerHTML = "VAOE";
-  leftTableVaoeRow.appendChild(cell);
-
-  // console.log("orbitalEnergies is: ")
-  // console.table(orbitalEnergies);
-  electrons.forEach((e, index) => {
-    cell = document.createElement('td');
-    cell.innerText = `${e === 0 ? "0.000" : orbitalEnergies[index].toFixed(3)}`;
-    leftTableVaoeRow.appendChild(cell);
-  });
-
-  const leftTableEtRow = document.getElementsByClassName('ion-energy-et-static-row')[0];
-  leftTableEtRow.replaceChildren();
-  cell = document.createElement('td');
-  cell.innerHTML = "E<sub>t</sub>";
-  leftTableEtRow.appendChild(cell);
-
-  electrons.forEach((e, index) => {
-    cell = document.createElement('td');
-    cell.innerText = `${e === 0 ? "0.000" : (orbitalEnergies[index] * electrons[index]).toFixed(3)}`;
-    leftTableEtRow.appendChild(cell);
-  });
+  // Et row
+  const etValues = orbitalEnergies.map((val, index) => val * electrons[index]);
+  updateRow(electrons, 'ion-energy-et-static-row', etValues);
 
   const totalEnergyCell = document.getElementById('ion-energy-left-table-total-energy');
-  totalEnergyCell!.innerText = `${totalOE!.toFixed(3)}`;
+  totalEnergyCell!.innerText = `${totalOE!.toFixed(3)} `;
+
 
   // ------------------- now, right-hand side table ----------------
 
@@ -87,7 +88,7 @@ export function populateIonEnergyTables() {
 
   rightTableNumElectronsRow.replaceChildren();
 
-  cell = document.createElement('td');
+  let cell = document.createElement('td');
   cell.innerText = "# of electrons";
   rightTableNumElectronsRow.appendChild(cell);
 
@@ -101,11 +102,11 @@ export function populateIonEnergyTables() {
     cell.appendChild(selectCell);
     for (let i = 0; i <= eCount; i++) {
       const optionCell = document.createElement('option');
-      optionCell.innerText = optionCell.value = `${i}`;
+      optionCell.innerText = optionCell.value = `${i} `;
       selectCell.appendChild(optionCell);
     }
     // set the default value for the dropdown
-    selectCell.value = `${eCount}`;
+    selectCell.value = `${eCount} `;
     const selectorName = `ion-energy-num-ions-selected-${index}`;
     selectCell.setAttribute("id", selectorName);
     selectCell.setAttribute("name", selectorName);
@@ -163,7 +164,7 @@ function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
   Zlst.forEach((z, index) => {
     const cell = document.createElement('td');
     // if the occupancy of the orbital is 0, make the value 0 instead of the computed energy.
-    cell.innerText = newOrbitals[index].numElectrons === 0 ? "0.000" : `${z.toFixed(3)}`;
+    cell.innerText = newOrbitals[index].numElectrons === 0 ? "0.000" : `${z.toFixed(3)} `;
     rightTableZesRow.appendChild(cell);
   });
 
@@ -179,7 +180,7 @@ function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
   orbitalEnergies.forEach((e, index) => {
     cell = document.createElement('td');
     // if the occupancy of the orbital is 0, make the value 0 instead of the computed energy.
-    cell.innerText = newOrbitals[index].numElectrons === 0 ? "0.000" : `${e.toFixed(3)}`;
+    cell.innerText = newOrbitals[index].numElectrons === 0 ? "0.000" : `${e.toFixed(3)} `;
     rightTableVaoeRow.appendChild(cell);
   });
 
@@ -193,16 +194,16 @@ function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
   orbitalEnergies.forEach((e, index) => {
     cell = document.createElement('td');
     // if the occupancy of the orbital is 0, make the value 0 instead of the computed energy.
-    cell.innerText = `${(e * newOrbitals[index].numElectrons).toFixed(3)}`;
+    cell.innerText = `${(e * newOrbitals[index].numElectrons).toFixed(3)} `;
     rightTableEtRow.appendChild(cell);
   });
 
   const totalEnergyCell = document.getElementById('ion-energy-right-table-total-energy');
-  totalEnergyCell!.innerText = `${totalOE!.toFixed(3)}`;
+  totalEnergyCell!.innerText = `${totalOE!.toFixed(3)} `;
 
   const ionizationEnergyCell = document.getElementById('ion-energy-ionization-energy');
   const ionEnergy = Math.abs(groundStateTotalEnergy - totalOE!);
-  ionizationEnergyCell!.innerText = `${ionEnergy.toFixed(3)}`;
+  ionizationEnergyCell!.innerText = `${ionEnergy.toFixed(3)} `;
 
   // Change the selectors so that they do not allow the user to create anions --
   // the total # of electrons must be <= total # of protons (atomic number).
@@ -217,12 +218,23 @@ function handleNumElectronsChangedByUser(groundStateTotalEnergy: number) {
     selCell.replaceChildren(); // remove all options (0, 1, 2, 3, ...)
     for (let i = 0; i <= Math.min(FULL_ORBITAL_CTS[index], newOrbitals[index].numElectrons + numElectronsBelowMax); i++) {
       const optionCell = document.createElement('option');
-      optionCell.innerText = optionCell.value = `${i}`;
+      optionCell.innerText = optionCell.value = `${i} `;
       selCell.appendChild(optionCell);
     }
-    selCell.value = `${newOrbitals[index].numElectrons}`;
+    selCell.value = `${newOrbitals[index].numElectrons} `;
   });
 
 }
+
+// update the row in the left-side table, when data changes.
+function updateRow(electrons: number[], rowClass: string, data: number[]) {
+  const row = document.getElementsByClassName(rowClass)[0]!;
+  const cells: Element[] = [...row.getElementsByTagName('TD')];
+
+  electrons.forEach((e, index) => {
+    cells[index].innerHTML = `${e === 0 ? "0.000" : data[index].toFixed(3)}`;
+  });
+}
+
 
 energies$.listen(() => populateIonEnergyTables());

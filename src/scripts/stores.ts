@@ -22,10 +22,9 @@ export const customMatrixVers$ = atom<number>(0);
 export const unitsSelection$ = atom<string>('Ha');
 
 
-// private method.
-function computeEnergiesForDyn23OrFauss(matName: string, matrix: number[][]) {
+export function computeEnergiesForDyn23OrFauss(matName: string, matrix: number[][], orbs: Orbital[]) {
   const selElemInfo = selectedElement$.get().selectedElementInfo!;
-  const orbs = selectedElement$.get().selectedElemOrbitals!;
+  // const orbs = selectedElement$.get().selectedElemOrbitals!;
   const totalEnergies = totalOrbitalEnergy(selElemInfo.number, orbs, matrix);
   const energyComps = energyComponents(selElemInfo.number, orbs, matrix);
   // console.log(`totalEnergies for ${matName} = ${totalEnergies}`);
@@ -53,14 +52,12 @@ export const energies$ = computed(
       return [];
     }
     // NOTE to self: using result.push() here screwed things up, for some reason. result.push
-    // modifies the array, but doing it this new way creates a new array each time. With the
-    // old way, the 0th element in the dynamic23 record in the total Energies field would go
-    // missing! Weird!!
+    // modifies the array, but doing it this new way creates a new array each time.
     let result: EnergyComponents[] = [];
-    result = [...result, computeEnergiesForDyn23OrFauss('dynamic23', dynamic23Matrix)];
-    result = [...result, computeEnergiesForDyn23OrFauss('faussurier', faussurierMatrix)];
-    // compute custom matrix values.
     const orbs = selElem.selectedElemOrbitals!;
+    result = [...result, computeEnergiesForDyn23OrFauss('dynamic23', dynamic23Matrix, orbs)];
+    result = [...result, computeEnergiesForDyn23OrFauss('faussurier', faussurierMatrix, orbs)];
+    // compute custom matrix values.
     const matrix = name2Matrix[matrixSel];
     const totalEnergies = totalOrbitalEnergy(selElem.selectedElementInfo!.number, orbs, matrix);
     const energyComps = energyComponents(selElem.selectedElementInfo!.number, orbs, matrix);

@@ -61,7 +61,16 @@ export function drawCharts() {
         pointRadius: calcPointRadius,
       }]
     },
-    options,
+    options: {
+      ...options,
+      plugins: {
+        title: {
+          text: "DeKock 2012",
+          display: true,
+          position: "bottom",
+        },
+      },
+    },
   });
 
   const ctx2 = document.getElementById('electronAffinityChartCanv')! as HTMLCanvasElement;
@@ -140,16 +149,7 @@ export function drawCharts() {
         },
       ]
     },
-    options: {
-      ...options,
-      plugins: {
-        title: {
-          text: ["Kramida, A., Ralchenko, Yu., Reader, J., and NIST ASD Team (2014). NIST Atomic Spectra Database (ver. 5.2),", "[Online]. Available: http://physics.nist.gov/asd [2016, February 22]. National Institute of Standards and Technology, Gaithersburg, MD."],
-          display: true,
-          position: "bottom",
-        },
-      },
-    },
+    options,
   });
 }
 

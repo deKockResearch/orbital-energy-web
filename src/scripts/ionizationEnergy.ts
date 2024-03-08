@@ -66,7 +66,7 @@ export function populateIonEnergyTables() {
 
   rightTableNumElectronsRow.replaceChildren();
 
-  let cell = document.createElement('td');
+  let cell = document.createElement('th');
   cell.innerText = "# of electrons";
   rightTableNumElectronsRow.appendChild(cell);
 

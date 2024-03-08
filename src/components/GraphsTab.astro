@@ -28,3 +28,28 @@ import UnitsSelector from "./UnitsSelector.astro";
 <script>
   import "../scripts/graphData.ts";
 </script>
+
+<style>
+  .charts-area {
+    display: flex;
+    flex-direction: row;
+    min-height: 500px;
+  }
+
+  #charts-wrapper {
+    width: 30%;
+  }
+
+  #charts-wrapper > canvas {
+    margin-bottom: 2rem;
+  }
+
+  #energy-info-for-element {
+    margin-left: 5vw;
+    display: inline-block;
+    width: 50%;
+    padding: 1rem;
+    font-weight: bold;
+    border: 1px solid black;
+  }
+</style>

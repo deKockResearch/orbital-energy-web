@@ -19,7 +19,7 @@ function updateDiagram(compEnergies: readonly EnergyComponents[]) {
   const energies: string[][] = compEnergies.map((c) => (
     convert2Strings(c.totalEnergies).slice(1)
   ));
-  drawDiagram(econfig, energies, ["dynamic23", "faussurier", matrixSelection$.get()]);
+  drawDiagram(econfig, energies, ["Calvin University - Year", "Faussurier - 1997", matrixSelection$.get()]);
 }
 
 

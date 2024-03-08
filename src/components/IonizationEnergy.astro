@@ -116,7 +116,7 @@ import TabLayout from "../layouts/TabLayout.astro";
         </tbody>
       </table>
       Total Energy: <span id="ion-energy-right-table-total-energy"></span>
-      <div style="color: red">
+      <div class="ion-energy-diff">
         Ionization Energy: <span id="ion-energy-ionization-energy"></span>
       </div>
     </div>
@@ -129,6 +129,22 @@ import TabLayout from "../layouts/TabLayout.astro";
       .fat-bottom-sep {
         border-bottom: 2px solid black;
       }
+
+      .ion-energy-area {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+      }
+
+      .ion-energy-econfig-static-row,
+      .ion-energy-econfig-dyn-row {
+        text-align: center;
+      }
+      .ion-energy-diff {
+        color: red;
+      }
     </style>
   </div>
 </TabLayout>
+
+<style></style>

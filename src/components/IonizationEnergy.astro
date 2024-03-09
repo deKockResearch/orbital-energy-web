@@ -3,6 +3,8 @@ import TabLayout from "../layouts/TabLayout.astro";
 ---
 
 <TabLayout tabName="Ionization Energy" id="ionization-energy-tab">
+  <h3 id="ion-energy-units">Energies shown in Ha.</h3>
+
   <div class="ion-energy-area">
     <div id="ion-energy-left-table">
       Ground state
@@ -126,6 +128,11 @@ import TabLayout from "../layouts/TabLayout.astro";
     </script>
 
     <style>
+      td,
+      th {
+        padding-left: 2px;
+        padding-right: 2px;
+      }
       .fat-bottom-sep {
         border-bottom: 2px solid black;
       }
@@ -146,5 +153,3 @@ import TabLayout from "../layouts/TabLayout.astro";
     </style>
   </div>
 </TabLayout>
-
-<style></style>

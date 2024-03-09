@@ -1,7 +1,6 @@
 import { drawDiagram } from "./energyDiagramsDisplay";
 import { convert2Strings } from "./utils";
-import { energies$, selectedElement$, matrixSelection$ } from "./stores";
-import { updateEnergyTables } from "./energyTables";
+import { energies$, selectedElement$, matrixSelection$, unitsSelection$ } from "./stores";
 import type { EnergyComponents } from "./types";
 
 function updateDiagram(compEnergies: readonly EnergyComponents[]) {
@@ -16,16 +15,15 @@ function updateDiagram(compEnergies: readonly EnergyComponents[]) {
   // Convert to strings with fixed digits after the decimal.
   // Slice off the first item in the array, as it is the total energy,
   // which is not used in the diagram.
-  const energies: string[][] = compEnergies.map((c) => (
-    convert2Strings(c.totalEnergies).slice(1)
-  ));
+  const energies: string[][] = compEnergies.map((c) => convert2Strings(c.totalEnergies));
   drawDiagram(econfig, energies, ["Calvin University - Year", "Faussurier - 1997", matrixSelection$.get()]);
 }
-
-
 
 // Trigger redraw when energy computation has emitted.
 energies$.subscribe((e) => {
   updateDiagram(e);
-  updateEnergyTables();
+});
+
+unitsSelection$.listen(() => {
+  updateDiagram(energies$.get());
 });

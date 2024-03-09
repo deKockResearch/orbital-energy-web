@@ -16,14 +16,18 @@ export const conversions = new Map([
   ['cm-1', 219474.6],
 ]);
 
+export function convertEnergyFromHartrees(energy: number): string {
+  const res = energy * conversions.get(unitsSelection$.get()!)!;
+  if (Math.abs(res) < 0.0001 && res !== 0) {   // if number is really small.
+    return `${res.toExponential(3)}`;
+  } else {
+    return `${res.toFixed(3)}`;  // 3 sigfigs
+  }
+}
+
 
 export function energyToUnitsAsString(energy: number, units: string): string {
-  const res = energy * conversions.get(units)!;
-  if (Math.abs(res) < 0.0001) {   // if number is really small.
-    return `${res.toExponential(3)} ${units}`;
-  } else {
-    return `${res.toFixed(3)} ${units}`;  // 3 sigfigs
-  }
+  return convertEnergyFromHartrees(energy) + ` ${units}`;
 }
 
 export function convert2Strings(energies: number[]): string[] {

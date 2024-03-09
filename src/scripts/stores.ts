@@ -38,21 +38,19 @@ export function computeEnergiesForDyn23OrFauss(matName: string, matrix: number[]
   return result;
 }
 
-// The energy computations are based on basically everything in the state.
+// The energy computations are based on basically everything in the state
+// except the units selection.
 // Emit when:
 // o element selection changes
-// o unit selection changes
 // o matrix selection changes
 // o custom has been selected, and the custom matrix has been changed
 //   since the last emission.
 export const energies$ = computed(
-  [selectedElement$, matrixSelection$, unitsSelection$, customMatrixVers$],
-  (selElem, matrixSel, _unitsSel, _customMatrixVers) => {
+  [selectedElement$, matrixSelection$, customMatrixVers$],
+  (selElem, matrixSel, _customMatrixVers) => {
     if (selectedElement$.get().selectedElementInfo === null) {
       return [];
     }
-    // NOTE to self: using result.push() here screwed things up, for some reason. result.push
-    // modifies the array, but doing it this new way creates a new array each time.
     let result: EnergyComponents[] = [];
     const orbs = selElem.selectedElemOrbitals!;
     result = [...result, computeEnergiesForDyn23OrFauss('dynamic23', dynamic23Matrix, orbs)];

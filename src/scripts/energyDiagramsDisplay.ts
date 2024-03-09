@@ -1,10 +1,9 @@
 import p5 from "p5";
 
-export function drawDiagram(eConfig: string, calcEnergies: string[][], matrixNames: string[]): void {
+export function drawDiagram(eConfig: string, energies: string[][], matrixNames: string[]): void {
   let sketch = (p: p5) => {
     const UNIT_L = 40;
 
-    // console.log('drawDiagram');
     // max # of electrons in each orbital.
     const FULL_ORBITAL_CTS = [2, 2, 6, 2, 6];
 
@@ -89,8 +88,12 @@ export function drawDiagram(eConfig: string, calcEnergies: string[][], matrixNam
 
       // Create y-axis
       let centerX = 200;
-      let centerY = CANV_H - 20;
-      newSZLevel.makeAxis(centerX, centerY);
+      let centerY = CANV_H - 20 - (UNIT_L * 5) / 4;
+      newSZLevel.makeAxis(centerX, centerY + 10);
+
+      p.textStyle(p.BOLD);
+      p.text("Total: ", centerX + 100, CANV_H - 14);
+      p.textStyle(p.NORMAL);
 
       // Draw orbitals lowest to highest
       for (let i = 0; i < eList.length; i++) {
@@ -98,20 +101,26 @@ export function drawDiagram(eConfig: string, calcEnergies: string[][], matrixNam
         centerY = centerY - (UNIT_L * 5) / 4;   // subtracting from last position each time.
       }
 
-      // for each set of computed energies:
+      // for each set of computed energies
       let horizOffset = 0;
-      for (let calcEnIdx = 0; calcEnIdx < calcEnergies.length; calcEnIdx++) {
-        const calcEnergy = calcEnergies[calcEnIdx];
+      for (let calcEnIdx = 0; calcEnIdx < energies.length; calcEnIdx++) {
+        const calcEnergy = energies[calcEnIdx];
         centerX = 200;
         centerY = CANV_H - 20;
 
         // print energy values
-        for (let i = 0; i < eList.length; i++) {
+        for (let i = 0; i < calcEnergy.length; i++) {
+          p.textStyle(i === 0 ? p.BOLD : p.NORMAL);   // for Total values
           p.text(`${calcEnergy[i]}`, horizOffset + centerX + UNIT_L * 5, centerY + UNIT_L / 8);
+          p.textStyle(p.NORMAL);
           centerY = centerY - (UNIT_L * 5) / 4;   // subtracting from last position each time.
         }
+
         // Draw label on top
-        p.text(matrixNames[calcEnIdx], horizOffset + centerX + UNIT_L * 5, centerY - (UNIT_L * 5) / 4);
+        p.textStyle(p.BOLD);
+        p.text(matrixNames[calcEnIdx], horizOffset + centerX + UNIT_L * 5, centerY);
+        p.textStyle(p.NORMAL);
+
         horizOffset += 200;
       }
     };

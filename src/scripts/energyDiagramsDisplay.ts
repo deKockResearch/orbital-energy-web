@@ -91,6 +91,11 @@ export function drawDiagram(eConfig: string, energies: string[][], matrixNames: 
       let centerY = CANV_H - 20 - (UNIT_L * 5) / 4;
       newSZLevel.makeAxis(centerX, centerY + 10);
 
+      if (eConfig === "") {
+        // when no element is selected, just draw the axis and nothing else.
+        return;
+      }
+
       p.textStyle(p.BOLD);
       p.text("Total: ", centerX + 100, CANV_H - 14);
       p.textStyle(p.NORMAL);

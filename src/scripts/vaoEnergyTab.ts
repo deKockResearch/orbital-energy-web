@@ -4,18 +4,15 @@ import { energies$, selectedElement$, matrixSelection$, unitsSelection$ } from "
 import type { EnergyComponents } from "./types";
 
 function updateDiagram(compEnergies: readonly EnergyComponents[]) {
-  if (selectedElement$.get().selectedElementInfo === null) {
-    // erase drawing of energy levels.
-    document.getElementById("eLevelsID")!.replaceChildren();
-    return;
-  }
+  const selElemInfo = selectedElement$.get().selectedElementInfo;
 
-  const econfig = selectedElement$.get().selectedElementInfo!.eConfig;
+  // erase existing drawing of energy levels.
+  document.getElementById("eLevelsID")!.replaceChildren();
+
+  const econfig = selElemInfo === null ? '' : selElemInfo.eConfig;
 
   // Convert to strings with fixed digits after the decimal.
-  // Slice off the first item in the array, as it is the total energy,
-  // which is not used in the diagram.
-  const energies: string[][] = compEnergies.map((c) => convert2Strings(c.totalEnergies));
+  const energies: string[][] = selElemInfo === null ? [] : compEnergies.map((c) => convert2Strings(c.totalEnergies));
   drawDiagram(econfig, energies, ["Calvin University - Year", "Faussurier - 1997", matrixSelection$.get()]);
 }
 

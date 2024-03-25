@@ -4,6 +4,7 @@ import { updateSelectableMatrixContents, watchCustomMatrixForChanges } from './s
 import { handleTabSwitching } from './tabHandling';
 import { drawCharts } from './graphData';
 import type { ElementType, Orbital } from './types';
+import { drawAtomicSizesCharts } from './atomicSize';
 
 
 
@@ -48,6 +49,7 @@ window.addEventListener("load", () => {
 
   handleTabSwitching();
   drawCharts();
+  drawAtomicSizesCharts();
 });
 
 function getElementByAtomicNumber(atomicNumber: number): ElementType {

@@ -69,3 +69,16 @@ export function computeZis(atomicNumber: number, orbsList: Orbital[], mx: number
   }
   return Zlst;
 }
+
+
+const factorials = [0, 1, 2, 6, 24, 120, 720];
+
+// n will always be 1, 2, or 3.
+function computeNormalizationConstant(ze: number, n: number) {
+  return ((2 * ze / n) ** n) * Math.sqrt((2 * ze / n) / factorials[2 * n]);
+}
+
+// compute psi -- the wave function.
+export function waveFunction(radius: number, n: number, ze: number) {
+  return computeNormalizationConstant(ze, n) * (radius ** (n - 1)) * Math.E ** (-1 * ze * radius / n);
+}

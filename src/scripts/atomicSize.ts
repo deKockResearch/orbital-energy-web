@@ -64,7 +64,7 @@ export function setupAtomicSizesCharts() {
     callout: {
       display: true,
       side: 10,
-    }
+    },
   };
   const datasetsObj = {
     // borderColor: colors[i],
@@ -95,27 +95,10 @@ export function setupAtomicSizesCharts() {
             // @ts-ignore
             annotations: {
               label1: labelObj,
-
-              // {
-              //   type: 'label',
-              //   // color: colors[i],
-              //   position: 'start',
-              //   // Move the label over to the right and down a bit.
-              //   xAdjust: 75,
-              //   yAdjust: 10,
-              //   callout: {
-              //     display: true,
-              //     side: 10,
-              //   }
-              // },
             }
           }
         },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
+        scales: { y: { beginAtZero: true } }
       },
     });
     charts.push({ canv, chart });
@@ -148,11 +131,7 @@ export function setupAtomicSizesCharts() {
             }
           }
         },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
+        scales: { y: { beginAtZero: true } }
       },
     })
   };
@@ -184,6 +163,10 @@ function updateAtomicSizeCharts(symbol: string, res: DataType[][]) {
 
   const orbs: Orbital[] = selectedElement$.get().selectedElemOrbitals!;
 
+  // Save the max of the maxes when putting them on the same chart. We use that
+  // to make the chart be 10% bigger than the max max, so that the label stays on the
+  // chart.
+  let maxOfAll5Graphs = -1;
   orbs.forEach((orb, index) => {
     const chartData = {
       data: res[index],
@@ -215,6 +198,7 @@ function updateAtomicSizeCharts(symbol: string, res: DataType[][]) {
           xValue: maxVal.x,
           yValue: maxVal.y,
           display: true,
+          color: colors[index],
         };
       } else if (index === 1) {
         // @ts-ignore
@@ -225,6 +209,7 @@ function updateAtomicSizeCharts(symbol: string, res: DataType[][]) {
           xValue: maxVal.x,
           yValue: maxVal.y,
           display: true,
+          color: colors[index],
         };
       } else if (index === 2) {
         // @ts-ignore
@@ -235,6 +220,7 @@ function updateAtomicSizeCharts(symbol: string, res: DataType[][]) {
           xValue: maxVal.x,
           yValue: maxVal.y,
           display: true,
+          color: colors[index],
         };
       } else if (index === 3) {
         // @ts-ignore
@@ -245,6 +231,7 @@ function updateAtomicSizeCharts(symbol: string, res: DataType[][]) {
           xValue: maxVal.x,
           yValue: maxVal.y,
           display: true,
+          color: colors[index],
         };
       } else if (index === 4) {
         // @ts-ignore
@@ -255,7 +242,12 @@ function updateAtomicSizeCharts(symbol: string, res: DataType[][]) {
           xValue: maxVal.x,
           yValue: maxVal.y,
           display: true,
+          color: colors[index],
         };
+      }
+      if (maxVal.y > maxOfAll5Graphs) {
+        maxOfAll5Graphs = maxVal.y;
+        allAtomicSizesInOneChart.chart.options.scales!.y!.suggestedMax = maxVal.y * 1.1;  // 10%
       }
     } else {
       // show each graph in a separate chart.
@@ -269,9 +261,9 @@ function updateAtomicSizeCharts(symbol: string, res: DataType[][]) {
           display: true,
         }
       };
+      charts[index].chart.options.scales!.y!.suggestedMax = maxVal.y * 1.1;  // 10%
+      charts[index].chart.update();
     }
-
-    charts[index].chart.update();
   });
   allAtomicSizesInOneChart.chart.update();
 }

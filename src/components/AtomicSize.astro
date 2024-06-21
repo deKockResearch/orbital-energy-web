@@ -3,7 +3,8 @@ import TabLayout from "../layouts/TabLayout.astro";
 ---
 
 <TabLayout tabName="Atomic Size" id="atomic-size-tab">
-  <div class="atomic-size-graphs">
+  <div id="atomicSizeCanvasAttachPoint"></div>
+  <!-- <div class="atomic-size-graphs">
     <fieldset>
       <legend>Select how to show graphs:</legend>
       <span>
@@ -33,15 +34,14 @@ import TabLayout from "../layouts/TabLayout.astro";
       <canvas id="atomicSize3Canv"></canvas>
       <canvas id="atomicSize4Canv"></canvas>
       <canvas id="allAtomicSizesInOneChartCanv"></canvas>
-    </div>
+    </div> -->
 
-    <script>
-      import "../scripts/atomicSize.ts";
-    </script>
-    <style>
-      canvas {
-        margin-bottom: 50px;
-      }
-    </style>
-  </div>
+  <script>
+    import "../scripts/atomicSize.ts";
+  </script>
+  <style>
+    canvas {
+      margin-bottom: 50px;
+    }
+  </style>
 </TabLayout>

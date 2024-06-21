@@ -2,7 +2,7 @@ import { dynamic23Matrix } from "./matrices";
 import { computeZis, totalOrbitalEnergy } from "./orbitalEnergies";
 import { computeEnergiesForDyn23OrFauss, energies$, selectedElement$, unitsSelection$ } from "./stores";
 import { LEVELS, FULL_ORBITAL_CTS, type Orbital } from "./types";
-import { convert2Strings, convertEnergyFromHartrees } from "./utils";
+import { convertEnergyFromHartrees } from "./utils";
 
 /**
  * get number of electrons in each orbital. Pad the array with 0s out to 5 elements.

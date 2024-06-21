@@ -50,7 +50,7 @@ export function energyComponents(atomicNumber: number, orbs: Orbital[], mx: numb
       const n_j = orbs[j].level;
       tempArray.push(
         (Zlst[i] * mx[i][j]) / (n_i * n_i) + (Zlst[j] * mx[j][i]) / (n_j * n_j)
-      )
+      );
     }
     returnDict.v_ij.push(tempArray);
   }

@@ -58,225 +58,253 @@ function computeMaxAtomicSizes(selElem: any, orbs: Orbital[]): number[] {
   });
 }
 
-const colors = ['blue', 'red', 'green', 'purple', 'black'];
+/*
+  const colors = ['blue', 'red', 'green', 'purple', 'black'];
 
-// This is run once when this code first loads.
-// It sets up the atomicSize charts without any data or labels.
-export function setupAtomicSizesCharts() {
+  // This is run once when this code first loads.
+  // It sets up the atomicSize charts without any data or labels.
+  export function setupAtomicSizesCharts() {
 
-  const labelObj = {
-    type: 'label',
-    // color: colors[i],
-    position: 'start',
-    // Move the label over to the right and down a bit.
-    xAdjust: 75,
-    yAdjust: -30,
-    callout: {
-      display: true,
-      side: 10,
-    },
-  };
-  const datasetsObj = {
-    // borderColor: colors[i],
-    label: `select an element`,
-    data: [],   // no data until element selected.
-    showLine: true,
-  };
-
-  // get the canvases for the 5 charts, and create the charts for each.
-  //   ** They are all hidden. **
-  for (let i = 0; i < 5; i++) {
-    const canv = document.getElementById(`atomicSize${i}Canv`)! as HTMLCanvasElement;
-    const chart = new Chart(canv, {
-      type: 'scatter',
-      data: {
-        datasets: [datasetsObj],
-        // {
-        //   // borderColor: colors[i],
-        //   label: `select an element`,
-        //   data: [],   // no data until element selected.
-        //   showLine: true,
-        // }],
+    const labelObj = {
+      type: 'label',
+      // color: colors[i],
+      position: 'start',
+      // Move the label over to the right and down a bit.
+      xAdjust: 75,
+      yAdjust: -30,
+      callout: {
+        display: true,
+        side: 10,
       },
-      options: {
-        animation: false,
-        plugins: {
-          annotation: {
-            // @ts-ignore
-            annotations: {
-              label1: labelObj,
-            }
-          }
-        },
-        scales: { y: { beginAtZero: true } }
-      },
-    });
-    charts.push({ canv, chart });
-    canv.style.display = 'none';
-  }
-
-
-  //
-  // set up the chart where all data is shown, when the user selects that mode.
-  //
-  const canv = document.getElementById(`allAtomicSizesInOneChartCanv`)! as HTMLCanvasElement;
-  allAtomicSizesInOneChart = {
-    canv,
-    chart: new Chart(canv, {
-      type: 'scatter',
-      data: {
-        datasets: [datasetsObj, datasetsObj, datasetsObj, datasetsObj, datasetsObj],
-      },
-      options: {
-        animation: false,
-        plugins: {
-          annotation: {
-            // @ts-ignore
-            annotations: {
-              label1: labelObj,
-              label2: labelObj,
-              label3: labelObj,
-              label4: labelObj,
-              label5: labelObj,
-            }
-          }
-        },
-        scales: { y: { beginAtZero: true } }
-      },
-    })
-  };
-
-  // don't show anything, initially
-  allAtomicSizesInOneChart.canv.style.display = 'none';
-}
-
-function updateAtomicSizeCharts(symbol: string, res: DataType[][]) {
-
-  charts.forEach(c => {
-    c.canv.style.display = 'none';
-    c.chart.data.datasets = [];
-    c.chart.update();
-  });
-  allAtomicSizesInOneChart.canv.style.display = 'none';
-  allAtomicSizesInOneChart.chart.data.datasets = [];
-  // @ts-ignore
-  allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label1.display = false;
-  // @ts-ignore
-  allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label2.display = false;
-  // @ts-ignore
-  allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label3.display = false;
-  // @ts-ignore
-  allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label4.display = false;
-  // @ts-ignore
-  allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label5.display = false;
-  allAtomicSizesInOneChart.chart.update();
-
-  const orbs: Orbital[] = selectedElement$.get().selectedElemOrbitals!;
-
-  // Save the max of the maxes when putting them on the same chart. We use that
-  // to make the chart be 10% bigger than the max max, so that the label stays on the
-  // chart.
-  let maxOfAll5Graphs = -1;
-  orbs.forEach((orb, index) => {
-    const chartData = {
-      data: res[index],
-      label: `${symbol} ${orb.level}${orb.sOrP}`,
-      borderColor: colors[index],
+    };
+    const datasetsObj = {
+      // borderColor: colors[i],
+      label: `select an element`,
+      data: [],   // no data until element selected.
       showLine: true,
     };
-    if (showAllGraphsInOneChart) {
-      allAtomicSizesInOneChart.canv.style.display = 'block';
-      allAtomicSizesInOneChart.chart.data.datasets[index] = chartData;
-    } else {
-      charts[index].canv.style.display = 'block';
-      charts[index].chart.data.datasets.push(chartData);
+
+    // get the canvases for the 5 charts, and create the charts for each.
+    //   ** They are all hidden. **
+    for (let i = 0; i < 5; i++) {
+      const canv = document.getElementById(`atomicSize${i}Canv`)! as HTMLCanvasElement;
+      const chart = new Chart(canv, {
+        type: 'scatter',
+        data: {
+          datasets: [datasetsObj],
+          // {
+          //   // borderColor: colors[i],
+          //   label: `select an element`,
+          //   data: [],   // no data until element selected.
+          //   showLine: true,
+          // }],
+        },
+        options: {
+          animation: false,
+          plugins: {
+            annotation: {
+              // @ts-ignore
+              annotations: {
+                label1: labelObj,
+              }
+            }
+          },
+          scales: { y: { beginAtZero: true } }
+        },
+      });
+      charts.push({ canv, chart });
+      canv.style.display = 'none';
     }
 
-    // Find the max y value in res, so we can label that value
-    // on the chart.
-    const maxVal = res[index].reduce((acc: DataType, curr: DataType) => {
-      return curr.y > acc.y ? curr : acc;
+
+    //
+    // set up the chart where all data is shown, when the user selects that mode.
+    //
+    const canv = document.getElementById(`allAtomicSizesInOneChartCanv`)! as HTMLCanvasElement;
+    allAtomicSizesInOneChart = {
+      canv,
+      chart: new Chart(canv, {
+        type: 'scatter',
+        data: {
+          datasets: [datasetsObj, datasetsObj, datasetsObj, datasetsObj, datasetsObj],
+        },
+        options: {
+          animation: false,
+          plugins: {
+            annotation: {
+              // @ts-ignore
+              annotations: {
+                label1: labelObj,
+                label2: labelObj,
+                label3: labelObj,
+                label4: labelObj,
+                label5: labelObj,
+              }
+            }
+          },
+          scales: { y: { beginAtZero: true } }
+        },
+      })
+    };
+
+    // don't show anything, initially
+    allAtomicSizesInOneChart.canv.style.display = 'none';
+  }
+
+  function updateAtomicSizeCharts(symbol: string, res: DataType[][]) {
+
+    charts.forEach(c => {
+      c.canv.style.display = 'none';
+      c.chart.data.datasets = [];
+      c.chart.update();
     });
+    allAtomicSizesInOneChart.canv.style.display = 'none';
+    allAtomicSizesInOneChart.chart.data.datasets = [];
+    // @ts-ignore
+    allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label1.display = false;
+    // @ts-ignore
+    allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label2.display = false;
+    // @ts-ignore
+    allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label3.display = false;
+    // @ts-ignore
+    allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label4.display = false;
+    // @ts-ignore
+    allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label5.display = false;
+    allAtomicSizesInOneChart.chart.update();
 
-    if (showAllGraphsInOneChart) {
-      if (index === 0) {
-        // @ts-ignore
-        allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label1 = {
-          // @ts-ignore
-          ...allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label1,
-          content: `Max value at (${maxVal.x.toFixed(5)}, ${maxVal.y.toFixed(5)})`,
-          xValue: maxVal.x,
-          yValue: maxVal.y,
-          display: true,
-          color: colors[index],
-        };
-      } else if (index === 1) {
-        // @ts-ignore
-        allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label2 = {
-          // @ts-ignore
-          ...allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label2,
-          content: `Max value at (${maxVal.x.toFixed(5)}, ${maxVal.y.toFixed(5)})`,
-          xValue: maxVal.x,
-          yValue: maxVal.y,
-          display: true,
-          color: colors[index],
-        };
-      } else if (index === 2) {
-        // @ts-ignore
-        allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label3 = {
-          // @ts-ignore
-          ...allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label3,
-          content: `Max value at (${maxVal.x.toFixed(5)}, ${maxVal.y.toFixed(5)})`,
-          xValue: maxVal.x,
-          yValue: maxVal.y,
-          display: true,
-          color: colors[index],
-        };
-      } else if (index === 3) {
-        // @ts-ignore
-        allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label4 = {
-          // @ts-ignore
-          ...allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label4,
-          content: `Max value at (${maxVal.x.toFixed(5)}, ${maxVal.y.toFixed(5)})`,
-          xValue: maxVal.x,
-          yValue: maxVal.y,
-          display: true,
-          color: colors[index],
-        };
-      } else if (index === 4) {
-        // @ts-ignore
-        allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label5 = {
-          // @ts-ignore
-          ...allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label5,
-          content: `Max value at (${maxVal.x.toFixed(5)}, ${maxVal.y.toFixed(5)})`,
-          xValue: maxVal.x,
-          yValue: maxVal.y,
-          display: true,
-          color: colors[index],
-        };
-      }
-      if (maxVal.y > maxOfAll5Graphs) {
-        maxOfAll5Graphs = maxVal.y;
-        allAtomicSizesInOneChart.chart.options.scales!.y!.suggestedMax = maxVal.y * 1.1;  // 10%
-      }
-    } else {
-      // show each graph in a separate chart.
-      charts[index].chart.options.plugins!.annotation!.annotations! = {
-        label1: {
-          // @ts-ignore
-          ...charts[index].chart.options.plugins!.annotation!.annotations!.label1,
-          content: `Max value at (${maxVal.x.toFixed(5)}, ${maxVal.y.toFixed(5)})`,
-          xValue: maxVal.x,
-          yValue: maxVal.y,
-          display: true,
-        }
+    const orbs: Orbital[] = selectedElement$.get().selectedElemOrbitals!;
+
+    // Save the max of the maxes when putting them on the same chart. We use that
+    // to make the chart be 10% bigger than the max max, so that the label stays on the
+    // chart.
+    let maxOfAll5Graphs = -1;
+    orbs.forEach((orb, index) => {
+      const chartData = {
+        data: res[index],
+        label: `${symbol} ${orb.level}${orb.sOrP}`,
+        borderColor: colors[index],
+        showLine: true,
       };
-      charts[index].chart.options.scales!.y!.suggestedMax = maxVal.y * 1.1;  // 10%
-      charts[index].chart.update();
+      if (showAllGraphsInOneChart) {
+        allAtomicSizesInOneChart.canv.style.display = 'block';
+        allAtomicSizesInOneChart.chart.data.datasets[index] = chartData;
+      } else {
+        charts[index].canv.style.display = 'block';
+        charts[index].chart.data.datasets.push(chartData);
+      }
+
+      // Find the max y value in res, so we can label that value
+      // on the chart.
+      const maxVal = res[index].reduce((acc: DataType, curr: DataType) => {
+        return curr.y > acc.y ? curr : acc;
+      });
+
+      if (showAllGraphsInOneChart) {
+        if (index === 0) {
+          // @ts-ignore
+          allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label1 = {
+            // @ts-ignore
+            ...allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label1,
+            content: `Max value at (${maxVal.x.toFixed(5)}, ${maxVal.y.toFixed(5)})`,
+            xValue: maxVal.x,
+            yValue: maxVal.y,
+            display: true,
+            color: colors[index],
+          };
+        } else if (index === 1) {
+          // @ts-ignore
+          allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label2 = {
+            // @ts-ignore
+            ...allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label2,
+            content: `Max value at (${maxVal.x.toFixed(5)}, ${maxVal.y.toFixed(5)})`,
+            xValue: maxVal.x,
+            yValue: maxVal.y,
+            display: true,
+            color: colors[index],
+          };
+        } else if (index === 2) {
+          // @ts-ignore
+          allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label3 = {
+            // @ts-ignore
+            ...allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label3,
+            content: `Max value at (${maxVal.x.toFixed(5)}, ${maxVal.y.toFixed(5)})`,
+            xValue: maxVal.x,
+            yValue: maxVal.y,
+            display: true,
+            color: colors[index],
+          };
+        } else if (index === 3) {
+          // @ts-ignore
+          allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label4 = {
+            // @ts-ignore
+            ...allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label4,
+            content: `Max value at (${maxVal.x.toFixed(5)}, ${maxVal.y.toFixed(5)})`,
+            xValue: maxVal.x,
+            yValue: maxVal.y,
+            display: true,
+            color: colors[index],
+          };
+        } else if (index === 4) {
+          // @ts-ignore
+          allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label5 = {
+            // @ts-ignore
+            ...allAtomicSizesInOneChart.chart.options.plugins!.annotation!.annotations!.label5,
+            content: `Max value at (${maxVal.x.toFixed(5)}, ${maxVal.y.toFixed(5)})`,
+            xValue: maxVal.x,
+            yValue: maxVal.y,
+            display: true,
+            color: colors[index],
+          };
+        }
+        if (maxVal.y > maxOfAll5Graphs) {
+          maxOfAll5Graphs = maxVal.y;
+          allAtomicSizesInOneChart.chart.options.scales!.y!.suggestedMax = maxVal.y * 1.1;  // 10%
+        }
+      } else {
+        // show each graph in a separate chart.
+        charts[index].chart.options.plugins!.annotation!.annotations! = {
+          label1: {
+            // @ts-ignore
+            ...charts[index].chart.options.plugins!.annotation!.annotations!.label1,
+            content: `Max value at (${maxVal.x.toFixed(5)}, ${maxVal.y.toFixed(5)})`,
+            xValue: maxVal.x,
+            yValue: maxVal.y,
+            display: true,
+          }
+        };
+        charts[index].chart.options.scales!.y!.suggestedMax = maxVal.y * 1.1;  // 10%
+        charts[index].chart.update();
+      }
+    });
+    allAtomicSizesInOneChart.chart.update();
+  }
+*/
+
+
+/*
+// Run this on initial load of this code.
+// setupAtomicSizesCharts();
+
+// Set up handling of radio buttons for choosing whether to show all graphs in
+// one chart or in multile charts.
+const inputs = document.querySelectorAll('input[name=graph_display]');
+inputs.forEach((i) => {
+  i.addEventListener('change', (event) => {
+
+  // @ts-ignore
+  showAllGraphsInOneChart = event!.target!.value === 'together';
+
+  const selElem = selectedElement$.get();
+  if (!selElem || !selElem.selectedElementInfo) {
+    return;
     }
-  });
-  allAtomicSizesInOneChart.chart.update();
-}
+    const orbs: Orbital[] | null = selElem.selectedElemOrbitals;
+    const res = orbs ? computeAtomicSizes(selElem, orbs) : [];
+    // updateAtomicSizeCharts(selElem.selectedElementInfo!.symbol, res);
+    });
+    });
+*/
+
 
 // When selected element changes...
 selectedElement$.listen((selElem) => {
@@ -289,32 +317,6 @@ selectedElement$.listen((selElem) => {
 
   drawAtomicSizes();
 });
-
-if (false) {
-  // Run this on initial load of this code.
-  setupAtomicSizesCharts();
-
-  // Set up handling of radio buttons for choosing whether to show all graphs in
-  // one chart or in multile charts.
-  const inputs = document.querySelectorAll('input[name=graph_display]');
-  inputs.forEach((i) => {
-    i.addEventListener('change', (event) => {
-
-      // @ts-ignore
-      showAllGraphsInOneChart = event!.target!.value === 'together';
-
-      const selElem = selectedElement$.get();
-      if (!selElem || !selElem.selectedElementInfo) {
-        return;
-      }
-      const orbs: Orbital[] | null = selElem.selectedElemOrbitals;
-      const res = orbs ? computeAtomicSizes(selElem, orbs) : [];
-      updateAtomicSizeCharts(selElem.selectedElementInfo!.symbol, res);
-    });
-  });
-}
-
-
 
 import p5 from "p5";
 
@@ -332,8 +334,7 @@ function ionSpeciesSuffixes(numSpecies: number): string[] {
 
 // str comes before subStr, and will be written to the canvas at strx, stry. Compute the location
 // where the superscript should be written and return that location.
-function computeSuperscriptLocation(p: p5, str: string, strx: number, stry: number, supStr: string): [number, number] {
-
+export function computeSuperscriptLocation(p: p5, str: string, strx: number, stry: number, supStr: string): [number, number] {
   const strWidth = p.textWidth(str);
   const rightOfStr = strx + strWidth;
   const strHt = p.textAscent();
@@ -347,11 +348,12 @@ export function drawAtomicSizes(): void {
     const CANV_W = 800;
     const CANV_H = 600;
     const COLUMN_W = CANV_W / 5;
-    const ROW_H = 100;
+    const ROW_H = 120;
     const BOTTOM_OFFSET = 10;
     const LEFT_OFFSET = 50;
     const TOP_OFFSET = 20;
-    const SCALE_Y = (CANV_H - BOTTOM_OFFSET - TOP_OFFSET) / 2.8;
+    // const SCALE_Y = (CANV_H - BOTTOM_OFFSET - TOP_OFFSET) / 13;
+    const SCALE_Y = ROW_H / 4.0;    // scaling in the rows.
 
     p.setup = () => {
       p.createCanvas(CANV_W, CANV_H);
@@ -365,8 +367,13 @@ export function drawAtomicSizes(): void {
     p.draw = () => {
       // draw for reference only.
       // draw axes: horizontal first, then vertical.
-      p.line(0, flipYAxis(0), CANV_W, flipYAxis(0));
-      p.line(0, flipYAxis(0), 0, flipYAxis(CANV_H));
+      // p.line(0, flipYAxis(0), CANV_W, flipYAxis(0));
+      // p.line(0, flipYAxis(0), 0, flipYAxis(CANV_H));
+
+      // draw a line just under the top labels.
+      p.line(0, flipYAxis(CANV_H - TOP_OFFSET - 3), CANV_W, flipYAxis(CANV_H - TOP_OFFSET - 3));
+      // draw a line just to the right of the left labels.
+      p.line(30, flipYAxis(0), 30, flipYAxis(CANV_H));
 
       p.textStyle(p.BOLD);
       p.textSize(16);
@@ -387,7 +394,7 @@ export function drawAtomicSizes(): void {
       for (let i = 0; i < numSpecies; i++) {
         p.text(elemSymbol, LEFT_OFFSET + COLUMN_W * i, flipYAxis(CANV_H - TOP_OFFSET));
         const supLoc = computeSuperscriptLocation(p, elemSymbol, LEFT_OFFSET + COLUMN_W * i, flipYAxis(CANV_H - TOP_OFFSET), speciesSuffixes[i]);
-        p.textSize(12);  // 75% of 16.
+        p.textSize(12);  // 75% of 16 pt font.
         p.text(speciesSuffixes[i], supLoc[0], supLoc[1]);
         p.textSize(16);
       }
@@ -439,13 +446,11 @@ export function drawAtomicSizes(): void {
           // });
           const value = res[index];
           const label = `${orb.level}${orb.sOrP}`;
-          const valueAsString = value.toFixed(5);
-          console.log('graphing valueAsString: ', valueAsString)
+          const valueAsString = value.toFixed(3);
           const xloc = LEFT_OFFSET + COLUMN_W * speciesIndex;
-          // const yloc = maxVal.x * SCALE_Y + BOTTOM_OFFSET;
-          const yloc = value * SCALE_Y + BOTTOM_OFFSET;
-          const text_width = p.textWidth(`${label}: ${valueAsString}`);
-          p.text(`${label}: ${valueAsString}`, xloc, flipYAxis(yloc));
+          const yloc = (ROW_H * index) + (value * SCALE_Y) + BOTTOM_OFFSET;
+          const text_width = p.textWidth(`${valueAsString}`);
+          p.text(`${valueAsString}`, xloc, flipYAxis(yloc));
           // draw line under the text with a little space between the text and the line.
           p.line(xloc, flipYAxis(yloc - 4), xloc + text_width, flipYAxis(yloc - 4));
 
@@ -456,7 +461,7 @@ export function drawAtomicSizes(): void {
             // no dashed lines anymore
             p.drawingContext.setLineDash([]);
             // write the difference in values.
-            const diffText = (lastVals[index] - value).toFixed(5);
+            const diffText = (lastVals[index] - value).toFixed(3);
             const diffTextWidth = p.textWidth(diffText);
             p.text(diffText, ((lastxs[index] + xloc) / 2) - diffTextWidth / 2, (lastys[index] + flipYAxis(yloc)) / 2 - 4);
           }

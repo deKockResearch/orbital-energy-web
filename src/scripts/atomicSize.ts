@@ -52,7 +52,6 @@ function computeMaxAtomicSizes(selElem: any, orbs: Orbital[]): number[] {
     // energies[0] uses dynamic23 matrix.
     const energs = energies.totalEnergies[index + 1];
     // just compute for n = 1.
-    console.log('energs = ', energs);
     const rmax_level = orb.level * Math.sqrt(-0.5 / energs);
     return rmax_level;
   });

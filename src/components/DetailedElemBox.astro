@@ -1,14 +1,27 @@
 ---
-// Used to keep the detailed element box ids unique in the multiple tabs.
-const { id } = Astro.props;
+// id used to keep the detailed element box ids unique in the multiple tabs.
+const { id, selectableRow } = Astro.props;
+
+// Some displays of element box support selecting of the entire row. Some do not.
+// When the entire is selectable, the details box functionalty changes.
+const selRow = selectableRow === "true";
 ---
 
 <div class="detailedView" id={id + "-details"}>
   <div class="detailsTempText">
-    <p>Select an element from the periodic table for more details</p>
+    <p>
+      {
+        selRow ? (
+          <p>Select an element or an entire row from the periodic table</p>
+        ) : (
+          <p>Select an element from the periodic table for more details</p>
+        )
+      }
+    </p>
   </div>
   <!-- the following is hidden until an element is selected -->
   <div class="detailsElemBox showcase" style="display: none">
+    <div class="rowSelectedInfo"></div>
     <div class="aNumber"></div>
     <div class="aSymbol"></div>
     <div class="aName"></div>
@@ -59,5 +72,12 @@ const { id } = Astro.props;
       font-size: 1.2vw;
       margin: 2%;
     }
+    .rowSelectedInfo {
+      font-size: 2vw;
+      margin: 2%;
+    }
+  }
+  .detailedViewRowSelected {
+    background-color: #f0f0f0;
   }
 </style>

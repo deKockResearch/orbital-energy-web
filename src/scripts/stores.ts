@@ -8,6 +8,7 @@ interface State {
   selectedHTMLElement: HTMLElement | null;
   selectedElementInfo: ElementType | null;
   selectedElemOrbitals: Orbital[] | null;
+  rowSelected: number | null;
 }
 
 
@@ -15,6 +16,7 @@ export const selectedElement$ = atom<State>({
   selectedHTMLElement: null,
   selectedElementInfo: null,
   selectedElemOrbitals: null,
+  rowSelected: null,
 });
 
 export const matrixSelection$ = atom<string>('custom');
@@ -49,7 +51,6 @@ export const energies$ = computed(
   [selectedElement$, matrixSelection$, customMatrixVers$],
   (selElem, matrixSel, _customMatrixVers) => {
     if (selectedElement$.get().selectedElementInfo === null) {
-      console.log("energies$: returning []");
       return [];
     }
     let result: EnergyComponents[] = [];
@@ -67,7 +68,7 @@ export const energies$ = computed(
       v_ij: energyComps.v_ij,
       totalEnergies,
     }];
-    console.log('energies: returning result ', result);
+    // console.log('energies: returning result ', result);
     return result;
   });
 

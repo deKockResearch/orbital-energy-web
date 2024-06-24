@@ -3,14 +3,17 @@ import DetailedElemBox from "./DetailedElemBox.astro";
 
 // used to make the elements table ids different in the different tabs. (ids should
 // be unique.)
-const { id } = Astro.props;
+const { id, selectableRow } = Astro.props;
+
+const selRow = selectableRow === "true";
 ---
 
 <div id={id + "-elements-table"} class="elements-table wrapper">
   <div class="innerTop">
     <div class="elements">
       <div class="row clickable">
-        <a class="element ptable group-12">H<br />1</a>
+        {selRow && <a class="element row-selector">1</a>}
+        <a class="element ptable group-12 row1">H<br />1</a>
         <div class="element empty-element"></div>
         <div class="element empty-element"></div>
         <div class="element empty-element"></div>
@@ -27,11 +30,12 @@ const { id } = Astro.props;
         <div class="element empty-element"></div>
         <div class="element empty-element"></div>
         <div class="element empty-element"></div>
-        <a class="element ptable group-12">He<br />2</a>
+        <a class="element ptable group-12 row1">He<br />2</a>
       </div>
       <div class="row clickable">
-        <a class="element ptable group-12">Li<br />3</a>
-        <a class="element ptable group-12">Be<br />4</a>
+        {selRow && <a class="element row-selector">2</a>}
+        <a class="element ptable group-12 row2">Li<br />3</a>
+        <a class="element ptable group-12 row2">Be<br />4</a>
         <div class="element empty-element"></div>
         <div class="element empty-element"></div>
         <div class="element empty-element"></div>
@@ -42,16 +46,17 @@ const { id } = Astro.props;
         <div class="element empty-element"></div>
         <div class="element empty-element"></div>
         <div class="element empty-element"></div>
-        <a class="element ptable group-nm">B<br />5</a>
-        <a class="element ptable group-nm">C<br />6</a>
-        <a class="element ptable group-nm">N<br />7</a>
-        <a class="element ptable group-nm">O<br />8</a>
-        <a class="element ptable group-nm">F<br />9</a>
-        <a class="element ptable group-nm">Ne<br />10</a>
+        <a class="element ptable group-nm row2">B<br />5</a>
+        <a class="element ptable group-nm row2">C<br />6</a>
+        <a class="element ptable group-nm row2">N<br />7</a>
+        <a class="element ptable group-nm row2">O<br />8</a>
+        <a class="element ptable group-nm row2">F<br />9</a>
+        <a class="element ptable group-nm row2">Ne<br />10</a>
       </div>
       <div class="row clickable">
-        <a class="element ptable group-12">Na<br />11</a>
-        <a class="element ptable group-12">Mg<br />12</a>
+        {selRow && <a class="element row-selector">3</a>}
+        <a class="element ptable group-12 row3">Na<br />11</a>
+        <a class="element ptable group-12 row3">Mg<br />12</a>
         <div class="element empty-element"></div>
         <div class="element empty-element"></div>
         <div class="element empty-element"></div>
@@ -62,15 +67,16 @@ const { id } = Astro.props;
         <div class="element empty-element"></div>
         <div class="element empty-element"></div>
         <div class="element empty-element"></div>
-        <a class="element ptable group-nm">Al<br />13</a>
-        <a class="element ptable group-nm">Si<br />14</a>
-        <a class="element ptable group-nm">P<br />15</a>
-        <a class="element ptable group-nm">S<br />16</a>
-        <a class="element ptable group-nm">Cl<br />17</a>
-        <a class="element ptable group-nm">Ar<br />18</a>
+        <a class="element ptable group-nm row3">Al<br />13</a>
+        <a class="element ptable group-nm row3">Si<br />14</a>
+        <a class="element ptable group-nm row3">P<br />15</a>
+        <a class="element ptable group-nm row3">S<br />16</a>
+        <a class="element ptable group-nm row3">Cl<br />17</a>
+        <a class="element ptable group-nm row3">Ar<br />18</a>
       </div>
       <div class="not-clickable">
         <div class="row">
+          {selRow && <a class="element">4</a>}
           <a class="element ptable group-12">K<br />19</a>
           <a class="element ptable group-12">Ca<br />20</a>
           <a class="element ptable group-transition">Sc<br />21</a>
@@ -91,6 +97,7 @@ const { id } = Astro.props;
           <a class="element ptable group-nm">Kr<br />36</a>
         </div>
         <div class="row">
+          {selRow && <a class="element">5</a>}
           <a class="element ptable group-12">Rb<br />37</a>
           <a class="element ptable group-12">Sr<br />38</a>
           <a class="element ptable group-transition">Y <br />39</a>
@@ -111,6 +118,7 @@ const { id } = Astro.props;
           <a class="element ptable group-nm">Xe<br />54</a>
         </div>
         <div class="row">
+          {selRow && <a class="element">6</a>}
           <a class="element ptable group-12">Cs<br />55</a>
           <a class="element ptable group-12">Ba<br />56</a>
           <a class="element ptable group-transition">La<br />57</a>
@@ -131,6 +139,7 @@ const { id } = Astro.props;
           <a class="element ptable group-nm">Rn<br />86</a>
         </div>
         <div class="row">
+          {selRow && <a class="element">7</a>}
           <a class="element ptable group-12">Fr<br />87</a>
           <a class="element ptable group-12">Ra<br />88</a>
           <a class="element ptable group-transition">Ac<br />89</a>
@@ -171,6 +180,7 @@ const { id } = Astro.props;
           <div class="element empty-element"></div>
         </div>
         <div class="row">
+          {selRow && <a class="element">6</a>}
           <div class="element empty-element"></div>
           <div class="element empty-element"></div>
           <div class="element empty-element"></div>
@@ -191,6 +201,7 @@ const { id } = Astro.props;
           <div class="element empty-element"></div>
         </div>
         <div class="row">
+          {selRow && <a class="element">7</a>}
           <div class="element empty-element"></div>
           <div class="element empty-element"></div>
           <div class="element empty-element"></div>
@@ -212,7 +223,7 @@ const { id } = Astro.props;
         </div>
       </div>
     </div>
-    <DetailedElemBox id={id} />
+    <DetailedElemBox id={id} selectableRow={selectableRow} />
   </div>
 </div>
 
@@ -231,6 +242,11 @@ const { id } = Astro.props;
     font-size: 1.15vw;
     width: 70%;
     float: left;
+  }
+
+  /* if you hover over the row-selector box, the whole row will be outline */
+  .clickable:has(> .row-selector:hover) {
+    outline: 1px solid black;
   }
 
   .not-clickable {
@@ -276,6 +292,11 @@ const { id } = Astro.props;
     transform: scale(1.1);
   }
 
+  .row-selector:hover {
+    box-shadow: 2px 2px 5px;
+    transform: scale(1.1);
+  }
+
   .element.clicked {
     box-shadow: 2px 2px 5px;
     transform: scale(1.2);
@@ -283,59 +304,6 @@ const { id } = Astro.props;
 
   .empty-element {
     border-style: none;
-  }
-
-  .group-12 {
-    background-color: #6480ba;
-  }
-
-  .group-12.ptable:hover {
-    transform: scale(1.1);
-    background-color: #6699ff;
-  }
-
-  .description.group-base {
-    background-color: rgba(225, 170, 173, 0.5);
-  }
-
-  .description.group-base.ptable:hover {
-    background-color: rgba(212, 132, 137, 0.8);
-  }
-
-  .key li.group-base:before {
-    background-color: #d48489;
-  }
-
-  .hover-group-base .element {
-    opacity: 0.5;
-  }
-
-  .hover-group-base .element.group-base {
-    opacity: 1;
-  }
-
-  .group-transition {
-    background-color: #eb4848;
-  }
-
-  .group-transition.ptable:hover {
-    background-color: #f86c6c;
-  }
-
-  .group-nm {
-    background-color: #ffcc00;
-  }
-
-  .group-nm.ptable:hover {
-    background-color: #e1deaa;
-  }
-
-  .group-la {
-    background-color: #00cc33;
-  }
-
-  .group-la.ptable:hover {
-    background-color: #d7e1aa;
   }
 
   /* In index.astro: and probably not used. */

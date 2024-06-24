@@ -17,12 +17,51 @@ function convertElectronConfigToHTML(): string {
  * Displays a box with the element's data
  */
 function displayDetailedElementBox(): void {
+
+  // console.log("displayDetailedElementBox called!");
+
+  const detailsTempTexts = document.getElementsByClassName("detailsTempText")!;
+  const detailsElemBoxes = document.getElementsByClassName("detailsElemBox")!;
+
   const selectedElement = selectedElement$.get().selectedElementInfo;
+  const row = selectedElement$.get().rowSelected;
+  if (!selectedElement && !row) {   // nothing selected
+
+    // show the instructions and hide the details box(es).
+    for (let detailsTempText of detailsTempTexts) {
+      (<HTMLElement>detailsTempText).style.display = "block";
+    }
+    for (let detailsElemBox of detailsElemBoxes) {
+      (<HTMLElement>detailsElemBox).style.display = "none";
+    }
+  } else {
+    // hide information and show element details.
+    for (let detailsTempText of detailsTempTexts) {
+      (<HTMLElement>detailsTempText).style.display = "none";
+    }
+    for (let detailsElemBox of detailsElemBoxes) {
+      (<HTMLElement>detailsElemBox).style.display = "block";
+    }
+  }
+
+  if (row) {
+    for (let detailsElemBox of detailsElemBoxes) {
+      const rowSelElem = detailsElemBox.querySelector(".rowSelectedInfo")!;
+      rowSelElem.textContent = `Row ${row} selected.`;
+      detailsElemBox.querySelector(".aNumber")!.textContent = "";
+      detailsElemBox.querySelector(".aSymbol")!.textContent = "";
+      detailsElemBox.querySelector(".aName")!.textContent = "";
+      detailsElemBox.querySelector(".aMass")!.textContent = "";
+      detailsElemBox.querySelector(".aEconfig")!.textContent = "";
+      detailsElemBox.classList.add("detailedViewRowSelected");
+    }
+    return;
+  }
+
   if (!selectedElement) {
     return;
   }
 
-  const detailsElemBoxes = document.getElementsByClassName("detailsElemBox")!;
   const selectedHTMLElem = selectedElement$.get().selectedHTMLElement!;
 
   for (let detailsElemBox of detailsElemBoxes) {
@@ -36,6 +75,7 @@ function displayDetailedElementBox(): void {
     const aName = detailsElemBox.querySelector(".aName")!;
     const aMass = detailsElemBox.querySelector(".aMass")!;
     const aEconfig = detailsElemBox.querySelector(".aEconfig")!;
+    detailsElemBox.querySelector(".rowSelectedInfo")!.textContent = "";
 
     aNumber.textContent = String(selectedElement.number);
     aSymbol.textContent = selectedElement.symbol;

@@ -38,6 +38,9 @@ export function populateIonEnergyTables() {
 }
 
 function populateLeftTableDataRows() {
+  if (selectedElement$.get().selectedElemOrbitals === null) {
+    return;
+  }
   const electrons = getElectronsFromElectronConfig();
 
   // Ze row
@@ -244,12 +247,14 @@ function updateVeeRows(electrons: number[], rowClass: string, data: number[][]) 
 }
 
 function updateIonEnergyTablesForUnitsChange(u: string) {
+  if (selectedElement$.get().selectedElemOrbitals === null) {
+    return;
+  }
   const unitsLabel = document.getElementById('ion-energy-units')!;
   unitsLabel.innerHTML = `Energies shown in ${u}.`;
 
   populateLeftTableDataRows();
   populateRightTableDataRows(computeOrbitalsFromSelects());
-
 }
 
 energies$.listen(() => populateIonEnergyTables());

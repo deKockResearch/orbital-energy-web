@@ -1,27 +1,32 @@
 import { Chart } from "chart.js/auto";
 import { selectedElement$, unitsSelection$ } from "./stores";
-import { conversions, energyToUnitsAsString } from "./utils";
+import { conversions } from "./utils";
+// import { conversions, energyToUnitsAsString } from "./utils";
 
-//https://doi.org/10.1016/j.cplett.2012.07.072
-//https://doi.org/10.1002/chem.201602949
+// https://doi.org/10.1016/j.cplett.2012.07.072
+// https://doi.org/10.1002/chem.201602949
 const atomicSize =
   [1.00, 0.57, 3.10, 2.05, 1.54, 1.22, 1.00, 0.85, 0.73, 0.65, 3.39, 2.59, 2.29, 1.99, 1.74, 1.55, 1.40, 1.27];
 
-//https://cccbdb.nist.gov/pollistx.asp
+// https://cccbdb.nist.gov/pollistx.asp
 const polarizability =
   [4.50, 1.41, 164.19, 37.79, 20.45, 11.88, 7.42, 5.41, 3.76, 2.57, 162.70, 71.53, 56.28, 36.31, 24.50, 19.57, 14.71, 11.23];
 
-//https://physics.nist.gov/PhysRefData/ASD/ionEnergy.html
+// https://physics.nist.gov/PhysRefData/ASD/ionEnergy.html
 const unweightedIonizationEnergy =
   [0.49973, 0.90357, 0.198142, 0.342603, 0.304947, 0.413808, 0.53412, 0.500454, 0.640277, 0.792482, 0.188858, 0.280994, 0.219973, 0.299569, 0.385379, 0.380723, 0.476552, 0.579155];
 
 const weightedIonizationEnergy =
   [0.49973, 0.967795, 0.198142, 0.337283, 0.437215, 0.543986, 0.654002, 0.757922, 0.864757, 0.973539, 0.188858, 0.277843, 0.326223, 0.379004, 0.433465, 0.48373, 0.536331, 0.589734];
 
-//https://cccbdb.nist.gov/elecaff1x.asp
+// https://cccbdb.nist.gov/elecaff1x.asp
 const electronAffinity =
   [0.027715971, 0, 0.022696014, 0, 0.010280366, 0.046381834, 0, 0.053726774, 0.124995102, 0, 0.020136828, 0, 0.015942444, 0.051063845, 0.027433736, 0.076332127, 0.132765158, 0];
 
+const startElemInPeriodicTableRows = [0, 2, 10];
+const numElemsInPeriodicTableRows = [2, 8, 8];
+const elemLabels = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
+  'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'];
 
 function calcPointRadius(context: { dataIndex: number }) {
   if (selectedElement$.get().selectedElementInfo === null) {
@@ -36,8 +41,29 @@ let polarizabilityChart: Chart;
 let ionizationEnergyChart: Chart;
 let weightedIonizationEnergyChart: Chart;
 
-// This is run once when the window loads (i.e., from "main").
-export function drawCharts() {
+let chart: Chart;
+
+interface ChartInfo {
+  data: number[];
+  title: string;
+  bottomMaterial: string[];
+}
+
+
+export function drawSelectedRowOfElemsChart(chartName: string) {
+
+  const rowSelected: number | null = selectedElement$.get().rowSelected;
+  if (!rowSelected) {
+    return;
+  }
+
+  const startElem = startElemInPeriodicTableRows[rowSelected - 1];
+  const numElems = numElemsInPeriodicTableRows[rowSelected - 1];
+  const labels = elemLabels.slice(startElem, startElem + numElems);
+
+  if (chart) {
+    chart.destroy();
+  }
 
   const options = {
     scales: {
@@ -46,17 +72,60 @@ export function drawCharts() {
       }
     }
   };
-  const labels = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
-    'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'];
 
-  const ctx = document.getElementById('atomicSizeChartCanv')! as HTMLCanvasElement;
-  atomicSizeChart = new Chart(ctx, {
+  let chartInfo: ChartInfo = {
+    data: [],
+    title: '',
+    bottomMaterial: [],
+  };
+
+  const unitSelectValue = unitsSelection$.get();
+
+  switch (chartName) {
+    case 'polarizability':
+      chartInfo = {
+        data: polarizability,
+        title: "Polarizability (bohr)",
+        bottomMaterial: ['DeKock 2012'],
+      };
+      break;
+    case 'ionization-energy':
+      chartInfo = {
+        // convert the values depending on unit selection.
+        data: unweightedIonizationEnergy.map((e) => e * conversions.get(unitSelectValue)!),
+        title: `Ionization Energy (${unitSelectValue})`,
+        bottomMaterial: ["Kramida, A., Ralchenko, Yu., Reader, J., and NIST ASD Team (2014). NIST Atomic Spectra Database (ver. 5.2),", "[Online]. Available: http://physics.nist.gov/asd [2016, February 22]. National Institute of Standards and Technology, Gaithersburg, MD."]
+      };
+      break;
+    case 'electron-affinity':
+      chartInfo = {
+        data: electronAffinity.map((e) => e * conversions.get(unitSelectValue)!),
+        title: `Electron Affinity (${unitSelectValue})`,
+        bottomMaterial: ["https://cccbdb.nist.gov/elecaff1x.asp"],
+      }
+      break;
+    case 'weighted-ion-energy':
+      chartInfo = {
+        data: weightedIonizationEnergy.map((e) => e * conversions.get(unitSelectValue)!),
+        title: `Weighted Ionization Energy (${unitSelectValue})`,
+        bottomMaterial: [],
+      };
+      break;
+    default:
+      console.error("Unknown chart name: ", chartName);
+      break;
+  }
+
+  const data = chartInfo.data.slice(startElem, startElem + numElems);
+
+  const ctx = document.getElementById('chart-canv')! as HTMLCanvasElement;
+  chart = new Chart(ctx, {
     type: 'line',
     data: {
       labels,
       datasets: [{
-        label: `Atomic Size (bohr)`,
-        data: [...atomicSize],
+        label: chartInfo.title,
+        data: [...data],
         borderWidth: 1,
         pointRadius: calcPointRadius,
       }]
@@ -65,7 +134,7 @@ export function drawCharts() {
       ...options,
       plugins: {
         title: {
-          text: "DeKock 2012",
+          text: chartInfo.bottomMaterial,
           display: true,
           position: "bottom",
         },
@@ -73,146 +142,229 @@ export function drawCharts() {
     },
   });
 
-  const ctx2 = document.getElementById('electronAffinityChartCanv')! as HTMLCanvasElement;
-  electronAffinityChart = new Chart(ctx2, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: `Electron Affinity (${unitsSelection$.get()})`,
-        data: [...electronAffinity],
-        borderWidth: 1,
-        pointRadius: calcPointRadius,
-      }]
-    },
-    options: {
-      ...options,
-      plugins: {
-        title: {
-          text: "https://cccbdb.nist.gov/elecaff1x.asp",
-          display: true,
-          position: "bottom",
-        },
-      },
-    },
-  });
-  const ctx3 = document.getElementById('polarizabilityChartCanv')! as HTMLCanvasElement;
-  polarizabilityChart = new Chart(ctx3, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: `Polarizability (bohr)`,
-        data: [...polarizability],
-        borderWidth: 1,
-        pointRadius: calcPointRadius,
-      }]
-    },
-    options,
-  });
-  const ctx4 = document.getElementById('ionizationEnergyChartCanv')! as HTMLCanvasElement;
-  ionizationEnergyChart = new Chart(ctx4, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: `Ionization Energy (${unitsSelection$.get()})`,
-          data: [...unweightedIonizationEnergy],
-          borderWidth: 1,
-          pointRadius: calcPointRadius,
-        },
-      ]
-    },
-    options: {
-      ...options,
-      plugins: {
-        title: {
-          text: ["Kramida, A., Ralchenko, Yu., Reader, J., and NIST ASD Team (2014). NIST Atomic Spectra Database (ver. 5.2),", "[Online]. Available: http://physics.nist.gov/asd [2016, February 22]. National Institute of Standards and Technology, Gaithersburg, MD."],
-          display: true,
-          position: "bottom",
-        },
-      },
-    },
-  });
-  const ctx5 = document.getElementById('weightedIonizationEnergyChartCanv')! as HTMLCanvasElement;
-  weightedIonizationEnergyChart = new Chart(ctx5, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: `Weighted Ionization Energy (${unitsSelection$.get()})`,
-          data: [...weightedIonizationEnergy],
-          borderWidth: 1,
-          pointRadius: calcPointRadius,
-        },
-      ]
-    },
-    options,
-  });
 }
+
+
+// This is run once when the window loads (i.e., from "main").
+export function drawCharts() {
+}
+
+//   const options = {
+//     scales: {
+//       y: {
+//         beginAtZero: true
+//       }
+//     }
+//   };
+//   const labels = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
+//     'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'];
+
+//   const ctx = document.getElementById('atomicSizeChartCanv')! as HTMLCanvasElement;
+//   atomicSizeChart = new Chart(ctx, {
+//     type: 'line',
+//     data: {
+//       labels,
+//       datasets: [{
+//         label: `Atomic Size (bohr)`,
+//         data: [...atomicSize],
+//         borderWidth: 1,
+//         pointRadius: calcPointRadius,
+//       }]
+//     },
+//     options: {
+//       ...options,
+//       plugins: {
+//         title: {
+//           text: "DeKock 2012",
+//           display: true,
+//           position: "bottom",
+//         },
+//       },
+//     },
+//   });
+
+//   const ctx2 = document.getElementById('electronAffinityChartCanv')! as HTMLCanvasElement;
+//   electronAffinityChart = new Chart(ctx2, {
+//     type: 'line',
+//     data: {
+//       labels,
+//       datasets: [{
+//         label: `Electron Affinity (${unitsSelection$.get()})`,
+//         data: [...electronAffinity],
+//         borderWidth: 1,
+//         pointRadius: calcPointRadius,
+//       }]
+//     },
+//     options: {
+//       ...options,
+//       plugins: {
+//         title: {
+//           text: "https://cccbdb.nist.gov/elecaff1x.asp",
+//           display: true,
+//           position: "bottom",
+//         },
+//       },
+//     },
+//   });
+//   const ctx3 = document.getElementById('polarizabilityChartCanv')! as HTMLCanvasElement;
+//   polarizabilityChart = new Chart(ctx3, {
+//     type: 'line',
+//     data: {
+//       labels,
+//       datasets: [{
+//         label: `Polarizability (bohr)`,
+//         data: [...polarizability],
+//         borderWidth: 1,
+//         pointRadius: calcPointRadius,
+//       }]
+//     },
+//     options,
+//   });
+//   const ctx4 = document.getElementById('ionizationEnergyChartCanv')! as HTMLCanvasElement;
+//   ionizationEnergyChart = new Chart(ctx4, {
+//     type: 'line',
+//     data: {
+//       labels,
+//       datasets: [
+//         {
+//           label: `Ionization Energy (${unitsSelection$.get()})`,
+//           data: [...unweightedIonizationEnergy],
+//           borderWidth: 1,
+//           pointRadius: calcPointRadius,
+//         },
+//       ]
+//     },
+//     options: {
+//       ...options,
+//       plugins: {
+//         title: {
+//           text: ["Kramida, A., Ralchenko, Yu., Reader, J., and NIST ASD Team (2014). NIST Atomic Spectra Database (ver. 5.2),", "[Online]. Available: http://physics.nist.gov/asd [2016, February 22]. National Institute of Standards and Technology, Gaithersburg, MD."],
+//           display: true,
+//           position: "bottom",
+//         },
+//       },
+//     },
+//   });
+//   const ctx5 = document.getElementById('weightedIonizationEnergyChartCanv')! as HTMLCanvasElement;
+//   weightedIonizationEnergyChart = new Chart(ctx5, {
+//     type: 'line',
+//     data: {
+//       labels,
+//       datasets: [
+//         {
+//           label: `Weighted Ionization Energy (${unitsSelection$.get()})`,
+//           data: [...weightedIonizationEnergy],
+//           borderWidth: 1,
+//           pointRadius: calcPointRadius,
+//         },
+//       ]
+//     },
+//     options,
+//   });
+// }
 
 // The unit selector was changed so update the charts to show using the
 // new scale (Ha, Ry, cal, etc.)
-function updateChartScales() {
+// function updateChartScales() {
 
-  const unitSelectValue = unitsSelection$.get();
-  for (let i = 0; i < electronAffinityChart.data.datasets[0].data.length; i++) {
-    electronAffinityChart.data.datasets[0].data[i] = electronAffinity[i] * conversions.get(unitSelectValue)!;
-  }
-  electronAffinityChart.data.datasets[0].label = `Electron Affinity (${unitSelectValue})`;
-  electronAffinityChart.update();
+//   const unitSelectValue = unitsSelection$.get();
+//   for (let i = 0; i < electronAffinityChart.data.datasets[0].data.length; i++) {
+//     electronAffinityChart.data.datasets[0].data[i] = electronAffinity[i] * conversions.get(unitSelectValue)!;
+//   }
+//   electronAffinityChart.data.datasets[0].label = `Electron Affinity (${unitSelectValue})`;
+//   electronAffinityChart.update();
 
-  for (let i = 0; i < ionizationEnergyChart.data.datasets[0].data.length; i++) {
-    ionizationEnergyChart.data.datasets[0].data[i] = unweightedIonizationEnergy[i] * conversions.get(unitSelectValue)!;
-  }
-  ionizationEnergyChart.data.datasets[0].label = `Ionization Energy (${unitSelectValue})`;
-  ionizationEnergyChart.update();
+//   for (let i = 0; i < ionizationEnergyChart.data.datasets[0].data.length; i++) {
+//     ionizationEnergyChart.data.datasets[0].data[i] = unweightedIonizationEnergy[i] * conversions.get(unitSelectValue)!;
+//   }
+//   ionizationEnergyChart.data.datasets[0].label = `Ionization Energy (${unitSelectValue})`;
+//   ionizationEnergyChart.update();
 
-  for (let i = 0; i < weightedIonizationEnergyChart.data.datasets[0].data.length; i++) {
-    weightedIonizationEnergyChart.data.datasets[0].data[i] = weightedIonizationEnergy[i] * conversions.get(unitSelectValue)!;
-  }
-  weightedIonizationEnergyChart.data.datasets[0].label = `Weighted Ionization Energy (${unitSelectValue})`;
-  weightedIonizationEnergyChart.update();
-}
+//   for (let i = 0; i < weightedIonizationEnergyChart.data.datasets[0].data.length; i++) {
+//     weightedIonizationEnergyChart.data.datasets[0].data[i] = weightedIonizationEnergy[i] * conversions.get(unitSelectValue)!;
+//   }
+//   weightedIonizationEnergyChart.data.datasets[0].label = `Weighted Ionization Energy (${unitSelectValue})`;
+//   weightedIonizationEnergyChart.update();
+// }
 
-function updateChartsPoints() {
-  atomicSizeChart.update();
-  electronAffinityChart.update();
-  polarizabilityChart.update();
-  ionizationEnergyChart.update();
-  weightedIonizationEnergyChart.update();
-}
+// function updateChartsPoints() {
+//   atomicSizeChart.update();
+//   electronAffinityChart.update();
+//   polarizabilityChart.update();
+//   ionizationEnergyChart.update();
+//   weightedIonizationEnergyChart.update();
+// }
 
 // this box appears next to the charts and summarizes the energies
 // for the element that has been selected.
-function updateEnergiesBox() {
+// function updateEnergiesBox() {
 
-  const unitSelectValue = unitsSelection$.get();
+//   const unitSelectValue = unitsSelection$.get();
 
-  const atomicNumIndex = selectedElement$.get().selectedElementInfo!.number - 1;
-  const een = document.getElementById('energy-element-name')! as HTMLCanvasElement;
-  een.innerHTML = "Name: " + selectedElement$.get().selectedElementInfo!.name;
-  const eas = document.getElementById('energy-atomic-size')! as HTMLCanvasElement;
-  eas.innerHTML = "Atomic Size: " + atomicSize[atomicNumIndex] + " bohr";
-  const eea = document.getElementById('energy-electron-affinity')! as HTMLCanvasElement;
-  eea.innerHTML = "Electron Affinity: " + energyToUnitsAsString(electronAffinity[atomicNumIndex], unitSelectValue);
-  const ep = document.getElementById('energy-polarizability')! as HTMLCanvasElement;
-  ep.innerHTML = "Polarizability: " + polarizability[atomicNumIndex] + " bohr";
-  const eie = document.getElementById('energy-ionization-energy')! as HTMLCanvasElement;
-  eie.innerHTML = "Weighted Ionization: " + energyToUnitsAsString(weightedIonizationEnergy[atomicNumIndex], unitSelectValue);
+//   const atomicNumIndex = selectedElement$.get().selectedElementInfo!.number - 1;
+//   const een = document.getElementById('energy-element-name')! as HTMLCanvasElement;
+//   een.innerHTML = "Name: " + selectedElement$.get().selectedElementInfo!.name;
+//   const eas = document.getElementById('energy-atomic-size')! as HTMLCanvasElement;
+//   eas.innerHTML = "Atomic Size: " + atomicSize[atomicNumIndex] + " bohr";
+//   const eea = document.getElementById('energy-electron-affinity')! as HTMLCanvasElement;
+//   eea.innerHTML = "Electron Affinity: " + energyToUnitsAsString(electronAffinity[atomicNumIndex], unitSelectValue);
+//   const ep = document.getElementById('energy-polarizability')! as HTMLCanvasElement;
+//   ep.innerHTML = "Polarizability: " + polarizability[atomicNumIndex] + " bohr";
+//   const eie = document.getElementById('energy-ionization-energy')! as HTMLCanvasElement;
+//   eie.innerHTML = "Weighted Ionization: " + energyToUnitsAsString(weightedIonizationEnergy[atomicNumIndex], unitSelectValue);
 
-}
+// }
 
 function updateEverything() {
   if (selectedElement$.get().selectedElementInfo === null) {
     return;
   }
-  updateChartsPoints();
-  updateChartScales();
-  updateEnergiesBox();
+  // updateChartsPoints();
+  // updateChartScales();
+  // updateEnergiesBox();
 }
 
-selectedElement$.subscribe(() => updateEverything());
-unitsSelection$.subscribe(() => updateEverything());
+// listen for user changing which graph to show.
+const graphSelFormElem = document.getElementById('graph-selection-form')! as HTMLFormElement;
+graphSelFormElem.addEventListener('change', (e: Event) => {
+  const target = e.target as HTMLSelectElement;
+  const graphToShow = target.value;   // electronAffinity, polarizability, ionizationEnergy, weightedIonizationEnergy
+  drawSelectedRowOfElemsChart(graphToShow);
+});
+
+function updateGraphOnAnyChange() {
+
+  // When the user selects an element or a row of elements, disable or enable
+  // the fieldset of single-element graph options or the fieldset of
+  // row-based graph options.
+  const selElem = selectedElement$.get();
+  const fieldSetOfSingleElemGraphs = document.getElementById('single-elem-graphs');
+  const fieldSetOfRowOfElemGraphs = document.getElementById('row-of-elem-graphs');
+
+  if (selElem.selectedHTMLElement === null) {
+    fieldSetOfSingleElemGraphs?.setAttribute('disabled', 'true');
+  } else {
+    fieldSetOfSingleElemGraphs?.removeAttribute('disabled');
+  }
+  if (selElem.rowSelected === null) {
+    fieldSetOfRowOfElemGraphs?.setAttribute('disabled', 'true');
+  } else {
+    fieldSetOfRowOfElemGraphs?.removeAttribute('disabled');
+  }
+
+  // get the value of the form -- to see which radio button ahs been selected.
+  const graphSelFormElem = document.getElementById('graph-selection-form')! as HTMLFormElement;
+  const fd = new FormData(graphSelFormElem);
+  const formData: { [key: string]: FormDataEntryValue } = {};
+  for (const [key, value] of fd.entries()) {
+    formData[key] = value;
+  }
+  if (formData['graph-type']) {
+    drawSelectedRowOfElemsChart(formData['graph-type'] as string);
+  }
+}
+
+// listen for user changing the selection or the units.
+selectedElement$.subscribe(() => updateGraphOnAnyChange());
+unitsSelection$.subscribe(() => updateGraphOnAnyChange());
+

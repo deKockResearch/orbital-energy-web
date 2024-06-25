@@ -8,48 +8,115 @@ import UnitsSelector from "./UnitsSelector.astro";
   <ElementsTable id="graphs" selectableRow="true" />
   <UnitsSelector />
 
+  <div id="graph-selection">
+    <form id="graph-selection-form" autocomplete="off">
+      <fieldset id="single-elem-graphs" disabled>
+        <legend>
+          For single element, select what you would like to graph:
+        </legend>
+        <div>
+          <input
+            type="radio"
+            id="something"
+            name="graph-type"
+            value="something"
+          />
+          <label for="something">Something</label>
+        </div>
+      </fieldset>
+      <fieldset id="row-of-elem-graphs" disabled>
+        <legend> For a row, select what you would like to graph: </legend>
+        <div>
+          <input
+            type="radio"
+            id="polarizability"
+            name="graph-type"
+            value="polarizability"
+          />
+          <label for="polarizability">Polarizability</label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            id="ionization-energy"
+            name="graph-type"
+            value="ionization-energy"
+          />
+          <label for="ionization-energy">Ionization Energy</label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            id="electron-affinity"
+            name="graph-type"
+            value="electron-affinity"
+          />
+          <label for="electron-affinity">Electron Affinity</label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            id="weighted-ion-energy"
+            name="graph-type"
+            value="weighted-ion-energy"
+          />
+          <label for="weighted-ion-energy">Weighted Ionization Energy</label>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+
   <div class="charts-area">
     <div id="charts-wrapper">
+      <canvas id="chart-canv"></canvas>
       <canvas id="atomicSizeChartCanv"></canvas>
       <canvas id="electronAffinityChartCanv"></canvas>
       <canvas id="polarizabilityChartCanv"></canvas>
       <canvas id="ionizationEnergyChartCanv"></canvas>
       <canvas id="weightedIonizationEnergyChartCanv"></canvas>
     </div>
-    <div id="energy-info-for-element">
+    <div id="chart-attachment">
+      <canvas id="chart-canv">
+        <!-- <div id="energy-info-for-element">
       <div id="energy-element-name"></div>
       <div id="energy-atomic-size"></div>
       <div id="energy-electron-affinity"></div>
       <div id="energy-polarizability"></div>
       <div id="energy-ionization-energy"></div>
+    </div> -->
+      </canvas>
     </div>
+    <script>
+      import "../scripts/graphData.ts";
+    </script>
+
+    <style>
+      .charts-area {
+        display: flex;
+        flex-direction: row;
+        min-height: 500px;
+      }
+
+      #charts-wrapper {
+        width: 90%;
+      }
+
+      #charts-wrapper > canvas {
+        margin-bottom: 2rem;
+      }
+
+      #energy-info-for-element {
+        margin-left: 5vw;
+        display: inline-block;
+        width: 50%;
+        padding: 1rem;
+        font-weight: bold;
+        border: 1px solid black;
+      }
+
+      [disabled] {
+        filter: opacity(50%);
+      }
+    </style>
   </div>
 </TabLayout>
-<script>
-  import "../scripts/graphData.ts";
-</script>
-
-<style>
-  .charts-area {
-    display: flex;
-    flex-direction: row;
-    min-height: 500px;
-  }
-
-  #charts-wrapper {
-    width: 30%;
-  }
-
-  #charts-wrapper > canvas {
-    margin-bottom: 2rem;
-  }
-
-  #energy-info-for-element {
-    margin-left: 5vw;
-    display: inline-block;
-    width: 50%;
-    padding: 1rem;
-    font-weight: bold;
-    border: 1px solid black;
-  }
-</style>

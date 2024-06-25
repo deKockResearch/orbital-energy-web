@@ -1,0 +1,288 @@
+[debug] [2024-06-25T20:35:08.880Z] ----------------------------------------------------------------------
+[debug] [2024-06-25T20:35:08.885Z] Command:       /Users/vtn2/.nvm/versions/node/v20.9.0/bin/node /Users/vtn2/.nvm/versions/node/v20.9.0/bin/firebase deploy
+[debug] [2024-06-25T20:35:08.886Z] CLI Version:   13.8.3
+[debug] [2024-06-25T20:35:08.886Z] Platform:      darwin
+[debug] [2024-06-25T20:35:08.886Z] Node Version:  v20.9.0
+[debug] [2024-06-25T20:35:08.886Z] Time:          Tue Jun 25 2024 16:35:08 GMT-0400 (Eastern Daylight Time)
+[debug] [2024-06-25T20:35:08.886Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-06-25T20:35:08.896Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2024-06-25T20:35:09.010Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-06-25T20:35:09.010Z] > authorizing via signed-in user (vic.norman@gmail.com)
+[debug] [2024-06-25T20:35:09.010Z] [iam] checking project orbital-energy for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2024-06-25T20:35:09.011Z] > refreshing access token with scopes: []
+[debug] [2024-06-25T20:35:09.011Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-06-25T20:35:09.011Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-06-25T20:35:09.086Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2024-06-25T20:35:09.086Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2024-06-25T20:35:09.127Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2024-06-25T20:35:09.127Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-06-25T20:35:09.162Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/orbital-energy:testIamPermissions [none]
+[debug] [2024-06-25T20:35:09.162Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/orbital-energy:testIamPermissions x-goog-quota-user=projects/orbital-energy
+[debug] [2024-06-25T20:35:09.162Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/orbital-energy:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-06-25T20:35:09.306Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/orbital-energy:testIamPermissions 200
+[debug] [2024-06-25T20:35:09.306Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/orbital-energy:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-06-25T20:35:09.307Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/orbital-energy/serviceAccounts/orbital-energy@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2024-06-25T20:35:09.307Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/orbital-energy/serviceAccounts/orbital-energy@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2024-06-25T20:35:09.483Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/orbital-energy/serviceAccounts/orbital-energy@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2024-06-25T20:35:09.484Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/orbital-energy/serviceAccounts/orbital-energy@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2024-06-25T20:35:09.485Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/orbital-energy [none]
+[debug] [2024-06-25T20:35:09.694Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/orbital-energy 200
+[debug] [2024-06-25T20:35:09.695Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/orbital-energy {"projectId":"orbital-energy","projectNumber":"236596638192","displayName":"orbital-energy","name":"projects/orbital-energy","resources":{"hostingSite":"orbital-energy"},"state":"ACTIVE","etag":"1_9026ef09-c069-40f6-b5ad-56c922beac18"}
+[debug] [2024-06-25T20:35:11.297Z] defaultcredentials: writing to file /Users/vtn2/.config/firebase/vic_norman_gmail.com_application_default_credentials.json
+[info] 
+   Thank you for trying our experimental support for Astro on Firebase Hosting.
+   While this integration is maintained by Googlers it is not a supported Firebase product.
+   Issues filed on GitHub will be addressed on a best-effort basis by maintainers and other community members.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/frameworks-overview
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2024-06-25T20:35:34.224Z] [web frameworks] effective firebase.json:  {
+  "hosting": [
+    {
+      "source": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "frameworksBackend": {
+        "region": "us-central1"
+      },
+      "site": "orbital-energy",
+      "rewrites": [
+        {
+          "source": "**",
+          "function": {
+            "functionId": "ssrorbitalenergy",
+            "region": "us-central1",
+            "pinTag": true
+          }
+        }
+      ],
+      "redirects": [],
+      "headers": [],
+      "cleanUrls": true,
+      "public": ".firebase/orbital-energy/hosting",
+      "webFramework": "astro_ssr"
+    }
+  ],
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ]
+    },
+    {
+      "source": ".firebase/orbital-energy/functions",
+      "codebase": "firebase-frameworks-orbital-energy"
+    }
+  ]
+}
+[info] 
+[info] === Deploying to 'orbital-energy'...
+[info] 
+[info] i  deploying functions, hosting 
+[debug] [2024-06-25T20:35:34.226Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/orbital-energy [none]
+[debug] [2024-06-25T20:35:34.364Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/orbital-energy 200
+[debug] [2024-06-25T20:35:34.364Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/orbital-energy {"projectId":"orbital-energy","projectNumber":"236596638192","displayName":"orbital-energy","name":"projects/orbital-energy","resources":{"hostingSite":"orbital-energy"},"state":"ACTIVE","etag":"1_9026ef09-c069-40f6-b5ad-56c922beac18"}
+[info] i  functions: preparing codebase default for deployment 
+[info] i  functions: preparing codebase firebase-frameworks-orbital-energy for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2024-06-25T20:35:34.365Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/cloudfunctions.googleapis.com [none]
+[debug] [2024-06-25T20:35:34.365Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/orbital-energy
+[debug] [2024-06-25T20:35:34.366Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/runtimeconfig.googleapis.com [none]
+[debug] [2024-06-25T20:35:34.366Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/orbital-energy
+[debug] [2024-06-25T20:35:34.367Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/cloudbuild.googleapis.com [none]
+[debug] [2024-06-25T20:35:34.367Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/cloudbuild.googleapis.com x-goog-quota-user=projects/orbital-energy
+[debug] [2024-06-25T20:35:34.368Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/artifactregistry.googleapis.com [none]
+[debug] [2024-06-25T20:35:34.368Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/artifactregistry.googleapis.com x-goog-quota-user=projects/orbital-energy
+[debug] [2024-06-25T20:35:34.666Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/runtimeconfig.googleapis.com 200
+[debug] [2024-06-25T20:35:34.667Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2024-06-25T20:35:34.669Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/cloudfunctions.googleapis.com 200
+[debug] [2024-06-25T20:35:34.670Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/cloudfunctions.googleapis.com [omitted]
+[info] ✔  functions: required API cloudfunctions.googleapis.com is enabled 
+[debug] [2024-06-25T20:35:34.739Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/artifactregistry.googleapis.com 200
+[debug] [2024-06-25T20:35:34.739Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/artifactregistry.googleapis.com [omitted]
+[info] ✔  artifactregistry: required API artifactregistry.googleapis.com is enabled 
+[debug] [2024-06-25T20:35:34.818Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/cloudbuild.googleapis.com 200
+[debug] [2024-06-25T20:35:34.818Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/cloudbuild.googleapis.com [omitted]
+[info] ✔  functions: required API cloudbuild.googleapis.com is enabled 
+[debug] [2024-06-25T20:35:34.819Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/orbital-energy/adminSdkConfig [none]
+[debug] [2024-06-25T20:35:34.913Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/orbital-energy/adminSdkConfig 200
+[debug] [2024-06-25T20:35:34.913Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/orbital-energy/adminSdkConfig {"projectId":"orbital-energy","storageBucket":"orbital-energy.appspot.com"}
+[debug] [2024-06-25T20:35:34.914Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/orbital-energy/configs [none]
+[debug] [2024-06-25T20:35:35.139Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/orbital-energy/configs 200
+[debug] [2024-06-25T20:35:35.139Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/orbital-energy/configs {}
+[debug] [2024-06-25T20:35:35.148Z] Validating nodejs source
+[warn] ⚠  functions: Runtime Node.js 16 was deprecated on 2024-01-30 and will be decommissioned on 2025-01-30, after which you will not be able to deploy without upgrading. Consider upgrading now to avoid disruption. See https://cloud.google.com/functions/docs/runtime-support for full details on the lifecycle policy 
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] ⚠  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2024-06-25T20:35:35.695Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^11.5.0",
+    "firebase-functions": "^4.7.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.0.0"
+  },
+  "private": true
+}
+[debug] [2024-06-25T20:35:35.695Z] Building nodejs source
+[info] i  functions: Loading and analyzing source code for codebase default to determine what to deploy 
+[debug] [2024-06-25T20:35:35.696Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-06-25T20:35:35.703Z] Found firebase-functions binary at '/Users/vtn2/src/orbital-energy-web/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8199
+
+[debug] [2024-06-25T20:35:38.385Z] Got response from /__/functions.yaml {"endpoints":{},"specVersion":"v1alpha1","requiredAPIs":[]}
+[debug] [2024-06-25T20:35:43.418Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] ⚠  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2024-06-25T20:35:43.922Z] > [functions] package.json contents: {
+  "name": "orbital-web",
+  "type": "module",
+  "version": "0.0.1",
+  "dependencies": {
+    "@astrojs/check": "^0.3.4",
+    "@astrojs/node": "^8.0.0",
+    "@astrojs/vercel": "^6.1.3",
+    "@types/p5": "^1.7.6",
+    "astro": "^4.0.9",
+    "chart.js": "^4.4.1",
+    "chartjs-plugin-annotation": "^3.0.1",
+    "firebase-functions": "^4.7.0",
+    "firebase-tools": "^11.30.0",
+    "nanostores": "^0.9.5",
+    "p5": "^1.9.0",
+    "typescript": "^5.3.3",
+    "firebase-frameworks": "^0.11.0",
+    "firebase-admin": "^11.11.1"
+  },
+  "main": "server.js",
+  "engines": {
+    "node": "20"
+  }
+}
+[debug] [2024-06-25T20:35:43.922Z] Building nodejs source
+[info] i  functions: Loading and analyzing source code for codebase firebase-frameworks-orbital-energy to determine what to deploy 
+[debug] [2024-06-25T20:35:43.922Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-06-25T20:35:43.923Z] Found firebase-functions binary at '/Users/vtn2/src/orbital-energy-web/.firebase/orbital-energy/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8218
+
+[debug] [2024-06-25T20:35:46.146Z] Got response from /__/functions.yaml {"endpoints":{"ssrorbitalenergy":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["us-central1"],"labels":{},"httpsTrigger":{},"entryPoint":"ssrorbitalenergy"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] i  functions: Loaded environment variables from .env. 
+[info] i  functions: preparing .firebase/orbital-energy/functions directory for uploading... 
+[info] i  functions: packaged /Users/vtn2/src/orbital-energy-web/.firebase/orbital-energy/functions (257.8 KB) for uploading 
+[debug] [2024-06-25T20:35:51.234Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v1/projects/orbital-energy/locations/-/functions [none]
+[debug] [2024-06-25T20:35:51.833Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v1/projects/orbital-energy/locations/-/functions 200
+[debug] [2024-06-25T20:35:51.833Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v1/projects/orbital-energy/locations/-/functions {}
+[debug] [2024-06-25T20:35:51.835Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/-/functions filter=environment%3D%22GEN_2%22
+[debug] [2024-06-25T20:35:52.279Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/-/functions 200
+[debug] [2024-06-25T20:35:52.280Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/-/functions {"functions":[{"name":"projects/orbital-energy/locations/us-central1/functions/ssrorbitalenergy","buildConfig":{"build":"projects/236596638192/locations/us-central1/builds/a21b22f8-b2ec-4d82-a022-9e24c58cacf3","runtime":"nodejs20","entryPoint":"ssrorbitalenergy","source":{"storageSource":{"bucket":"gcf-v2-sources-236596638192-us-central1","object":"ssrorbitalenergy/function-source.zip","generation":"1719247593322629"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"dockerRepository":"projects/orbital-energy/locations/us-central1/repositories/gcf-artifacts","sourceProvenance":{"resolvedStorageSource":{"bucket":"gcf-v2-sources-236596638192-us-central1","object":"ssrorbitalenergy/function-source.zip","generation":"1719247593322629"}},"dockerRegistry":"ARTIFACT_REGISTRY"},"serviceConfig":{"service":"projects/orbital-energy/locations/us-central1/services/ssrorbitalenergy","timeoutSeconds":60,"environmentVariables":{"__FIREBASE_FRAMEWORKS_ENTRY__":"astro","FIREBASE_CONFIG":"{\"projectId\":\"orbital-energy\",\"storageBucket\":\"orbital-energy.appspot.com\"}","GCLOUD_PROJECT":"orbital-energy","EVENTARC_CLOUD_EVENT_SOURCE":"projects/orbital-energy/locations/us-central1/services/ssrorbitalenergy","FUNCTION_TARGET":"ssrorbitalenergy"},"maxInstanceCount":100,"ingressSettings":"ALLOW_ALL","uri":"https://ssrorbitalenergy-ncqmowhgta-uc.a.run.app","serviceAccountEmail":"236596638192-compute@developer.gserviceaccount.com","availableMemory":"256Mi","allTrafficOnLatestRevision":true,"revision":"ssrorbitalenergy-00037-zet","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"state":"ACTIVE","updateTime":"2024-06-24T16:48:53.923041811Z","labels":{"firebase-functions-codebase":"firebase-frameworks-orbital-energy","firebase-functions-hash":"64085d0cdba905880e75b0eccf4547235cbe38f0","deployment-tool":"cli-firebase"},"environment":"GEN_2","url":"https://us-central1-orbital-energy.cloudfunctions.net/ssrorbitalenergy","createTime":"2024-02-08T20:37:49.932929037Z"}]}
+[info] i  functions: ensuring required API run.googleapis.com is enabled... 
+[info] i  functions: ensuring required API eventarc.googleapis.com is enabled... 
+[info] i  functions: ensuring required API pubsub.googleapis.com is enabled... 
+[info] i  functions: ensuring required API storage.googleapis.com is enabled... 
+[debug] [2024-06-25T20:35:52.286Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/run.googleapis.com [none]
+[debug] [2024-06-25T20:35:52.286Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/run.googleapis.com x-goog-quota-user=projects/orbital-energy
+[debug] [2024-06-25T20:35:52.289Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/eventarc.googleapis.com [none]
+[debug] [2024-06-25T20:35:52.289Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/eventarc.googleapis.com x-goog-quota-user=projects/orbital-energy
+[debug] [2024-06-25T20:35:52.293Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/pubsub.googleapis.com [none]
+[debug] [2024-06-25T20:35:52.294Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/pubsub.googleapis.com x-goog-quota-user=projects/orbital-energy
+[debug] [2024-06-25T20:35:52.296Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/storage.googleapis.com [none]
+[debug] [2024-06-25T20:35:52.296Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/storage.googleapis.com x-goog-quota-user=projects/orbital-energy
+[debug] [2024-06-25T20:35:52.580Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/eventarc.googleapis.com 200
+[debug] [2024-06-25T20:35:52.580Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/eventarc.googleapis.com [omitted]
+[info] ✔  functions: required API eventarc.googleapis.com is enabled 
+[debug] [2024-06-25T20:35:52.581Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/pubsub.googleapis.com 200
+[debug] [2024-06-25T20:35:52.581Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/pubsub.googleapis.com [omitted]
+[info] ✔  functions: required API pubsub.googleapis.com is enabled 
+[debug] [2024-06-25T20:35:52.582Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/storage.googleapis.com 200
+[debug] [2024-06-25T20:35:52.582Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/storage.googleapis.com [omitted]
+[info] ✔  functions: required API storage.googleapis.com is enabled 
+[debug] [2024-06-25T20:35:52.583Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/run.googleapis.com 200
+[debug] [2024-06-25T20:35:52.583Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/orbital-energy/services/run.googleapis.com [omitted]
+[info] ✔  functions: required API run.googleapis.com is enabled 
+[info] i  functions: generating the service identity for pubsub.googleapis.com... 
+[info] i  functions: generating the service identity for eventarc.googleapis.com... 
+[debug] [2024-06-25T20:35:52.584Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1beta1/projects/236596638192/services/pubsub.googleapis.com:generateServiceIdentity [none]
+[debug] [2024-06-25T20:35:52.585Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1beta1/projects/236596638192/services/eventarc.googleapis.com:generateServiceIdentity [none]
+[debug] [2024-06-25T20:35:52.943Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1beta1/projects/236596638192/services/eventarc.googleapis.com:generateServiceIdentity 200
+[debug] [2024-06-25T20:35:52.943Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/236596638192/services/eventarc.googleapis.com:generateServiceIdentity {"name":"operations/finished.DONE_OPERATION","done":true,"response":{"@type":"type.googleapis.com/google.api.serviceusage.v1beta1.ServiceIdentity","email":"service-236596638192@gcp-sa-eventarc.iam.gserviceaccount.com","uniqueId":"102513516449542689100"}}
+[debug] [2024-06-25T20:35:52.965Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1beta1/projects/236596638192/services/pubsub.googleapis.com:generateServiceIdentity 200
+[debug] [2024-06-25T20:35:52.965Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/236596638192/services/pubsub.googleapis.com:generateServiceIdentity {"name":"operations/finished.DONE_OPERATION","done":true,"response":{"@type":"type.googleapis.com/google.api.serviceusage.v1beta1.ServiceIdentity","email":"service-236596638192@gcp-sa-pubsub.iam.gserviceaccount.com","uniqueId":"118308568162413495779"}}
+[debug] [2024-06-25T20:35:52.967Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/orbital-energy [none]
+[debug] [2024-06-25T20:35:53.136Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/orbital-energy 200
+[debug] [2024-06-25T20:35:53.137Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/orbital-energy {"projectId":"orbital-energy","projectNumber":"236596638192","displayName":"orbital-energy","name":"projects/orbital-energy","resources":{"hostingSite":"orbital-energy"},"state":"ACTIVE","etag":"1_9026ef09-c069-40f6-b5ad-56c922beac18"}
+[debug] [2024-06-25T20:35:53.142Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/orbital-energy/versions [none]
+[debug] [2024-06-25T20:35:53.142Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/orbital-energy/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase","firebase-web-framework":"astro_ssr"}}
+[debug] [2024-06-25T20:35:53.664Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/orbital-energy/versions 200
+[debug] [2024-06-25T20:35:53.665Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/orbital-energy/versions {"name":"projects/236596638192/sites/orbital-energy/versions/76d66ad74cbc47bf","status":"CREATED","config":{},"labels":{"firebase-web-framework":"astro_ssr","deployment-tool":"cli-firebase"}}
+[debug] [2024-06-25T20:35:53.667Z] >>> [apiv2][query] POST https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/functions:generateUploadUrl [none]
+[debug] [2024-06-25T20:35:53.823Z] <<< [apiv2][status] POST https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/functions:generateUploadUrl 200
+[debug] [2024-06-25T20:35:53.824Z] <<< [apiv2][body] POST https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/functions:generateUploadUrl {"uploadUrl":"https://storage.googleapis.com/gcf-v2-uploads-236596638192-us-central1/0aa12947-2e32-4e85-a4dc-2ddcd3cd7a84.zip?GoogleAccessId=service-236596638192@gcf-admin-robot.iam.gserviceaccount.com&Expires=1719349553&Signature=gsNvIP9zYJ4KByhDc7PRTJheo2tJvk6mafee5RFxEPHlSd3DD7RMSK19kXEWdATvoZnFLRQilSH2bTEuLIuAXFsx8t4Hlwv0C%2F8BtMlNjNsX3YkHnPA75v3%2Bbp%2Fc9qo4h34LMsiuzcOVdQW9H9KZsotH8%2FFa9LGfJn00IbfBvkd%2FoNL5hzPyga4oyLi0HZH5yczJwCenn%2FA2t9jL1X1oTg70sTz31mppgwVN%2FPgSk1kMe3SI5wUeIUJ9eYvAmq9AFAWKtoJCxlBlbmPHjbjlPnQuzp9NIciYA3ve%2FZqETcDbE3LjaOx%2B9eAhNiJZ0rMgpKt%2FLZHvgU7Yq20RI66DGQ%3D%3D","storageSource":{"bucket":"gcf-v2-uploads-236596638192-us-central1","object":"0aa12947-2e32-4e85-a4dc-2ddcd3cd7a84.zip"}}
+[debug] [2024-06-25T20:35:53.825Z] >>> [apiv2][query] PUT https://storage.googleapis.com/gcf-v2-uploads-236596638192-us-central1/0aa12947-2e32-4e85-a4dc-2ddcd3cd7a84.zip GoogleAccessId=service-236596638192%40gcf-admin-robot.iam.gserviceaccount.com&Expires=1719349553&Signature=gsNvIP9zYJ4KByhDc7PRTJheo2tJvk6mafee5RFxEPHlSd3DD7RMSK19kXEWdATvoZnFLRQilSH2bTEuLIuAXFsx8t4Hlwv0C%2F8BtMlNjNsX3YkHnPA75v3%2Bbp%2Fc9qo4h34LMsiuzcOVdQW9H9KZsotH8%2FFa9LGfJn00IbfBvkd%2FoNL5hzPyga4oyLi0HZH5yczJwCenn%2FA2t9jL1X1oTg70sTz31mppgwVN%2FPgSk1kMe3SI5wUeIUJ9eYvAmq9AFAWKtoJCxlBlbmPHjbjlPnQuzp9NIciYA3ve%2FZqETcDbE3LjaOx%2B9eAhNiJZ0rMgpKt%2FLZHvgU7Yq20RI66DGQ%3D%3D
+[debug] [2024-06-25T20:35:53.825Z] >>> [apiv2][body] PUT https://storage.googleapis.com/gcf-v2-uploads-236596638192-us-central1/0aa12947-2e32-4e85-a4dc-2ddcd3cd7a84.zip [stream]
+[debug] [2024-06-25T20:35:54.110Z] <<< [apiv2][status] PUT https://storage.googleapis.com/gcf-v2-uploads-236596638192-us-central1/0aa12947-2e32-4e85-a4dc-2ddcd3cd7a84.zip 200
+[debug] [2024-06-25T20:35:54.111Z] <<< [apiv2][body] PUT https://storage.googleapis.com/gcf-v2-uploads-236596638192-us-central1/0aa12947-2e32-4e85-a4dc-2ddcd3cd7a84.zip [omitted]
+[info] ✔  functions: .firebase/orbital-energy/functions folder uploaded successfully 
+[info] i  hosting[orbital-energy]: beginning deploy... 
+[info] i  hosting[orbital-energy]: found 4 files in .firebase/orbital-energy/hosting 
+[debug] [2024-06-25T20:35:54.129Z] [hosting] uploading with 200 concurrency
+[debug] [2024-06-25T20:35:54.186Z] [hosting] hash cache [LmZpcmViYXNlL29yYml0YWwtZW5lcmd5L2hvc3Rpbmc] stored for 4 files
+[debug] [2024-06-25T20:35:54.186Z] [hosting][hash queue][FINAL] {"max":50,"min":4,"avg":16.75,"active":0,"complete":4,"success":4,"errored":0,"retried":0,"total":4,"elapsed":52}
+[debug] [2024-06-25T20:35:54.187Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/236596638192/sites/orbital-energy/versions/76d66ad74cbc47bf:populateFiles [none]
+[debug] [2024-06-25T20:35:54.187Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/236596638192/sites/orbital-energy/versions/76d66ad74cbc47bf:populateFiles {"files":{"/favicon.svg":"b5d3457391af727992322503594131143c34a6ee51cd608ce1c6fb00e4b9c0b2","/_astro/index.4E8w79H6.css":"da36bdf7ffea0b7bc8cf86672b224c969c40f6c94c79e585dca11e06546a2583","/integrals.xlsx":"20dd199852fc45e75e646dd3ab95a462dac88fae687e13c4f9e8bf2960435121","/_astro/hoisted.2rEt9q_S.js":"add007e41365cc03c4dc3efee6b8bdbc018b64421bf46aa50b61a140a6f741bf"}}
+[debug] [2024-06-25T20:35:54.307Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/236596638192/sites/orbital-energy/versions/76d66ad74cbc47bf:populateFiles 200
+[debug] [2024-06-25T20:35:54.307Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/236596638192/sites/orbital-energy/versions/76d66ad74cbc47bf:populateFiles {"uploadRequiredHashes":["da36bdf7ffea0b7bc8cf86672b224c969c40f6c94c79e585dca11e06546a2583","add007e41365cc03c4dc3efee6b8bdbc018b64421bf46aa50b61a140a6f741bf"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/orbital-energy/versions/76d66ad74cbc47bf/files"}
+[debug] [2024-06-25T20:35:54.308Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/orbital-energy/versions/76d66ad74cbc47bf/files/da36bdf7ffea0b7bc8cf86672b224c969c40f6c94c79e585dca11e06546a2583 [none]
+[debug] [2024-06-25T20:35:54.308Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/orbital-energy/versions/76d66ad74cbc47bf/files/da36bdf7ffea0b7bc8cf86672b224c969c40f6c94c79e585dca11e06546a2583 [stream]
+[debug] [2024-06-25T20:35:54.309Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/orbital-energy/versions/76d66ad74cbc47bf/files/add007e41365cc03c4dc3efee6b8bdbc018b64421bf46aa50b61a140a6f741bf [none]
+[debug] [2024-06-25T20:35:54.309Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/orbital-energy/versions/76d66ad74cbc47bf/files/add007e41365cc03c4dc3efee6b8bdbc018b64421bf46aa50b61a140a6f741bf [stream]
+[debug] [2024-06-25T20:35:54.311Z] [hosting][populate queue][FINAL] {"max":123,"min":123,"avg":123,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":126}
+[debug] [2024-06-25T20:35:54.311Z] [hosting] uploads queued: 2
+[debug] [2024-06-25T20:35:54.995Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/orbital-energy/versions/76d66ad74cbc47bf/files/da36bdf7ffea0b7bc8cf86672b224c969c40f6c94c79e585dca11e06546a2583 200
+[debug] [2024-06-25T20:35:54.995Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/orbital-energy/versions/76d66ad74cbc47bf/files/da36bdf7ffea0b7bc8cf86672b224c969c40f6c94c79e585dca11e06546a2583 [stream]
+[debug] [2024-06-25T20:35:55.180Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/orbital-energy/versions/76d66ad74cbc47bf/files/add007e41365cc03c4dc3efee6b8bdbc018b64421bf46aa50b61a140a6f741bf 200
+[debug] [2024-06-25T20:35:55.180Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/orbital-energy/versions/76d66ad74cbc47bf/files/add007e41365cc03c4dc3efee6b8bdbc018b64421bf46aa50b61a140a6f741bf [stream]
+[debug] [2024-06-25T20:35:55.181Z] [hosting][upload queue][FINAL] {"max":873,"min":688,"avg":780.5,"active":0,"complete":2,"success":2,"errored":0,"retried":0,"total":2,"elapsed":874}
+[info] ✔  hosting[orbital-energy]: file upload complete 
+[debug] [2024-06-25T20:35:55.182Z] [hosting] deploy completed after 1069ms
+[info] i  functions: updating Node.js 20 (2nd Gen) function firebase-frameworks-orbital-energy:ssrorbitalenergy(us-central1)... 
+[debug] [2024-06-25T20:35:55.188Z] >>> [apiv2][query] PATCH https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/functions/ssrorbitalenergy updateMask=name%2CbuildConfig.runtime%2CbuildConfig.entryPoint%2CbuildConfig.source.storageSource.bucket%2CbuildConfig.source.storageSource.object%2CbuildConfig.environmentVariables%2CserviceConfig.environmentVariables%2CserviceConfig.ingressSettings%2CserviceConfig.timeoutSeconds%2CserviceConfig.serviceAccountEmail%2CserviceConfig.availableMemory%2CserviceConfig.minInstanceCount%2CserviceConfig.maxInstanceCount%2CserviceConfig.maxInstanceRequestConcurrency%2CserviceConfig.availableCpu%2CserviceConfig.vpcConnector%2CserviceConfig.vpcConnectorEgressSettings%2Clabels%2CbuildConfig.buildEnvironmentVariables
+[debug] [2024-06-25T20:35:55.188Z] >>> [apiv2][body] PATCH https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/functions/ssrorbitalenergy {"name":"projects/orbital-energy/locations/us-central1/functions/ssrorbitalenergy","buildConfig":{"runtime":"nodejs20","entryPoint":"ssrorbitalenergy","source":{"storageSource":{"bucket":"gcf-v2-uploads-236596638192-us-central1","object":"0aa12947-2e32-4e85-a4dc-2ddcd3cd7a84.zip"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""}},"serviceConfig":{"environmentVariables":{"__FIREBASE_FRAMEWORKS_ENTRY__":"astro","FIREBASE_CONFIG":"{\"projectId\":\"orbital-energy\",\"storageBucket\":\"orbital-energy.appspot.com\"}","GCLOUD_PROJECT":"orbital-energy","EVENTARC_CLOUD_EVENT_SOURCE":"projects/orbital-energy/locations/us-central1/services/ssrorbitalenergy","FUNCTION_TARGET":"ssrorbitalenergy"},"ingressSettings":null,"timeoutSeconds":null,"serviceAccountEmail":null,"availableMemory":"256Mi","minInstanceCount":null,"maxInstanceCount":null,"maxInstanceRequestConcurrency":80,"availableCpu":"1","vpcConnector":null,"vpcConnectorEgressSettings":null},"labels":{"deployment-tool":"cli-firebase","firebase-functions-codebase":"firebase-frameworks-orbital-energy","firebase-functions-hash":"813d9c7005258a8210786702cc393012189b90c3"}}
+[debug] [2024-06-25T20:35:56.265Z] <<< [apiv2][status] PATCH https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/functions/ssrorbitalenergy 200
+[debug] [2024-06-25T20:35:56.266Z] <<< [apiv2][body] PATCH https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/functions/ssrorbitalenergy {"name":"projects/orbital-energy/locations/us-central1/operations/operation-1719347755272-61bbcd832c9d2-ba5bf367-09d79651","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-06-25T20:35:56.255788679Z","target":"projects/orbital-energy/locations/us-central1/functions/ssrorbitalenergy","verb":"update","cancelRequested":false,"apiVersion":"v2"},"done":false}
+[debug] [2024-06-25T20:35:56.268Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/operations/operation-1719347755272-61bbcd832c9d2-ba5bf367-09d79651 [none]
+[debug] [2024-06-25T20:35:56.340Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/operations/operation-1719347755272-61bbcd832c9d2-ba5bf367-09d79651 200
+[debug] [2024-06-25T20:35:56.340Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/operations/operation-1719347755272-61bbcd832c9d2-ba5bf367-09d79651 {"name":"projects/orbital-energy/locations/us-central1/operations/operation-1719347755272-61bbcd832c9d2-ba5bf367-09d79651","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-06-25T20:35:56.255788679Z","target":"projects/orbital-energy/locations/us-central1/functions/ssrorbitalenergy","verb":"update","cancelRequested":false,"apiVersion":"v2"},"done":false}
+[debug] [2024-06-25T20:35:56.842Z] [update-firebase-frameworks-orbital-energy-us-central1-ssrorbitalenergy] Retrying task index 0
+[debug] [2024-06-25T20:35:56.843Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/operations/operation-1719347755272-61bbcd832c9d2-ba5bf367-09d79651 [none]
+[debug] [2024-06-25T20:35:56.918Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/operations/operation-1719347755272-61bbcd832c9d2-ba5bf367-09d79651 200
+[debug] [2024-06-25T20:35:56.918Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/operations/operation-1719347755272-61bbcd832c9d2-ba5bf367-09d79651 {"name":"projects/orbital-energy/locations/us-central1/operations/operation-1719347755272-61bbcd832c9d2-ba5bf367-09d79651","metadata":{"@type":"type.googleapis.com/google.cloud.functions.v2.OperationMetadata","createTime":"2024-06-25T20:35:56.255788679Z","target":"projects/orbital-energy/locations/us-central1/functions/ssrorbitalenergy","verb":"update","cancelRequested":false,"apiVersion":"v2","requestResource":{"@type":"type.googleapis.com/google.cloud.functions.v2.Function","name":"projects/orbital-energy/locations/us-central1/functions/ssrorbitalenergy","buildConfig":{"runtime":"nodejs20","entryPoint":"ssrorbitalenergy","source":{"storageSource":{"bucket":"gcf-v2-sources-236596638192-us-central1","object":"ssrorbitalenergy/function-source.zip","generation":"1719347756211131"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"dockerRepository":"projects/orbital-energy/locations/us-central1/repositories/gcf-artifacts","sourceProvenance":{"resolvedStorageSource":{"bucket":"gcf-v2-sources-236596638192-us-central1","object":"ssrorbitalenergy/function-source.zip","generation":"1719247593322629"}},"dockerRegistry":"ARTIFACT_REGISTRY"},"serviceConfig":{"service":"projects/orbital-energy/locations/us-central1/services/ssrorbitalenergy","timeoutSeconds":60,"environmentVariables":{"__FIREBASE_FRAMEWORKS_ENTRY__":"astro","FIREBASE_CONFIG":"{\"projectId\":\"orbital-energy\",\"storageBucket\":\"orbital-energy.appspot.com\"}","GCLOUD_PROJECT":"orbital-energy","EVENTARC_CLOUD_EVENT_SOURCE":"projects/orbital-energy/locations/us-central1/services/ssrorbitalenergy","FUNCTION_TARGET":"ssrorbitalenergy"},"ingressSettings":"ALLOW_ALL","uri":"https://ssrorbitalenergy-ncqmowhgta-uc.a.run.app","serviceAccountEmail":"236596638192-compute@developer.gserviceaccount.com","availableMemory":"256Mi","allTrafficOnLatestRevision":true,"revision":"ssrorbitalenergy-00037-zet","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"state":"ACTIVE","labels":{"deployment-tool":"cli-firebase","firebase-functions-codebase":"firebase-frameworks-orbital-energy","firebase-functions-hash":"813d9c7005258a8210786702cc393012189b90c3"},"environment":"GEN_2","url":"https://us-central1-orbital-energy.cloudfunctions.net/ssrorbitalenergy"},"stages":[{"name":"BUILD","message":"Creating build","state":"IN_PROGRESS","resource":"projects/236596638192/locations/us-central1/builds/0e68d933-5549-419a-9359-c848ba2431a1","resourceUri":"https://console.cloud.google.com/cloud-build/builds;region=us-central1/0e68d933-5549-419a-9359-c848ba2431a1?project=236596638192"},{"name":"SERVICE","state":"NOT_STARTED"}],"operationType":"UPDATE_FUNCTION"},"done":false}
+[debug] [2024-06-25T20:35:57.919Z] [update-firebase-frameworks-orbital-energy-us-central1-ssrorbitalenergy] Retrying task index 0
+[debug] [2024-06-25T20:35:57.920Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/orbital-energy/locations/us-central1/operations/operation-1719347755272-61bbcd832c9d2-ba5bf367-09d79651 [none]

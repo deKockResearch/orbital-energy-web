@@ -386,7 +386,7 @@ type WizardSteps =
 
 
 let wizardStep: WizardSteps = "waitingForRowOrElemToBeSelected";
-let orbitalOrWholeElemForARow = "";     // "orbital" or "wholeElem"
+let orbitalOrWholeElemForARow = "";     // "orbital" or "element"
 let orbitalForRow = "";                 // string 1s, 2s, 2p, etc.
 let xValueChosen = "";                  // pick string to describe what to graph.
 let yValueChosen = "";                  // pick string to describe what to graph.
@@ -432,7 +432,7 @@ function updateWizardState(selElem: any) {
 
   // User choose a row of elements but then selected to graph values for each of the whole elements.
   // (not the orbitals thereof).
-  if (wizardStep === "rowSelectedSoUserChoosesOrbitalOrElem" && orbitalOrWholeElemForARow === "wholeElem") {
+  if (wizardStep === "rowSelectedSoUserChoosesOrbitalOrElem" && orbitalOrWholeElemForARow === "element") {
     wizardStep = "chooseXForRowAndElem";
     console.log("wizardStep is now: ", wizardStep);
     return;
@@ -467,9 +467,33 @@ function updateWizardState(selElem: any) {
   console.log("💩💩💩💩💩Nothing matched!!!");
 }
 
+function updateDisplayWhenLeavingAStep(step: WizardSteps) {
+  switch (step) {
+    case "rowSelectedSoUserChoosesOrbitalOrElem":
+      const orbitalOrElemElem = document.getElementById('row-selected-so-user-chooses-orbital-or-elem')!;
+      orbitalOrElemElem.dataset.wizardStep = "wizard-step-previous-selected";
+      // update the text to show which was chosen, and hide the form.
+      const chooseOrbitalOrElemText = document.getElementById('choose-orbital-or-elem-text')!;
+      chooseOrbitalOrElemText.innerText += " " + orbitalOrWholeElemForARow;
+      const chooseOrbitalOrElemForm = document.getElementById('orb-or-elem-form')!;
+      chooseOrbitalOrElemForm.style.display = 'none';
+      return;
+    case "chooseWhichOrbitalToGraph":
+      const chooseWhichOrbitalToGraph = document.getElementById('choose-which-orbital-to-graph')!;
+      chooseWhichOrbitalToGraph.dataset.wizardStep = "wizard-step-previous-selected";
+      const chooseOrbitalText = document.getElementById('choose-which-orbital-text')!;
+      chooseOrbitalText.innerText += " " + orbitalForRow;
+      const chooseOrbitalForm = document.getElementById('select-orbital-form')!;
+      chooseOrbitalForm.style.display = 'none';
+      return;
+    default:
+      console.error("Unknown wizard step: ", step);
+  }
+}
+
 // When the wizard state changes, we need to display different instructions
 // based on which state we are in.
-function updateDisplayedInstructions() {
+function updateDisplayForNextStep() {
   const waitingForRowOrElem = document.getElementById('waiting-for-row-or-elem-to-be-selected')!;
   const rowSelectedSoUserChoosesOrbitalOrElem = document.getElementById('row-selected-so-user-chooses-orbital-or-elem')!;
   const chooseWhichOrbitalToGraph = document.getElementById('choose-which-orbital-to-graph')!;
@@ -481,39 +505,39 @@ function updateDisplayedInstructions() {
   const chooseYForElem = document.getElementById('choose-y-for-elem')!;
   const showingGraph = document.getElementById('showing-graph')!;
 
-  if (wizardStep === "waitingForRowOrElemToBeSelected") {
-    // User could choose a new element or a row at any stage of
-    // the process, so we have to hide all the other steps.
-    rowSelectedSoUserChoosesOrbitalOrElem.dataset.wizardStep = "wizard-step-hidden";
-    chooseWhichOrbitalToGraph.dataset.wizardStep = 'wizard-step-hidden';
-    chooseXForRowAndOrbital.dataset.wizardStep = "wizard-step-hidden";
-    chooseYForRowAndOrbital.dataset.wizardStep = "wizard-step-hidden";
-    chooseXForRowAndElem.dataset.wizardStep = "wizard-step-hidden";
-    chooseYForRowAndElem.dataset.wizardStep = "wizard-step-hidden";
-    chooseXForElem.dataset.wizardStep = "wizard-step-hidden";
-    chooseYForElem.dataset.wizardStep = "wizard-step-hidden";
-    showingGraph.dataset.wizardStep = "wizard-step-hidden";
-    return;
-  }
-  if (wizardStep === "rowSelectedSoUserChoosesOrbitalOrElem") {
-    waitingForRowOrElem.dataset.wizardStep = "wizard-step-previous-selected";
-    rowSelectedSoUserChoosesOrbitalOrElem.dataset.wizardStep = 'wizard-step-current';
-    return;
-  }
-  if (wizardStep === "chooseXForElem") {
-    waitingForRowOrElem.dataset.wizardStep = "wizard-step-previous-selected";
-    chooseXForElem.dataset.wizardStep = 'wizard-step-current';
-    return;
-  }
-  if (wizardStep === "chooseWhichOrbitalToGraph") {
-    rowSelectedSoUserChoosesOrbitalOrElem.dataset.wizardStep = "wizard-step-previous-selected";
-    chooseWhichOrbitalToGraph.dataset.wizardStep = 'wizard-step-current';
-    return;
-  }
-  if (wizardStep === "chooseXForRowAndOrbital") {
-    chooseWhichOrbitalToGraph.dataset.wizardStep = "wizard-step-previous-selected";
-    chooseXForRowAndOrbital.dataset.wizardStep = 'wizard-step-current';
-    return;
+  switch (wizardStep) {
+    case "waitingForRowOrElemToBeSelected":
+      // User could choose a new element or a row at any stage of
+      // the process, so we have to hide all the other steps.
+      rowSelectedSoUserChoosesOrbitalOrElem.dataset.wizardStep = "wizard-step-hidden";
+      chooseWhichOrbitalToGraph.dataset.wizardStep = 'wizard-step-hidden';
+      chooseXForRowAndOrbital.dataset.wizardStep = "wizard-step-hidden";
+      chooseYForRowAndOrbital.dataset.wizardStep = "wizard-step-hidden";
+      chooseXForRowAndElem.dataset.wizardStep = "wizard-step-hidden";
+      chooseYForRowAndElem.dataset.wizardStep = "wizard-step-hidden";
+      chooseXForElem.dataset.wizardStep = "wizard-step-hidden";
+      chooseYForElem.dataset.wizardStep = "wizard-step-hidden";
+      showingGraph.dataset.wizardStep = "wizard-step-hidden";
+      return;
+    case "rowSelectedSoUserChoosesOrbitalOrElem":
+      waitingForRowOrElem.dataset.wizardStep = "wizard-step-previous-selected";
+      rowSelectedSoUserChoosesOrbitalOrElem.dataset.wizardStep = 'wizard-step-current';
+      return;
+    case "chooseXForElem":
+      waitingForRowOrElem.dataset.wizardStep = "wizard-step-previous-selected";
+      chooseXForElem.dataset.wizardStep = 'wizard-step-current';
+      return;
+    case "chooseWhichOrbitalToGraph":
+      chooseWhichOrbitalToGraph.dataset.wizardStep = 'wizard-step-current';
+      return;
+    case "chooseXForRowAndOrbital":
+      chooseXForRowAndOrbital.dataset.wizardStep = 'wizard-step-current';
+      return;
+    case "chooseXForRowAndElem":
+      chooseXForRowAndElem.dataset.wizardStep = 'wizard-step-current';
+      return;
+    default:
+      console.error("Unknown wizard step: ", wizardStep);
   }
 }
 
@@ -526,12 +550,11 @@ orbOrElemFormElem.addEventListener('submit', (e: Event) => {
   if (orbOrElem === null) {
     return;
   }
-  orbitalOrWholeElemForARow = orbOrElem === 'orbital'
-    ? "orbital"
-    : "wholeElem";
+  orbitalOrWholeElemForARow = orbOrElem as string;
   console.log('orbitalOrWholeElemForARow: ', orbitalOrWholeElemForARow);
+  updateDisplayWhenLeavingAStep(wizardStep);
   updateWizardState(selectedElement$.get());
-  updateDisplayedInstructions();
+  updateDisplayForNextStep();
 });
 
 const whichOrbToGraph = document.getElementById('select-orbital-form')! as HTMLFormElement;
@@ -542,12 +565,12 @@ whichOrbToGraph.addEventListener('submit', (e: Event) => {
     return;
   }
   orbitalForRow = orbToGraph as string;
-  console.log('orbitalForRow: ', orbitalForRow);
+  updateDisplayWhenLeavingAStep(wizardStep);
   updateWizardState(selectedElement$.get());
-  updateDisplayedInstructions();
+  updateDisplayForNextStep();
 });
 
 selectedElement$.listen((selElem) => {
   updateWizardState(selElem);
-  updateDisplayedInstructions();
+  updateDisplayForNextStep();
 });

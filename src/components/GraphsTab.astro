@@ -6,6 +6,78 @@ import UnitsSelector from "./UnitsSelector.astro";
 
 <TabLayout tabName="Graphs" id="graphs-tab">
   <ElementsTable id="graphs" selectableRow="true" />
+
+  <!-- Wizard to lead user through choices for graphing -->
+  <div
+    id="waiting-for-row-or-elem-to-be-selected"
+    data-wizard-step="wizard-step-current"
+  >
+    <!-- Add box with/without checkmark in it depending on if the user has
+       selected something. -->
+    Step 1: Select the type of graph to create by selecting a single element or a
+    row of elements above.
+  </div>
+  <div
+    id="row-selected-so-user-chooses-orbital-or-elem"
+    data-wizard-step="wizard-step-hidden"
+  >
+    Step 2: Select whether to graph values for each orbital or for the elements
+    as a whole:
+    <form
+      class="indented-area-for-a-step"
+      autocomplete="off"
+      id="orb-or-elem-form"
+    >
+      <label for="orbital">Orbital</label>
+      <input type="radio" id="orbital" name="orb-or-elem" value="orbital" />
+      <label for="element">Element</label>
+      <input type="radio" id="element" name="orb-or-elem" value="element" />
+      <input class="space-left" type="submit" value="Continue" />
+    </form>
+  </div>
+  <div id="choose-which-orbital-to-graph" data-wizard-step="wizard-step-hidden">
+    Step 3: Choose the orbital to graph.
+    <form
+      class="indented-area-for-a-step"
+      autocomplete="off"
+      id="select-orbital-form"
+    >
+      <label for="1s">1s</label>
+      <input type="radio" id="1s" name="orb-to-graph" value="1s" />
+      <label for="2s">2s</label>
+      <input type="radio" id="2s" name="orb-to-graph" value="2s" />
+      <label for="2p">2p</label>
+      <input type="radio" id="2p" name="orb-to-graph" value="2p" />
+      <label for="3s">3s</label>
+      <input type="radio" id="3s" name="orb-to-graph" value="3s" />
+      <label for="3p">3p</label>
+      <input type="radio" id="3p" name="orb-to-graph" value="3p" />
+
+      <input class="space-left" type="submit" value="Continue" />
+    </form>
+  </div>
+  <div id="choose-x-for-row-and-orbital" data-wizard-step="wizard-step-hidden">
+    Step 4: Select the values to place on the horizontal (x) axis.
+  </div>
+  <div id="choose-y-for-row-and-orbital" data-wizard-step="wizard-step-hidden">
+    Step 5: Select the values to place on the vertical (y) axis.
+  </div>
+  <div id="choose-x-for-row-and-elem" data-wizard-step="wizard-step-hidden">
+    Step 4: Select the values to place on the horizontal (x) axis.
+  </div>
+  <div id="choose-y-for-row-and-elem" data-wizard-step="wizard-step-hidden">
+    Step 5: Select the values to place on the vertical (y) axis.
+  </div>
+  <div id="choose-x-for-elem" data-wizard-step="wizard-step-hidden">
+    Step 2: Select the values to place on the horizontal (x) axis.
+  </div>
+  <div id="choose-y-for-elem" data-wizard-step="wizard-step-hidden">
+    Step 3: Select the values to place on the vertical (y) axis.
+  </div>
+  <div id="showing-graph" data-wizard-step="wizard-step-hidden">
+    Graph goes here...
+  </div>
+
   <UnitsSelector />
 
   <div id="graph-selection">
@@ -86,37 +158,56 @@ import UnitsSelector from "./UnitsSelector.astro";
     </div> -->
       </canvas>
     </div>
-    <script>
-      import "../scripts/graphData.ts";
-    </script>
-
-    <style>
-      .charts-area {
-        display: flex;
-        flex-direction: row;
-        min-height: 500px;
-      }
-
-      #charts-wrapper {
-        width: 90%;
-      }
-
-      #charts-wrapper > canvas {
-        margin-bottom: 2rem;
-      }
-
-      #energy-info-for-element {
-        margin-left: 5vw;
-        display: inline-block;
-        width: 50%;
-        padding: 1rem;
-        font-weight: bold;
-        border: 1px solid black;
-      }
-
-      [disabled] {
-        filter: opacity(50%);
-      }
-    </style>
   </div>
 </TabLayout>
+<script>
+  import "../scripts/graphData.ts";
+</script>
+
+<style>
+  .charts-area {
+    display: flex;
+    flex-direction: row;
+    min-height: 500px;
+  }
+
+  #charts-wrapper {
+    width: 90%;
+  }
+
+  #charts-wrapper > canvas {
+    margin-bottom: 2rem;
+  }
+
+  #energy-info-for-element {
+    margin-left: 5vw;
+    display: inline-block;
+    width: 50%;
+    padding: 1rem;
+    font-weight: bold;
+    border: 1px solid black;
+  }
+
+  [disabled] {
+    filter: opacity(50%);
+  }
+
+  [data-wizard-step="wizard-step-hidden"] {
+    display: none;
+  }
+  [data-wizard-step="wizard-step-current"] {
+    display: block;
+    font-size: larger;
+    font-width: bold;
+  }
+  [data-wizard-step="wizard-step-previous-selected"]::before {
+    content: "✅ ";
+  }
+
+  .indented-area-for-a-step {
+    margin-left: 2rem;
+  }
+  .space-left {
+    margin-left: 2rem;
+  }
+</style>

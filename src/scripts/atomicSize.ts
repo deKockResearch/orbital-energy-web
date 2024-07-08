@@ -1,6 +1,6 @@
-import { computeZis, waveFunction } from "../scripts/orbitalEnergies";
+import { computeMaxAtomicSizes, computeZis, waveFunction } from "../scripts/orbitalEnergies";
 import { dynamic23Matrix } from "../scripts/matrices";
-import { computeEnergiesForDyn23OrFauss, energies$, selectedElement$ } from "../scripts/stores";
+import { selectedElement$ } from "../scripts/stores";
 import { Chart } from "chart.js/auto";
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { eLevels, type Orbital } from "./types";
@@ -44,18 +44,6 @@ function computeAtomicSizes(selElem: any, orbs: Orbital[]): DataType[][] {
   return result;
 }
 
-function computeMaxAtomicSizes(selElem: any, orbs: Orbital[]): number[] {
-  // return array for each LEVEL (1, 2, 2, 3, 3), containing a value for each e_i.
-  const energies = computeEnergiesForDyn23OrFauss('dynamic23', dynamic23Matrix, orbs)
-  return orbs.map((orb, index) => {
-    // remember 1st item in totalEnergies is the sum, which we don't want.
-    // energies[0] uses dynamic23 matrix.
-    const energs = energies.totalEnergies[index + 1];
-    // just compute for n = 1.
-    const rmax_level = orb.level * Math.sqrt(-0.5 / energs);
-    return rmax_level;
-  });
-}
 
 /*
   const colors = ['blue', 'red', 'green', 'purple', 'black'];
@@ -432,8 +420,7 @@ export function drawAtomicSizes(): void {
           }
         }
         // console.log('newOrbits: ', JSON.stringify(newOrbitals, null, 2));
-        // const res = computeAtomicSizes(selectedElement$.get(), newOrbitals);
-        const res = computeMaxAtomicSizes(selectedElement$.get(), newOrbitals);
+        const res = computeMaxAtomicSizes(newOrbitals);
 
         newOrbitals.forEach((orb, index) => {
           // for drawing dashed lines between the species.

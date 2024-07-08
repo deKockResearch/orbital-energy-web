@@ -4,6 +4,7 @@ import { updateSelectableMatrixContents, watchCustomMatrixForChanges } from './s
 import { handleTabSwitching } from './tabHandling';
 import { drawCharts } from './graphData';
 import type { ElementType, Orbital } from './types';
+import { computeOrbitals } from './orbitalEnergies';
 // import { drawAtomicSizesCharts } from './atomicSize';
 
 
@@ -59,21 +60,6 @@ window.addEventListener("load", () => {
 
 function getElementByAtomicNumber(atomicNumber: number): ElementType {
   return elements.find((element) => element.number === atomicNumber)!;
-}
-
-function computeOrbitals(eConfigStr: string): Orbital[] {
-  const res: Orbital[] = [];
-  const groups = eConfigStr.split(" ");
-  for (const group of groups) {
-    const re = /(\d+)([sp])(\d+)/;
-    const matches = group.match(re)!;
-    res.push({
-      level: Number(matches[1]),
-      sOrP: matches[2],
-      numElectrons: Number(matches[3]),
-    });
-  }
-  return res;
 }
 
 function unSelectAllElements(): void {

@@ -24,11 +24,14 @@ export const customMatrixVers$ = atom<number>(0);
 export const unitsSelection$ = atom<string>('Ha');
 
 
-export function computeEnergiesForDyn23OrFauss(matName: string, matrix: number[][], orbs: Orbital[]) {
-  const selElemInfo = selectedElement$.get().selectedElementInfo!;
+export function computeEnergiesForDyn23OrFauss(matName: string, matrix: number[][], orbs: Orbital[],
+  atomicNumber?: number) {
+  if (atomicNumber === undefined) {
+    atomicNumber = selectedElement$.get().selectedElementInfo!.number;
+  }
   // const orbs = selectedElement$.get().selectedElemOrbitals!;
-  const totalEnergies = totalOrbitalEnergy(selElemInfo.number, orbs, matrix);
-  const energyComps = energyComponents(selElemInfo.number, orbs, matrix);
+  const totalEnergies = totalOrbitalEnergy(atomicNumber, orbs, matrix);
+  const energyComps = energyComponents(atomicNumber, orbs, matrix);
   // console.log(`totalEnergies for ${matName} = ${totalEnergies}`);
   const result: EnergyComponents = {
     matrix: matName,

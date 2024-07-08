@@ -1,5 +1,23 @@
+import { elements } from "./elements";
+import { dynamic23Matrix } from "./matrices";
+import { computeEnergiesForDyn23OrFauss } from "./stores";
 import { type Orbital } from "./types";
 
+
+export function computeOrbitals(eConfigStr: string): Orbital[] {
+  const res: Orbital[] = [];
+  const groups = eConfigStr.split(" ");
+  for (const group of groups) {
+    const re = /(\d+)([sp])(\d+)/;
+    const matches = group.match(re)!;
+    res.push({
+      level: Number(matches[1]),
+      sOrP: matches[2],
+      numElectrons: Number(matches[3]),
+    });
+  }
+  return res;
+}
 
 // compute the orbital energies and the total. The result is an array of numbers:
 // total energy, following by energies for each orbital.
@@ -81,4 +99,69 @@ function computeNormalizationConstant(ze: number, n: number) {
 // compute psi -- the wave function.
 export function waveFunction(radius: number, n: number, ze: number) {
   return computeNormalizationConstant(ze, n) * (radius ** (n - 1)) * Math.E ** (-1 * ze * radius / n);
+}
+
+
+export function getValuesForRowOfElementsAndOrbital(startElem: number, numElems: number, orbIndex: number,
+  func: (atomicNumber: number) => number[]) {
+  let values = [];
+  for (let i = startElem; i < startElem + numElems; i++) {
+    values.push(func(i)[orbIndex]);
+  }
+  return values;
+}
+
+export function getZisForRowOfElementsAndOrbital(startElem: number, numElems: number, orbIndex: number) {
+  return getValuesForRowOfElementsAndOrbital(startElem, numElems, orbIndex,
+    (i) => {
+      return computeZis(elements[i].number, computeOrbitals(elements[i].eConfig), dynamic23Matrix);
+    });
+}
+
+
+// get the t_i's for a row of elements and a given orbital.
+export function getTisForRowOfElementsAndOrbital(startElem: number, numElems: number, orbIndex: number) {
+  return getValuesForRowOfElementsAndOrbital(startElem, numElems, orbIndex,
+    (i) => {
+      const energyComps = energyComponents(elements[i].number, computeOrbitals(elements[i].eConfig), dynamic23Matrix);
+      return energyComps.t_i;
+    });
+}
+
+
+// get the v_i's for a row of elements and a given orbital.
+export function getVisForRowOfElementsAndOrbital(startElem: number, numElems: number, orbIndex: number) {
+  return getValuesForRowOfElementsAndOrbital(startElem, numElems, orbIndex,
+    (i) => {
+      const energyComps = energyComponents(elements[i].number, computeOrbitals(elements[i].eConfig), dynamic23Matrix);
+      return energyComps.v_i;
+    });
+}
+
+// get the vaoe's for a row of elements and a given orbital.
+export function getVAOEsForRowOfElementsAndOrbital(startElem: number, numElems: number, orbIndex: number) {
+  return getValuesForRowOfElementsAndOrbital(startElem, numElems, orbIndex,
+    (i) => {
+      const [totalOE, ...orbitalEnergies] = totalOrbitalEnergy(elements[i].number, computeOrbitals(elements[i].eConfig), dynamic23Matrix);
+      return orbitalEnergies;
+    });
+}
+
+export function computeMaxAtomicSizes(atomicNumber: number, orbs: Orbital[]): number[] {
+  // return array for each LEVEL (1, 2, 2, 3, 3), containing a value for each e_i.
+  const energies = computeEnergiesForDyn23OrFauss('dynamic23', dynamic23Matrix, orbs, atomicNumber);
+  return orbs.map((orb, index) => {
+    // remember 1st item in totalEnergies is the sum, which we don't want.
+    const energs = energies.totalEnergies[index + 1];
+
+    const rmax_level = orb.level * Math.sqrt(-0.5 / energs);
+    return rmax_level;
+  });
+}
+
+export function getRmaxForRowOfElementsAndOrbital(startElem: number, numElems: number, orbIndex: number) {
+  return getValuesForRowOfElementsAndOrbital(startElem, numElems, orbIndex,
+    (i) => {
+      return computeMaxAtomicSizes(elements[i].number, computeOrbitals(elements[i].eConfig));
+    });
 }

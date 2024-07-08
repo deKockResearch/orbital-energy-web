@@ -1,6 +1,14 @@
-import { Chart } from "chart.js/auto";
+import { Chart, type ScatterDataPoint } from "chart.js/auto";
 import { selectedElement$, unitsSelection$ } from "./stores";
 import { conversions } from "./utils";
+import {
+  getRmaxForRowOfElementsAndOrbital,
+  getTisForRowOfElementsAndOrbital,
+  getVAOEsForRowOfElementsAndOrbital,
+  getVisForRowOfElementsAndOrbital,
+  getZisForRowOfElementsAndOrbital
+} from "./orbitalEnergies";
+import { eLevels } from "./types";
 // import { conversions, energyToUnitsAsString } from "./utils";
 
 // https://doi.org/10.1016/j.cplett.2012.07.072
@@ -111,6 +119,9 @@ export function drawSelectedRowOfElemsChart(chartName: string) {
         bottomMaterial: [],
       };
       break;
+
+    case 'z':     // nuclear charge
+      break;
     default:
       console.error("Unknown chart name: ", chartName);
       break;
@@ -144,6 +155,117 @@ export function drawSelectedRowOfElemsChart(chartName: string) {
 
 }
 
+export function drawGraphForRowAndElem() {
+
+  const rowSelected: number | null = selectedElement$.get().rowSelected;
+  if (!rowSelected) {
+    return;
+  }
+
+  const startElem = startElemInPeriodicTableRows[rowSelected - 1];
+  const numElems = numElemsInPeriodicTableRows[rowSelected - 1];
+  // const labels = elemLabels.slice(startElem, startElem + numElems);
+
+  if (chart) {
+    chart.destroy();
+  }
+
+  const xdataAndLabel = getValuesAndLabel(xValueChosen, startElem, numElems);
+  const xData = xdataAndLabel.data;
+  const xLabel = xdataAndLabel.label;
+
+  const ydataAndLabel = getValuesAndLabel(yValueChosen, startElem, numElems);
+  const yData = ydataAndLabel.data;
+  const yLabel = ydataAndLabel.label;
+
+  const data: ScatterDataPoint[] = xData.map((x, i) => ({ x, y: yData[i] }));
+
+  const options = {
+    scales: {
+      x: {
+        title: {
+          text: xLabel,
+          display: true,
+        },
+      },
+      y: {
+        title: {
+          text: yLabel,
+          display: true,
+        }
+      }
+    }
+  };
+
+
+  const ctx = document.getElementById('chart-canv')! as HTMLCanvasElement;
+  chart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      labels: elemLabels.slice(startElem, startElem + numElems),
+      datasets: [{
+        data: [...data],
+        borderWidth: 1,
+        label: `${xLabel} vs ${yLabel}`,
+      }]
+    },
+    options: {
+      ...options,
+      plugins: {
+        title: {
+          text: "chartInfo.bottomMaterial",
+          display: false,       // TODO
+          position: "bottom",
+        },
+      },
+    },
+  });
+
+}
+
+
+function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numElems: number) {
+  let data: number[] = [];
+  let label: string = '';
+  switch (valueChosenToGraph) {
+    case 'polarizability':
+      data = polarizability;
+      label = `Polarizability (bohr)`;
+      break;
+    case 'ionization-energy':
+      data = unweightedIonizationEnergy;
+      label = `Ionization Energy (${unitsSelection$.get()})`;
+      break;
+    case 'weighted-ionization-energy':
+      data = weightedIonizationEnergy;
+      label = `Weighted Ionization Energy (${unitsSelection$.get()})`;
+      break;
+    case 'Zi': // effective nuclear charge
+      data = getZisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
+      label = `Effective Nuclear Charge for ${eLevels[orbitalForRow]}`;
+      break;
+    case 'ti': // kinetic energy
+      data = getTisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
+      label = `Kinetic Energy for ${eLevels[orbitalForRow]}`;
+      break;
+    case 'ven': // effective nuclear charge
+      data = getVisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
+      label = `Effective Nuclear Charge for ${eLevels[orbitalForRow]}`;
+      break;
+    case 'vaoe': // orbital energy
+      data = getVAOEsForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
+      label = `Orbital Energy for ${eLevels[orbitalForRow]}`;
+      break;
+    case 'rmax':
+      data = getRmaxForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
+      label = `Max Atomic Size for ${eLevels[orbitalForRow]}`;
+      break;
+    default:
+      console.error("Unknown xValueChosen: ", xValueChosen);
+      break;
+  }
+  return { data, label };
+}
 
 // This is run once when the window loads (i.e., from "main").
 export function drawCharts() {
@@ -324,13 +446,13 @@ function updateEverything() {
   // updateEnergiesBox();
 }
 
-// listen for user changing which graph to show.
-const graphSelFormElem = document.getElementById('graph-selection-form')! as HTMLFormElement;
-graphSelFormElem.addEventListener('change', (e: Event) => {
-  const target = e.target as HTMLSelectElement;
-  const graphToShow = target.value;   // electronAffinity, polarizability, ionizationEnergy, weightedIonizationEnergy
-  drawSelectedRowOfElemsChart(graphToShow);
-});
+// // listen for user changing which graph to show.
+// const graphSelFormElem = document.getElementById('graph-selection-form')! as HTMLFormElement;
+// graphSelFormElem.addEventListener('change', (e: Event) => {
+//   const target = e.target as HTMLSelectElement;
+//   const graphToShow = target.value;   // electronAffinity, polarizability, ionizationEnergy, weightedIonizationEnergy
+//   drawSelectedRowOfElemsChart(graphToShow);
+// });
 
 function updateGraphOnAnyChange() {
 
@@ -352,7 +474,7 @@ function updateGraphOnAnyChange() {
     fieldSetOfRowOfElemGraphs?.removeAttribute('disabled');
   }
 
-  // get the value of the form -- to see which radio button ahs been selected.
+  // get the value of the form -- to see which radio button has been selected.
   const graphSelFormElem = document.getElementById('graph-selection-form')! as HTMLFormElement;
   const fd = new FormData(graphSelFormElem);
   const graphType = fd.get('graph-type');
@@ -387,7 +509,7 @@ type WizardSteps =
 
 let wizardStep: WizardSteps = "waitingForRowOrElemToBeSelected";
 let orbitalOrWholeElemForARow = "";     // "orbital" or "element"
-let orbitalForRow = "";                 // string 1s, 2s, 2p, etc.
+let orbitalForRow = -1;                  // index into ["1s", "2s", "2p", etc.]
 let xValueChosen = "";                  // pick string to describe what to graph.
 let yValueChosen = "";                  // pick string to describe what to graph.
 
@@ -414,7 +536,7 @@ function updateWizardState(selElem: any) {
     console.log("wizardStep is now: ", wizardStep);
     return;
   }
-  if (wizardStep === "chooseWhichOrbitalToGraph" && orbitalForRow !== "") {
+  if (wizardStep === "chooseWhichOrbitalToGraph" && orbitalForRow !== -1) {
     wizardStep = "chooseXForRowAndOrbital";
     console.log("wizardStep is now: ", wizardStep);
     return;
@@ -482,9 +604,41 @@ function updateDisplayWhenLeavingAStep(step: WizardSteps) {
       const chooseWhichOrbitalToGraph = document.getElementById('choose-which-orbital-to-graph')!;
       chooseWhichOrbitalToGraph.dataset.wizardStep = "wizard-step-previous-selected";
       const chooseOrbitalText = document.getElementById('choose-which-orbital-text')!;
-      chooseOrbitalText.innerText += " " + orbitalForRow;
+      chooseOrbitalText.innerText += " " + eLevels[orbitalForRow];
       const chooseOrbitalForm = document.getElementById('select-orbital-form')!;
       chooseOrbitalForm.style.display = 'none';
+      return;
+    case "chooseXForRowAndElem":
+      const chooseXForRowAndElem = document.getElementById('choose-x-for-row-and-elem')!;
+      chooseXForRowAndElem.dataset.wizardStep = "wizard-step-previous-selected";
+      const chooseXForRowAndElemText = document.getElementById('choose-x-for-row-and-elem-text')!;
+      chooseXForRowAndElemText.innerText += " " + xValueChosen;
+      const chooseXForRowAndElemForm = document.getElementById('x-for-row-and-elem-form')!;
+      chooseXForRowAndElemForm.style.display = 'none';
+      return;
+    case "chooseYForRowAndElem":
+      const chooseYForRowAndElem = document.getElementById('choose-y-for-row-and-elem')!;
+      chooseYForRowAndElem.dataset.wizardStep = "wizard-step-previous-selected";
+      const chooseYForRowAndElemText = document.getElementById('choose-y-for-row-and-elem-text')!;
+      chooseYForRowAndElemText.innerText += " " + yValueChosen;
+      const chooseYForRowAndElemForm = document.getElementById('y-for-row-and-elem-form')!;
+      chooseYForRowAndElemForm.style.display = 'none';
+      return;
+    case "chooseXForRowAndOrbital":
+      const chooseXForRowAndOrbital = document.getElementById('choose-x-for-row-and-orbital')!;
+      chooseXForRowAndOrbital.dataset.wizardStep = "wizard-step-previous-selected";
+      const chooseXForRowAndOrbitalText = document.getElementById('x-for-row-and-orbital-text')!;
+      chooseXForRowAndOrbitalText.innerText += " " + xValueChosen;
+      const chooseXForRowAndOrbitalForm = document.getElementById('x-for-row-and-orbital-form')!;
+      chooseXForRowAndOrbitalForm.style.display = 'none';
+      return;
+    case "chooseYForRowAndOrbital":
+      const chooseYForRowAndOrbital = document.getElementById('choose-y-for-row-and-orbital')!;
+      chooseYForRowAndOrbital.dataset.wizardStep = "wizard-step-previous-selected";
+      const chooseYForRowAndOrbitalText = document.getElementById('y-for-row-and-orbital-text')!;
+      chooseYForRowAndOrbitalText.innerText += " " + yValueChosen;
+      const chooseYForRowAndOrbitalForm = document.getElementById('y-for-row-and-orbital-form')!;
+      chooseYForRowAndOrbitalForm.style.display = 'none';
       return;
     default:
       console.error("Unknown wizard step: ", step);
@@ -520,10 +674,12 @@ function updateDisplayForNextStep() {
       showingGraph.dataset.wizardStep = "wizard-step-hidden";
       return;
     case "rowSelectedSoUserChoosesOrbitalOrElem":
+      // TODO: remove next line?
       waitingForRowOrElem.dataset.wizardStep = "wizard-step-previous-selected";
       rowSelectedSoUserChoosesOrbitalOrElem.dataset.wizardStep = 'wizard-step-current';
       return;
     case "chooseXForElem":
+      // TODO: remove next line?
       waitingForRowOrElem.dataset.wizardStep = "wizard-step-previous-selected";
       chooseXForElem.dataset.wizardStep = 'wizard-step-current';
       return;
@@ -533,8 +689,17 @@ function updateDisplayForNextStep() {
     case "chooseXForRowAndOrbital":
       chooseXForRowAndOrbital.dataset.wizardStep = 'wizard-step-current';
       return;
+    case "chooseYForRowAndOrbital":
+      chooseYForRowAndOrbital.dataset.wizardStep = 'wizard-step-current';
+      return;
     case "chooseXForRowAndElem":
       chooseXForRowAndElem.dataset.wizardStep = 'wizard-step-current';
+      return;
+    case "chooseYForRowAndElem":
+      chooseYForRowAndElem.dataset.wizardStep = 'wizard-step-current';
+      return;
+    case "showingGraph":
+      drawGraphForRowAndElem();
       return;
     default:
       console.error("Unknown wizard step: ", wizardStep);
@@ -564,7 +729,60 @@ whichOrbToGraph.addEventListener('submit', (e: Event) => {
   if (orbToGraph === null) {
     return;
   }
-  orbitalForRow = orbToGraph as string;
+  orbitalForRow = Number(orbToGraph as string); //  "1" -> 1, etc.
+  updateDisplayWhenLeavingAStep(wizardStep);
+  updateWizardState(selectedElement$.get());
+  updateDisplayForNextStep();
+});
+
+const xValueToGraphForRowAndElemFormElem = document.getElementById('x-for-row-and-elem-form')! as HTMLFormElement;
+xValueToGraphForRowAndElemFormElem.addEventListener('submit', (e: Event) => {
+  e.preventDefault();
+  const xValueToGraph = new FormData(e.target as HTMLFormElement).get('x-for-row-and-elem');
+  if (xValueToGraph === null) {
+    return;
+  }
+  xValueChosen = xValueToGraph as string;
+  updateDisplayWhenLeavingAStep(wizardStep);
+  updateWizardState(selectedElement$.get());
+  updateDisplayForNextStep();
+});
+
+const yValueToGraphForRowAndElemFormElem = document.getElementById('y-for-row-and-elem-form')! as HTMLFormElement;
+yValueToGraphForRowAndElemFormElem.addEventListener('submit', (e: Event) => {
+  e.preventDefault();
+  const yValueToGraph = new FormData(e.target as HTMLFormElement).get('y-for-row-and-elem');
+  if (yValueToGraph === null) {
+    return;
+  }
+  yValueChosen = yValueToGraph as string;
+  updateDisplayWhenLeavingAStep(wizardStep);
+  updateWizardState(selectedElement$.get());
+  updateDisplayForNextStep();
+});
+
+
+const xValueToGraphForRowAndOrbFormElem = document.getElementById('x-for-row-and-orbital-form')! as HTMLFormElement;
+xValueToGraphForRowAndOrbFormElem.addEventListener('submit', (e: Event) => {
+  e.preventDefault();
+  const xValueToGraph = new FormData(e.target as HTMLFormElement).get('x-for-row-and-orbital');
+  if (xValueToGraph === null) {
+    return;
+  }
+  xValueChosen = xValueToGraph as string;
+  updateDisplayWhenLeavingAStep(wizardStep);
+  updateWizardState(selectedElement$.get());
+  updateDisplayForNextStep();
+});
+
+const yValueToGraphForRowAndOrbFormElem = document.getElementById('y-for-row-and-orbital-form')! as HTMLFormElement;
+yValueToGraphForRowAndOrbFormElem.addEventListener('submit', (e: Event) => {
+  e.preventDefault();
+  const yValueToGraph = new FormData(e.target as HTMLFormElement).get('y-for-row-and-orbital');
+  if (yValueToGraph === null) {
+    return;
+  }
+  yValueChosen = yValueToGraph as string;
   updateDisplayWhenLeavingAStep(wizardStep);
   updateWizardState(selectedElement$.get());
   updateDisplayForNextStep();

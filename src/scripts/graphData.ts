@@ -1,4 +1,5 @@
 import { Chart, type ScatterDataPoint } from "chart.js/auto";
+// import annotationPlugin from 'chartjs-plugin-annotation';
 import { selectedElement$, unitsSelection$ } from "./stores";
 import { conversions } from "./utils";
 import {
@@ -10,6 +11,9 @@ import {
 } from "./orbitalEnergies";
 import { eLevels } from "./types";
 // import { conversions, energyToUnitsAsString } from "./utils";
+
+// attempt to add a label to each point.
+// Chart.register(annotationPlugin);
 
 // https://doi.org/10.1016/j.cplett.2012.07.072
 // https://doi.org/10.1002/chem.201602949
@@ -119,13 +123,13 @@ export function drawSelectedRowOfElemsChart(chartName: string) {
         bottomMaterial: [],
       };
       break;
-
     case 'z':     // nuclear charge
       break;
     default:
       console.error("Unknown chart name: ", chartName);
       break;
   }
+
 
   const data = chartInfo.data.slice(startElem, startElem + numElems);
 
@@ -180,6 +184,16 @@ export function drawGraphForRowAndElem() {
 
   const data: ScatterDataPoint[] = xData.map((x, i) => ({ x, y: yData[i] }));
 
+  // attempt to add a label to each point.
+  // const labelObj = {
+  //   type: 'label',
+  //   // color: colors[i],
+  //   position: { x: 'center', y: 'center' },
+  //   // Move the label over to the right and down a bit.
+  //   // xAdjust: 75,
+  //   // yAdjust: -30,
+  //   content: "Hello",
+  // };
   const options = {
     scales: {
       x: {
@@ -194,9 +208,9 @@ export function drawGraphForRowAndElem() {
           display: true,
         }
       }
-    }
-  };
+    },
 
+  };
 
   const ctx = document.getElementById('chart-canv')! as HTMLCanvasElement;
   chart = new Chart(ctx, {
@@ -217,6 +231,13 @@ export function drawGraphForRowAndElem() {
           display: false,       // TODO
           position: "bottom",
         },
+        // Attempt to add a label to each point.
+        // annotation: {
+        //   // @ts-ignore
+        //   annotations: {
+        //     label1: labelObj,
+        //   }
+        // }
       },
     },
   });
@@ -229,16 +250,20 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
   let label: string = '';
   switch (valueChosenToGraph) {
     case 'polarizability':
-      data = polarizability;
+      data = polarizability.slice(startElem, startElem + numElems);
       label = `Polarizability (bohr)`;
       break;
     case 'ionization-energy':
-      data = unweightedIonizationEnergy;
+      data = unweightedIonizationEnergy.slice(startElem, startElem + numElems);;
       label = `Ionization Energy (${unitsSelection$.get()})`;
       break;
     case 'weighted-ionization-energy':
-      data = weightedIonizationEnergy;
+      data = weightedIonizationEnergy.slice(startElem, startElem + numElems);;
       label = `Weighted Ionization Energy (${unitsSelection$.get()})`;
+      break;
+    case 'z':  // nuclear charge
+      data = Array.from({ length: numElems }, (_, i) => startElem + i + 1);
+      label = `Nuclear Charge`;
       break;
     case 'Zi': // effective nuclear charge
       data = getZisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
@@ -248,8 +273,13 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
       data = getTisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
       label = `Kinetic Energy for ${eLevels[orbitalForRow]}`;
       break;
-    case 'ven': // effective nuclear charge
-      data = getVisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
+    case 'sqrt-ti': // sqrt of kinetic energy
+      data = getTisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow).map((t) => Math.sqrt(t));
+      label = `Sqrt of Kinetic Energy for ${eLevels[orbitalForRow]}`;
+      break;
+    case 'ven': // effective nuclear charge / Z
+      const Z = Array.from({ length: numElems }, (_, i) => startElem + i + 1);
+      data = getVisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow).map((v, i) => v / Z[i]);
       label = `Effective Nuclear Charge for ${eLevels[orbitalForRow]}`;
       break;
     case 'vaoe': // orbital energy
@@ -261,7 +291,7 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
       label = `Max Atomic Size for ${eLevels[orbitalForRow]}`;
       break;
     default:
-      console.error("Unknown xValueChosen: ", xValueChosen);
+      console.error("Unknown graph choice: ", valueChosenToGraph);
       break;
   }
   return { data, label };
@@ -437,14 +467,14 @@ export function drawCharts() {
 
 // }
 
-function updateEverything() {
-  if (selectedElement$.get().selectedElementInfo === null) {
-    return;
-  }
-  // updateChartsPoints();
-  // updateChartScales();
-  // updateEnergiesBox();
-}
+// function updateEverything() {
+//   if (selectedElement$.get().selectedElementInfo === null) {
+//     return;
+//   }
+//   // updateChartsPoints();
+//   // updateChartScales();
+//   // updateEnergiesBox();
+// }
 
 // // listen for user changing which graph to show.
 // const graphSelFormElem = document.getElementById('graph-selection-form')! as HTMLFormElement;
@@ -454,35 +484,35 @@ function updateEverything() {
 //   drawSelectedRowOfElemsChart(graphToShow);
 // });
 
-function updateGraphOnAnyChange() {
+// function updateGraphOnAnyChange() {
 
-  // When the user selects an element or a row of elements, disable or enable
-  // the fieldset of single-element graph options or the fieldset of
-  // row-based graph options.
-  const selElem = selectedElement$.get();
-  const fieldSetOfSingleElemGraphs = document.getElementById('single-elem-graphs');
-  const fieldSetOfRowOfElemGraphs = document.getElementById('row-of-elem-graphs');
+//   // When the user selects an element or a row of elements, disable or enable
+//   // the fieldset of single-element graph options or the fieldset of
+//   // row-based graph options.
+//   const selElem = selectedElement$.get();
+//   const fieldSetOfSingleElemGraphs = document.getElementById('single-elem-graphs');
+//   const fieldSetOfRowOfElemGraphs = document.getElementById('row-of-elem-graphs');
 
-  if (selElem.selectedHTMLElement === null) {
-    fieldSetOfSingleElemGraphs?.setAttribute('disabled', 'true');
-  } else {
-    fieldSetOfSingleElemGraphs?.removeAttribute('disabled');
-  }
-  if (selElem.rowSelected === null) {
-    fieldSetOfRowOfElemGraphs?.setAttribute('disabled', 'true');
-  } else {
-    fieldSetOfRowOfElemGraphs?.removeAttribute('disabled');
-  }
+//   if (selElem.selectedHTMLElement === null) {
+//     fieldSetOfSingleElemGraphs?.setAttribute('disabled', 'true');
+//   } else {
+//     fieldSetOfSingleElemGraphs?.removeAttribute('disabled');
+//   }
+//   if (selElem.rowSelected === null) {
+//     fieldSetOfRowOfElemGraphs?.setAttribute('disabled', 'true');
+//   } else {
+//     fieldSetOfRowOfElemGraphs?.removeAttribute('disabled');
+//   }
 
-  // get the value of the form -- to see which radio button has been selected.
-  const graphSelFormElem = document.getElementById('graph-selection-form')! as HTMLFormElement;
-  const fd = new FormData(graphSelFormElem);
-  const graphType = fd.get('graph-type');
+//   // get the value of the form -- to see which radio button has been selected.
+//   const graphSelFormElem = document.getElementById('graph-selection-form')! as HTMLFormElement;
+//   const fd = new FormData(graphSelFormElem);
+//   const graphType = fd.get('graph-type');
 
-  if (graphType !== null) {
-    drawSelectedRowOfElemsChart(graphType as string);
-  }
-}
+//   if (graphType !== null) {
+//     drawSelectedRowOfElemsChart(graphType as string);
+//   }
+// }
 
 
 // listen for user changing the selection or the units.
@@ -716,7 +746,6 @@ orbOrElemFormElem.addEventListener('submit', (e: Event) => {
     return;
   }
   orbitalOrWholeElemForARow = orbOrElem as string;
-  console.log('orbitalOrWholeElemForARow: ', orbitalOrWholeElemForARow);
   updateDisplayWhenLeavingAStep(wizardStep);
   updateWizardState(selectedElement$.get());
   updateDisplayForNextStep();

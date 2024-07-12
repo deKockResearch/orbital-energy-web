@@ -420,7 +420,7 @@ export function drawAtomicSizes(): void {
           }
         }
         // console.log('newOrbits: ', JSON.stringify(newOrbitals, null, 2));
-        const res = computeMaxAtomicSizes(newOrbitals);
+        const res = computeMaxAtomicSizes(selectedElement$.get().selectedElementInfo?.number!, newOrbitals);
 
         newOrbitals.forEach((orb, index) => {
           // for drawing dashed lines between the species.
@@ -431,7 +431,6 @@ export function drawAtomicSizes(): void {
           //   return curr.y > acc.y ? curr : acc;
           // });
           const value = res[index];
-          const label = `${orb.level}${orb.sOrP}`;
           const valueAsString = value.toFixed(3);
           const xloc = LEFT_OFFSET + COLUMN_W * speciesIndex;
           const yloc = (ROW_H * index) + (value * SCALE_Y) + BOTTOM_OFFSET;

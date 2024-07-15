@@ -2,6 +2,7 @@
 import TabLayout from "../layouts/TabLayout.astro";
 import ElementsTable from "./ElementsTable.astro";
 import UnitsSelector from "./UnitsSelector.astro";
+import WizardStep from "./WizardStep.astro";
 ---
 
 <TabLayout tabName="Graphs" id="graphs-tab">
@@ -17,181 +18,137 @@ import UnitsSelector from "./UnitsSelector.astro";
     a row of elements above:
     <span id="selected-row-or-elem-text"></span>
   </div>
-  <div
-    id="row-selected-so-user-chooses-orbital-or-elem"
-    data-wizard-step="wizard-step-hidden"
+
+  <WizardStep
+    stepName="choose-orbital-or-elem"
+    stepDescr="Step 2. Select whether to graph values for each orbital or for the elements as a whole: "
   >
-    Step 2: Select whether to graph values for each orbital or for the elements
-    as a whole:
-    <span id="choose-orbital-or-elem-text"></span>
-    <form
-      class="indented-area-for-a-step"
-      autocomplete="off"
-      id="orb-or-elem-form"
-    >
-      <label for="orbital">Orbital</label>
-      <input type="radio" id="orbital" name="orb-or-elem" value="orbital" />
-      <label class="space-left" for="element">Element</label>
-      <input type="radio" id="element" name="orb-or-elem" value="element" />
-      <input class="space-left" type="submit" value="Continue" />
-    </form>
-  </div>
-  <div id="choose-which-orbital-to-graph" data-wizard-step="wizard-step-hidden">
-    Step 3: Choose the orbital to graph:
-    <span id="choose-which-orbital-text"></span>
-    <form
-      class="indented-area-for-a-step"
-      autocomplete="off"
-      id="select-orbital-form"
-    >
-      <label class="space-left" for="1s">1s</label>
-      <input type="radio" id="1s" name="orb-to-graph" value="0" />
-      <label class="space-left" for="2s">2s</label>
-      <input type="radio" id="2s" name="orb-to-graph" value="1" />
-      <label class="space-left" for="2p">2p</label>
-      <input type="radio" id="2p" name="orb-to-graph" value="2" />
-      <label class="space-left" for="3s">3s</label>
-      <input type="radio" id="3s" name="orb-to-graph" value="3" />
-      <label class="space-left" for="3p">3p</label>
-      <input type="radio" id="3p" name="orb-to-graph" value="4" />
+    <label for="orbital">Orbital</label>
+    <input type="radio" id="orbital" name="orb-or-elem" value="orbital" />
+    <label for="element">Element</label>
+    <input type="radio" id="element" name="orb-or-elem" value="element" />
+  </WizardStep>
 
-      <input class="space-left" type="submit" value="Continue" />
-    </form>
-  </div>
-  <div id="choose-x-for-row-and-orbital" data-wizard-step="wizard-step-hidden">
-    Step 4: Select the values to place on the horizontal (x) axis:
-    <span id="x-for-row-and-orbital-text"></span>
-    <form
-      class="indented-area-for-a-step"
-      autocomplete="off"
-      id="x-for-row-and-orbital-form"
-    >
-      <label class="space-left" for="Zi">Z<sub>i</sub></label>
-      <input type="radio" id="Zi" name="x-for-row-and-orbital" value="Zi" />
-      <label class="space-left" for="z">Z</label>
-      <input type="radio" id="z" name="x-for-row-and-orbital" value="z" />
-      <label class="space-left" for="ti">t<sub>i</sub></label>
-      <input type="radio" id="ti" name="x-for-row-and-orbital" value="ti" />
-      <label class="space-left" for="sqrt-ti">sqrt(t<sub>i</sub>)</label>
-      <input
-        type="radio"
-        id="sqrt-ti"
-        name="x-for-row-and-orbital"
-        value="sqrt-ti"
-      />
-      <label class="space-left" for="ven">V<sub>en</sub> / Z</label>
-      <input type="radio" id="ven" name="x-for-row-and-orbital" value="ven" />
-      <label class="space-left" for="vaoe">VAOE</label>
-      <input type="radio" id="vaoe" name="x-for-row-and-orbital" value="vaoe" />
-      <label class="space-left" for="rmax">r<sub>max</sub></label>
-      <input type="radio" id="rmax" name="x-for-row-and-orbital" value="rmax" />
+  <WizardStep
+    stepName="choose-which-orbital"
+    stepDescr="Step 3: Choose the orbital to graph: "
+  >
+    <label for="1s">1s</label>
+    <input type="radio" id="1s" name="orb-to-graph" value="0" />
+    <label for="2s">2s</label>
+    <input type="radio" id="2s" name="orb-to-graph" value="1" />
+    <label for="2p">2p</label>
+    <input type="radio" id="2p" name="orb-to-graph" value="2" />
+    <label for="3s">3s</label>
+    <input type="radio" id="3s" name="orb-to-graph" value="3" />
+    <label for="3p">3p</label>
+    <input type="radio" id="3p" name="orb-to-graph" value="4" />
+  </WizardStep>
 
-      <input class="space-left" type="submit" value="Continue" />
-    </form>
-  </div>
-  <div id="choose-y-for-row-and-orbital" data-wizard-step="wizard-step-hidden">
-    Step 5: Select the values to place on the vertical (y) axis:
-    <span id="y-for-row-and-orbital-text"></span>
-    <form
-      class="indented-area-for-a-step"
-      autocomplete="off"
-      id="y-for-row-and-orbital-form"
-    >
-      <label class="space-left" for="Zi">Z<sub>i</sub></label>
-      <input type="radio" id="Zi" name="y-for-row-and-orbital" value="Zi" />
-      <label class="space-left" for="z">Z</label>
-      <input type="radio" id="z" name="y-for-row-and-orbital" value="z" />
-      <label class="space-left" for="ti">t<sub>i</sub></label>
-      <input type="radio" id="ti" name="y-for-row-and-orbital" value="ti" />
-      <label class="space-left" for="sqrt-ti">sqrt(t<sub>i</sub>)</label>
-      <input
-        type="radio"
-        id="sqrt-ti"
-        name="y-for-row-and-orbital"
-        value="sqrt-ti"
-      />
-      <label class="space-left" for="ven">V<sub>en</sub> / Z</label>
-      <input type="radio" id="ven" name="y-for-row-and-orbital" value="ven" />
-      <label class="space-left" for="vaoe">VAOE</label>
-      <input type="radio" id="vaoe" name="y-for-row-and-orbital" value="vaoe" />
-      <label class="space-left" for="rmax">r<sub>max</sub></label>
-      <input type="radio" id="rmax" name="y-for-row-and-orbital" value="rmax" />
+  <WizardStep
+    stepName="choose-x-for-row-and-orbital"
+    stepDescr="Step 4: Select the values to place on the horizontal (x) axis: "
+  >
+    <label for="Zi">Z<sub>i</sub></label>
+    <input type="radio" id="Zi" name="x-for-row-and-orbital" value="Zi" />
+    <label for="z">Z</label>
+    <input type="radio" id="z" name="x-for-row-and-orbital" value="z" />
+    <label for="ti">t<sub>i</sub></label>
+    <input type="radio" id="ti" name="x-for-row-and-orbital" value="ti" />
+    <label for="sqrt-ti">sqrt(t<sub>i</sub>)</label>
+    <input
+      type="radio"
+      id="sqrt-ti"
+      name="x-for-row-and-orbital"
+      value="sqrt-ti"
+    />
+    <label for="ven">V<sub>en</sub> / Z</label>
+    <input type="radio" id="ven" name="x-for-row-and-orbital" value="ven" />
+    <label for="vaoe">VAOE</label>
+    <input type="radio" id="vaoe" name="x-for-row-and-orbital" value="vaoe" />
+    <label for="rmax">r<sub>max</sub></label>
+    <input type="radio" id="rmax" name="x-for-row-and-orbital" value="rmax" />
+  </WizardStep>
 
-      <input class="space-left" type="submit" value="Continue" />
-    </form>
-  </div>
+  <WizardStep
+    stepName="choose-y-for-row-and-orbital"
+    stepDescr="Step 5: Select the values to place on the vertical (y) axis: "
+  >
+    <label for="Zi">Z<sub>i</sub></label>
+    <input type="radio" id="Zi" name="y-for-row-and-orbital" value="Zi" />
+    <label for="z">Z</label>
+    <input type="radio" id="z" name="y-for-row-and-orbital" value="z" />
+    <label for="ti">t<sub>i</sub></label>
+    <input type="radio" id="ti" name="y-for-row-and-orbital" value="ti" />
+    <label for="sqrt-ti">sqrt(t<sub>i</sub>)</label>
+    <input
+      type="radio"
+      id="sqrt-ti"
+      name="y-for-row-and-orbital"
+      value="sqrt-ti"
+    />
+    <label for="ven">V<sub>en</sub> / Z</label>
+    <input type="radio" id="ven" name="y-for-row-and-orbital" value="ven" />
+    <label for="vaoe">VAOE</label>
+    <input type="radio" id="vaoe" name="y-for-row-and-orbital" value="vaoe" />
+    <label for="rmax">r<sub>max</sub></label>
+    <input type="radio" id="rmax" name="y-for-row-and-orbital" value="rmax" />
+  </WizardStep>
 
-  <div id="choose-x-for-row-and-elem" data-wizard-step="wizard-step-hidden">
-    Step 3: Select the values to place on the horizontal (x) axis:
-    <span id="choose-x-for-row-and-elem-text"></span>
-    <form
-      class="indented-area-for-a-step"
-      autocomplete="off"
-      id="x-for-row-and-elem-form"
-    >
-      <label class="space-left" for="polarizability">Polarizabilty</label>
-      <input
-        type="radio"
-        id="polarizability"
-        name="x-for-row-and-elem"
-        value="polarizability"
-      />
-      <label class="space-left" for="ionization-energy">Ionization Energy</label
-      >
-      <input
-        type="radio"
-        id="ionization-energy"
-        name="x-for-row-and-elem"
-        value="ionization-energy"
-      />
-      <label class="space-left" for="weighted-ionization-energy"
-        >Weighted Ionization Energy</label
-      >
-      <input
-        type="radio"
-        id="weighted-ionization-energy"
-        name="x-for-row-and-elem"
-        value="weighted-ionization-energy"
-      />
-      <input class="space-left" type="submit" value="Continue" />
-    </form>
-  </div>
-  <div id="choose-y-for-row-and-elem" data-wizard-step="wizard-step-hidden">
-    Step 4: Select the values to place on the vertical (y) axis:
-    <span id="choose-y-for-row-and-elem-text"></span>
-    <form
-      class="indented-area-for-a-step"
-      autocomplete="off"
-      id="y-for-row-and-elem-form"
-    >
-      <label class="space-left" for="y-polarizability">Polarizabilty</label>
-      <input
-        type="radio"
-        id="y-polarizability"
-        name="y-for-row-and-elem"
-        value="polarizability"
-      />
-      <label class="space-left" for="y-ionization-energy"
-        >Ionization Energy</label
-      >
-      <input
-        type="radio"
-        id="y-ionization-energy"
-        name="y-for-row-and-elem"
-        value="ionization-energy"
-      />
-      <label class="space-left" for="y-weighted-ionization-energy"
-        >Weighted Ionization Energy</label
-      >
-      <input
-        type="radio"
-        id="y-weighted-ionization-energy"
-        name="y-for-row-and-elem"
-        value="weighted-ionization-energy"
-      />
-      <input class="space-left" type="submit" value="Continue" />
-    </form>
-  </div>
+  <WizardStep
+    stepName="choose-x-for-row-and-elem"
+    stepDescr="Step 3: Select the values to place on the horizontal (x) axis: "
+  >
+    <label for="polarizability">Polarizabilty</label>
+    <input
+      type="radio"
+      id="polarizability"
+      name="x-for-row-and-elem"
+      value="polarizability"
+    />
+    <label for="ionization-energy">Ionization Energy</label>
+    <input
+      type="radio"
+      id="ionization-energy"
+      name="x-for-row-and-elem"
+      value="ionization-energy"
+    />
+    <label for="weighted-ionization-energy">Weighted Ionization Energy</label>
+    <input
+      type="radio"
+      id="weighted-ionization-energy"
+      name="x-for-row-and-elem"
+      value="weighted-ionization-energy"
+    />
+  </WizardStep>
+
+  <WizardStep
+    stepName="choose-y-for-row-and-elem"
+    stepDescr="Step 4: Select the values to place on the vertical (y) axis: "
+  >
+    <label for="y-polarizability">Polarizabilty</label>
+    <input
+      type="radio"
+      id="y-polarizability"
+      name="y-for-row-and-elem"
+      value="polarizability"
+    />
+    <label for="y-ionization-energy">Ionization Energy</label>
+    <input
+      type="radio"
+      id="y-ionization-energy"
+      name="y-for-row-and-elem"
+      value="ionization-energy"
+    />
+    <label for="y-weighted-ionization-energy">Weighted Ionization Energy</label>
+    <input
+      type="radio"
+      id="y-weighted-ionization-energy"
+      name="y-for-row-and-elem"
+      value="weighted-ionization-energy"
+    />
+  </WizardStep>
+
   <div id="choose-x-for-elem" data-wizard-step="wizard-step-hidden">
     Step 2: Select the values to place on the horizontal (x) axis:
     <span id="choose-x-for-elem-text"></span>
@@ -200,15 +157,16 @@ import UnitsSelector from "./UnitsSelector.astro";
     Step 3: Select the values to place on the vertical (y) axis:
     <span id="choose-y-for-elem-text"></span>
   </div>
-  <div id="showing-graph" data-wizard-step="wizard-step-hidden"></div>
+
+  <button id="reset-graphing"> Reset graphing wizard </button>
 
   <UnitsSelector />
 
   <div id="chart-attachment">
     <canvas id="chart-canv"></canvas>
   </div>
-
-  <!-- <div class="charts-area">
+</TabLayout>
+<!-- <div class="charts-area">
     <div id="charts-wrapper">
       <canvas id="chart-canv"></canvas>
       <canvas id="atomicSizeChartCanv"></canvas>
@@ -219,16 +177,15 @@ import UnitsSelector from "./UnitsSelector.astro";
     </div>
     <div id="chart-attachment">
       <canvas id="chart-canv"> -->
-  <!-- <div id="energy-info-for-element">
+<!-- <div id="energy-info-for-element">
       <div id="energy-element-name"></div>
       <div id="energy-atomic-size"></div>
       <div id="energy-electron-affinity"></div>
       <div id="energy-polarizability"></div>
       <div id="energy-ionization-energy"></div>
     </div> -->
-  <!-- </canvas>
+<!-- </canvas>
     </div> -->
-</TabLayout>
 
 <script>
   import "../scripts/graphData.ts";
@@ -274,13 +231,18 @@ import UnitsSelector from "./UnitsSelector.astro";
     content: "✅ ";
   }
 
-  .indented-area-for-a-step {
-    margin-left: 2rem;
-  }
   .space-left {
     margin-left: 2rem;
   }
   .space-top {
     margin-top: 2rem;
+  }
+
+  label {
+    margin-left: 2rem;
+  }
+
+  #reset-graphing {
+    margin-top: 1rem;
   }
 </style>

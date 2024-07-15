@@ -1,0 +1,37 @@
+---
+const { stepName, stepDescr } = Astro.props;
+---
+
+<div id={stepName} data-wizard-step="wizard-step-hidden">
+  {stepDescr}
+  <span id={stepName + "-text"}></span>
+  <form class="indented-area-for-a-step" autocomplete="off"
+    id={stepName + "-form"}>
+    <slot></slot>
+    <input class="space-left" type="submit" value="Continue" />
+  </form>
+</div>
+
+<style>
+  .space-left {
+    margin-left: 2rem;
+  }
+
+  [data-wizard-step="wizard-step-hidden"] {
+    display: none;
+  }
+
+  [data-wizard-step="wizard-step-current"] {
+    display: block;
+    font-size: larger;
+    font-width: bold;
+  }
+
+  [data-wizard-step="wizard-step-previous-selected"]::before {
+    content: "✅ ";
+  }
+
+  .indented-area-for-a-step {
+    margin-left: 2rem;
+  }
+</style>

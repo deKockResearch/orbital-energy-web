@@ -1,3 +1,6 @@
+import { unSelectAllElements } from "./main";
+import { selectedElement$ } from "./stores";
+
 export function handleTabSwitching() {
   const tabs = document.querySelectorAll('.tab');
 
@@ -20,12 +23,25 @@ export function handleTabSwitching() {
       target.classList.add('is-active');
 
       // clear the coloring on the tabs
-      // tabs.forEach(t => t.classList.remove('is-active'));
       for (let s of siblingTabs) {
         s.classList.remove('is-active');
       }
       // make the selected tab colored
       tab.classList.add('is-active');
+
+      // If we are switching from Graphs tab to another tab where one cannot select a row,
+      // and a row has been selected, then unselect the row.
+      if (target.id !== 'graphs-tab' && selectedElement$.get().rowSelected !== null) {
+        unSelectAllElements();
+
+        // clear the values changed when changing elements.
+        selectedElement$.set({
+          selectedHTMLElement: null,
+          selectedElementInfo: null,
+          selectedElemOrbitals: null,
+          rowSelected: null,
+        });
+      }
     });
   });
 }

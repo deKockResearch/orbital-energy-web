@@ -62,7 +62,7 @@ function getElementByAtomicNumber(atomicNumber: number): ElementType {
   return elements.find((element) => element.number === atomicNumber)!;
 }
 
-function unSelectAllElements(): void {
+export function unSelectAllElements(): void {
   const pTableElements = document.getElementsByClassName("element ptable");
   for (let pTableElem of pTableElements) {
     if (pTableElem.classList.contains("clicked")) {
@@ -135,19 +135,16 @@ function toggleElemRow(e: Event): void {
   // row was already selected, so toggle off.
   if (selectedElement$.get().rowSelected === rowNum) {
     rowNum = null;
-  }
-
-  selectedElement$.set({
-    selectedHTMLElement: null,
-    selectedElementInfo: null,
-    selectedElemOrbitals: null,
-    rowSelected: rowNum,
-  });
-
-  if (rowNum === null) {
+    selectedElement$.set({
+      selectedHTMLElement: null,
+      selectedElementInfo: null,
+      selectedElemOrbitals: null,
+      rowSelected: null,
+    });
     return;
   }
 
+  // new row selected.
   const className = "row" + rowNum;
   const rowElements = document.getElementsByClassName(className);
   for (let i = 0; i < rowElements.length; i++) {
@@ -155,10 +152,10 @@ function toggleElemRow(e: Event): void {
     element.classList.toggle("clicked");
   }
 
-  const selElem = selectedElement$.get();
-
   selectedElement$.set({
-    ...selElem,
+    selectedHTMLElement: null,
+    selectedElementInfo: null,
+    selectedElemOrbitals: null,
     rowSelected: rowNum,
   });
 

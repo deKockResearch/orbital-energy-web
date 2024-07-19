@@ -1,5 +1,4 @@
 import { Chart, type ScatterDataPoint } from "chart.js/auto";
-// import annotationPlugin from 'chartjs-plugin-annotation';
 import { selectedElement$, unitsSelection$ } from "./stores";
 import { conversions } from "./utils";
 import {
@@ -13,8 +12,6 @@ import { eLevels } from "./types";
 import { unSelectAllElements } from "./main";
 // import { conversions, energyToUnitsAsString } from "./utils";
 
-// attempt to add a label to each point.
-// Chart.register(annotationPlugin);
 
 // https://doi.org/10.1016/j.cplett.2012.07.072
 // https://doi.org/10.1002/chem.201602949
@@ -169,7 +166,6 @@ export function drawGraphForRowAndElem() {
 
   const startElem = startElemInPeriodicTableRows[rowSelected - 1];
   const numElems = numElemsInPeriodicTableRows[rowSelected - 1];
-  // const labels = elemLabels.slice(startElem, startElem + numElems);
 
   if (chart) {
     chart.destroy();
@@ -185,16 +181,6 @@ export function drawGraphForRowAndElem() {
 
   const data: ScatterDataPoint[] = xData.map((x, i) => ({ x, y: yData[i] }));
 
-  // attempt to add a label to each point.
-  // const labelObj = {
-  //   type: 'label',
-  //   // color: colors[i],
-  //   position: { x: 'center', y: 'center' },
-  //   // Move the label over to the right and down a bit.
-  //   // xAdjust: 75,
-  //   // yAdjust: -30,
-  //   content: "Hello",
-  // };
   const options = {
     scales: {
       x: {
@@ -211,6 +197,22 @@ export function drawGraphForRowAndElem() {
       }
     },
 
+  };
+
+  // https://www.youtube.com/watch?v=PNbDrDI97Ng
+  const dataLabels = {
+    id: 'dataLabels',
+    afterDatasetsDraw: (chart: Chart) => {
+      const { ctx } = chart;
+      ctx.save();
+      ctx.font = "12px sans-serif";
+      for (let i = 0; i < data.length; i++) {
+        ctx.fillText(((chart.config.data.labels!) as string[])[i],
+          chart.getDatasetMeta(0).data[i].x + 10,
+          chart.getDatasetMeta(0).data[i].y);
+      }
+      ctx.restore();
+    },
   };
 
   const ctx = document.getElementById('chart-canv')! as HTMLCanvasElement;
@@ -232,15 +234,9 @@ export function drawGraphForRowAndElem() {
           display: false,       // TODO
           position: "bottom",
         },
-        // Attempt to add a label to each point.
-        // annotation: {
-        //   // @ts-ignore
-        //   annotations: {
-        //     label1: labelObj,
-        //   }
-        // }
       },
     },
+    plugins: [dataLabels],  // https://www.youtube.com/watch?v=PNbDrDI97Ng
   });
 
 }
@@ -274,13 +270,9 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
       data = getTisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
       label = `Kinetic Energy for ${eLevels[orbitalForRow]}`;
       break;
-    case 'sqrt-ti': // sqrt of kinetic energy
-      data = getTisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow).map((t) => Math.sqrt(t));
-      label = `Sqrt of Kinetic Energy for ${eLevels[orbitalForRow]}`;
-      break;
     case 'ven': // effective nuclear charge / Z
       const Z = Array.from({ length: numElems }, (_, i) => startElem + i + 1);
-      data = getVisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow).map((v, i) => v / Z[i]);
+      data = getVisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
       label = `Effective Nuclear Charge for ${eLevels[orbitalForRow]}`;
       break;
     case 'vaoe': // orbital energy
@@ -705,6 +697,7 @@ function resetAllSteps() {
   resetStep(chooseYForRowAndElem, chooseYForRowAndElemText, chooseYForRowAndElemForm);
   chooseXForElem.dataset.wizardStep = "wizard-step-hidden";
   chooseYForElem.dataset.wizardStep = "wizard-step-hidden";
+  chart.destroy();
 }
 
 // When the wizard state changes, we need to display different instructions

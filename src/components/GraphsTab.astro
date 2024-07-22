@@ -30,55 +30,55 @@ import WizardStep from "./WizardStep.astro";
   </WizardStep>
 
   <WizardStep
-    stepName="choose-which-orbital"
+    stepName="choose-orbital-for-row"
     stepDescr="Step 3: Choose the orbital to graph: "
   >
     <label for="1s">1s</label>
-    <input type="radio" id="1s" name="orb-to-graph" value="0" />
+    <input type="radio" id="1s" name="orb-for-row" value="0" />
     <label for="2s">2s</label>
-    <input type="radio" id="2s" name="orb-to-graph" value="1" />
+    <input type="radio" id="2s" name="orb-for-row" value="1" />
     <label for="2p">2p</label>
-    <input type="radio" id="2p" name="orb-to-graph" value="2" />
+    <input type="radio" id="2p" name="orb-for-row" value="2" />
     <label for="3s">3s</label>
-    <input type="radio" id="3s" name="orb-to-graph" value="3" />
+    <input type="radio" id="3s" name="orb-for-row" value="3" />
     <label for="3p">3p</label>
-    <input type="radio" id="3p" name="orb-to-graph" value="4" />
+    <input type="radio" id="3p" name="orb-for-row" value="4" />
   </WizardStep>
 
   <WizardStep
     stepName="choose-x-for-row-and-orbital"
     stepDescr="Step 4: Select the values to place on the horizontal (x) axis: "
   >
-    <label for="Zi">Z<sub>i</sub></label>
-    <input type="radio" id="Zi" name="x-for-row-and-orbital" value="Zi" />
-    <label for="z">Z</label>
-    <input type="radio" id="z" name="x-for-row-and-orbital" value="z" />
-    <label for="ti">t<sub>i</sub></label>
-    <input type="radio" id="ti" name="x-for-row-and-orbital" value="ti" />
-    <label for="ven">V<sub>en</sub></label>
-    <input type="radio" id="ven" name="x-for-row-and-orbital" value="ven" />
-    <label for="vaoe">VAOE</label>
-    <input type="radio" id="vaoe" name="x-for-row-and-orbital" value="vaoe" />
-    <label for="rmax">r<sub>max</sub></label>
-    <input type="radio" id="rmax" name="x-for-row-and-orbital" value="rmax" />
+    <label for="x_Zi">Z<sub>i</sub></label>
+    <input type="radio" id="x_Zi" name="x-for-row-and-orbital" value="Zi" />
+    <label for="x_z">Z</label>
+    <input type="radio" id="x_z" name="x-for-row-and-orbital" value="z" />
+    <label for="x_ti">t<sub>i</sub></label>
+    <input type="radio" id="x_ti" name="x-for-row-and-orbital" value="ti" />
+    <label for="x_ven">V<sub>en</sub></label>
+    <input type="radio" id="x_ven" name="x-for-row-and-orbital" value="ven" />
+    <label for="x_vaoe">VAOE</label>
+    <input type="radio" id="x_vaoe" name="x-for-row-and-orbital" value="vaoe" />
+    <label for="x_rmax">r<sub>max</sub></label>
+    <input type="radio" id="x_rmax" name="x-for-row-and-orbital" value="rmax" />
   </WizardStep>
 
   <WizardStep
     stepName="choose-y-for-row-and-orbital"
     stepDescr="Step 5: Select the values to place on the vertical (y) axis: "
   >
-    <label for="Zi">Z<sub>i</sub></label>
-    <input type="radio" id="Zi" name="y-for-row-and-orbital" value="Zi" />
-    <label for="z">Z</label>
-    <input type="radio" id="z" name="y-for-row-and-orbital" value="z" />
-    <label for="ti">t<sub>i</sub></label>
-    <input type="radio" id="ti" name="y-for-row-and-orbital" value="ti" />
-    <label for="ven">V<sub>en</sub></label>
-    <input type="radio" id="ven" name="y-for-row-and-orbital" value="ven" />
-    <label for="vaoe">VAOE</label>
-    <input type="radio" id="vaoe" name="y-for-row-and-orbital" value="vaoe" />
-    <label for="rmax">r<sub>max</sub></label>
-    <input type="radio" id="rmax" name="y-for-row-and-orbital" value="rmax" />
+    <label for="y_Zi">Z<sub>i</sub></label>
+    <input type="radio" id="y_Zi" name="y-for-row-and-orbital" value="Zi" />
+    <label for="y_z">Z</label>
+    <input type="radio" id="y_z" name="y-for-row-and-orbital" value="z" />
+    <label for="y_ti">t<sub>i</sub></label>
+    <input type="radio" id="y_ti" name="y-for-row-and-orbital" value="ti" />
+    <label for="y_ven">V<sub>en</sub></label>
+    <input type="radio" id="y_ven" name="y-for-row-and-orbital" value="ven" />
+    <label for="y_vaoe">VAOE</label>
+    <input type="radio" id="y_vaoe" name="y-for-row-and-orbital" value="vaoe" />
+    <label for="y_rmax">r<sub>max</sub></label>
+    <input type="radio" id="y_rmax" name="y-for-row-and-orbital" value="rmax" />
   </WizardStep>
 
   <WizardStep
@@ -135,12 +135,28 @@ import WizardStep from "./WizardStep.astro";
     />
   </WizardStep>
 
+  <WizardStep
+    stepName="choose-orbital-for-elem"
+    stepDescr="Step 2: Choose the orbital to graph: "
+  >
+    <label for="e-1s">1s</label>
+    <input type="radio" id="e-1s" name="orb-for-elem" value="0" />
+    <label for="e-2s">2s</label>
+    <input type="radio" id="e-2s" name="orb-for-elem" value="1" />
+    <label for="e-2p">2p</label>
+    <input type="radio" id="e-2p" name="orb-for-elem" value="2" />
+    <label for="e-3s">3s</label>
+    <input type="radio" id="e-3s" name="orb-for-elem" value="3" />
+    <label for="e-3p">3p</label>
+    <input type="radio" id="e-3p" name="orb-for-elem" value="4" />
+  </WizardStep>
+
   <div id="choose-x-for-elem" data-wizard-step="wizard-step-hidden">
-    Step 2: Select the values to place on the horizontal (x) axis:
+    Step 3: Select the values to place on the horizontal (x) axis:
     <span id="choose-x-for-elem-text"></span>
   </div>
   <div id="choose-y-for-elem" data-wizard-step="wizard-step-hidden">
-    Step 3: Select the values to place on the vertical (y) axis:
+    Step 4: Select the values to place on the vertical (y) axis:
     <span id="choose-y-for-elem-text"></span>
   </div>
 

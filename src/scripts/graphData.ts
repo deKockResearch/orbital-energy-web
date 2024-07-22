@@ -243,6 +243,7 @@ export function drawGraphForRowAndElem() {
 
 
 function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numElems: number) {
+  const units = unitsSelection$.get();
   let data: number[] = [];
   let label: string = '';
   switch (valueChosenToGraph) {
@@ -251,11 +252,11 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
       label = `Polarizability (bohr)`;
       break;
     case 'ionization-energy':
-      data = unweightedIonizationEnergy.slice(startElem, startElem + numElems);;
+      data = unweightedIonizationEnergy.map(e => e * conversions.get(units)!).slice(startElem, startElem + numElems);
       label = `Ionization Energy (${unitsSelection$.get()})`;
       break;
     case 'weighted-ionization-energy':
-      data = weightedIonizationEnergy.slice(startElem, startElem + numElems);;
+      data = weightedIonizationEnergy.map(e => e * conversions.get(units)!).slice(startElem, startElem + numElems);;
       label = `Weighted Ionization Energy (${unitsSelection$.get()})`;
       break;
     case 'z':  // nuclear charge
@@ -263,20 +264,20 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
       label = `Nuclear Charge`;
       break;
     case 'Zi': // effective nuclear charge
-      data = getZisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
+      data = getZisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow).map(e => e * conversions.get(units)!);
       label = `Effective Nuclear Charge for ${eLevels[orbitalForRow]}`;
       break;
     case 'ti': // kinetic energy
-      data = getTisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
+      data = getTisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow).map(e => e * conversions.get(units)!);
       label = `Kinetic Energy for ${eLevels[orbitalForRow]}`;
       break;
     case 'ven': // effective nuclear charge / Z
       const Z = Array.from({ length: numElems }, (_, i) => startElem + i + 1);
-      data = getVisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
+      data = getVisForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow).map(e => e * conversions.get(units)!);
       label = `Effective Nuclear Charge for ${eLevels[orbitalForRow]}`;
       break;
     case 'vaoe': // orbital energy
-      data = getVAOEsForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow);
+      data = getVAOEsForRowOfElementsAndOrbital(startElem, numElems, orbitalForRow).map(e => e * conversions.get(units)!);
       label = `Orbital Energy for ${eLevels[orbitalForRow]}`;
       break;
     case 'rmax':
@@ -793,9 +794,12 @@ document.getElementById('reset-graphing')!.addEventListener('click', () => {
   updateDisplayForNextStep();
 });
 
-
 selectedElement$.listen((selElem) => {
   updateDisplayWhenLeavingAStep(wizardStep);
   updateWizardState(selElem);
   updateDisplayForNextStep();
 });
+
+// When user changes the units, redraw the graph.
+unitsSelection$.listen(() => drawGraphForRowAndElem());
+

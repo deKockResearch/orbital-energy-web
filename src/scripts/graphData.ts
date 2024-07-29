@@ -782,7 +782,7 @@ function processWizardSelection(formElem: HTMLElement, radioValueName: string, c
 processWizardSelection(chooseOrbitalOrElemForm, 'orb-or-elem', (val: string) => {
   orbitalOrWholeElemForARow = val;
 });
-processWizardSelection(chooseOrbitalForRowForm, 'orb-to-graph', (val: string) => {
+processWizardSelection(chooseOrbitalForRowForm, 'orb-for-row', (val: string) => {
   orbitalChosen = Number(val);
 });
 processWizardSelection(chooseXForRowAndElemForm, 'x-for-row-and-elem', (val: string) => {

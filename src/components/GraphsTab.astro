@@ -151,14 +151,27 @@ import WizardStep from "./WizardStep.astro";
     <input type="radio" id="e-3p" name="orb-for-elem" value="4" />
   </WizardStep>
 
-  <div id="choose-x-for-elem" data-wizard-step="wizard-step-hidden">
-    Step 3: Select the values to place on the horizontal (x) axis:
-    <span id="choose-x-for-elem-text"></span>
-  </div>
-  <div id="choose-y-for-elem" data-wizard-step="wizard-step-hidden">
-    Step 4: Select the values to place on the vertical (y) axis:
-    <span id="choose-y-for-elem-text"></span>
-  </div>
+  <WizardStep
+    stepName="choose-y-for-elem"
+    stepDescr="Step 3: Select the values to place on the vertical (y) axis: "
+  >
+    <label for="y-rad-prob-dist">Radial Probability Distribution</label>
+    <input
+      type="radio"
+      id="y-rad-prob-dist"
+      name="y-for-elem"
+      value="rad-prob-dist"
+    />
+    <label for="y-electron-density">Electron Density</label>
+    <input
+      type="radio"
+      id="y-electron-density"
+      name="y-for-elem"
+      value="electron-density"
+    />
+    <label for="y-wave-fcn">Wave Function</label>
+    <input type="radio" id="y-wave-fcn" name="y-for-elem" value="wave-fcn" />
+  </WizardStep>
 
   <button id="reset-graphing"> Reset graphing wizard </button>
 
@@ -168,26 +181,6 @@ import WizardStep from "./WizardStep.astro";
     <canvas id="chart-canv"></canvas>
   </div>
 </TabLayout>
-<!-- <div class="charts-area">
-    <div id="charts-wrapper">
-      <canvas id="chart-canv"></canvas>
-      <canvas id="atomicSizeChartCanv"></canvas>
-      <canvas id="electronAffinityChartCanv"></canvas>
-      <canvas id="polarizabilityChartCanv"></canvas>
-      <canvas id="ionizationEnergyChartCanv"></canvas>
-      <canvas id="weightedIonizationEnergyChartCanv"></canvas>
-    </div>
-    <div id="chart-attachment">
-      <canvas id="chart-canv"> -->
-<!-- <div id="energy-info-for-element">
-      <div id="energy-element-name"></div>
-      <div id="energy-atomic-size"></div>
-      <div id="energy-electron-affinity"></div>
-      <div id="energy-polarizability"></div>
-      <div id="energy-ionization-energy"></div>
-    </div> -->
-<!-- </canvas>
-    </div> -->
 
 <script>
   import "../scripts/graphData.ts";

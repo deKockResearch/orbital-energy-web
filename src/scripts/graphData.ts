@@ -2,14 +2,18 @@ import { Chart, type ScatterDataPoint } from "chart.js/auto";
 import { selectedElement$, unitsSelection$ } from "./stores";
 import { conversions } from "./utils";
 import {
+  getRadProbDensityForElemAndOrbital,
   getRmaxForRowOfElementsAndOrbital,
   getTisForRowOfElementsAndOrbital,
   getVAOEsForRowOfElementsAndOrbital,
   getVisForRowOfElementsAndOrbital,
-  getZisForRowOfElementsAndOrbital
+  getWaveFunction,
+  getWaveFunctionSquared,
+  getZisForRowOfElementsAndOrbital,
+  type XYpair
 } from "./orbitalEnergies";
 import { eLevels } from "./types";
-import { unSelectAllElements } from "./main";
+import { unSelectAllElements } from "./elementsTable";
 // import { conversions, energyToUnitsAsString } from "./utils";
 
 
@@ -38,126 +42,126 @@ const numElemsInPeriodicTableRows = [2, 8, 8];
 const elemLabels = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
   'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'];
 
-function calcPointRadius(context: { dataIndex: number }) {
-  if (selectedElement$.get().selectedElementInfo === null) {
-    return 5;
-  }
-  return context.dataIndex === selectedElement$.get().selectedElementInfo!.number - 1 ? 10 : 5;
-}
+// function calcPointRadius(context: { dataIndex: number }) {
+//   if (selectedElement$.get().selectedElementInfo === null) {
+//     return 5;
+//   }
+//   return context.dataIndex === selectedElement$.get().selectedElementInfo!.number - 1 ? 10 : 5;
+// }
 
-let atomicSizeChart: Chart;
-let electronAffinityChart: Chart;
-let polarizabilityChart: Chart;
-let ionizationEnergyChart: Chart;
-let weightedIonizationEnergyChart: Chart;
+// let atomicSizeChart: Chart;
+// let electronAffinityChart: Chart;
+// let polarizabilityChart: Chart;
+// let ionizationEnergyChart: Chart;
+// let weightedIonizationEnergyChart: Chart;
 
 let chart: Chart;
 
-interface ChartInfo {
-  data: number[];
-  title: string;
-  bottomMaterial: string[];
-}
+// interface ChartInfo {
+//   data: number[];
+//   title: string;
+//   bottomMaterial: string[];
+// }
 
 
-export function drawSelectedRowOfElemsChart(chartName: string) {
+// export function drawSelectedRowOfElemsChart(chartName: string) {
 
-  const rowSelected: number | null = selectedElement$.get().rowSelected;
-  if (!rowSelected) {
-    return;
-  }
+//   const rowSelected: number | null = selectedElement$.get().rowSelected;
+//   if (!rowSelected) {
+//     return;
+//   }
 
-  const startElem = startElemInPeriodicTableRows[rowSelected - 1];
-  const numElems = numElemsInPeriodicTableRows[rowSelected - 1];
-  const labels = elemLabels.slice(startElem, startElem + numElems);
+//   const startElem = startElemInPeriodicTableRows[rowSelected - 1];
+//   const numElems = numElemsInPeriodicTableRows[rowSelected - 1];
+//   const labels = elemLabels.slice(startElem, startElem + numElems);
 
-  if (chart) {
-    chart.destroy();
-  }
+//   if (chart) {
+//     chart.destroy();
+//   }
 
-  const options = {
-    scales: {
-      y: {
-        beginAtZero: true
-      }
-    }
-  };
+//   const options = {
+//     scales: {
+//       y: {
+//         beginAtZero: true
+//       }
+//     }
+//   };
 
-  let chartInfo: ChartInfo = {
-    data: [],
-    title: '',
-    bottomMaterial: [],
-  };
+//   let chartInfo: ChartInfo = {
+//     data: [],
+//     title: '',
+//     bottomMaterial: [],
+//   };
 
-  const unitSelectValue = unitsSelection$.get();
+//   const unitSelectValue = unitsSelection$.get();
 
-  switch (chartName) {
-    case 'polarizability':
-      chartInfo = {
-        data: polarizability,
-        title: "Polarizability (bohr)",
-        bottomMaterial: ['DeKock 2012'],
-      };
-      break;
-    case 'ionization-energy':
-      chartInfo = {
-        // convert the values depending on unit selection.
-        data: unweightedIonizationEnergy.map((e) => e * conversions.get(unitSelectValue)!),
-        title: `Ionization Energy (${unitSelectValue})`,
-        bottomMaterial: ["Kramida, A., Ralchenko, Yu., Reader, J., and NIST ASD Team (2014). NIST Atomic Spectra Database (ver. 5.2),", "[Online]. Available: http://physics.nist.gov/asd [2016, February 22]. National Institute of Standards and Technology, Gaithersburg, MD."]
-      };
-      break;
-    case 'electron-affinity':
-      chartInfo = {
-        data: electronAffinity.map((e) => e * conversions.get(unitSelectValue)!),
-        title: `Electron Affinity (${unitSelectValue})`,
-        bottomMaterial: ["https://cccbdb.nist.gov/elecaff1x.asp"],
-      }
-      break;
-    case 'weighted-ion-energy':
-      chartInfo = {
-        data: weightedIonizationEnergy.map((e) => e * conversions.get(unitSelectValue)!),
-        title: `Weighted Ionization Energy (${unitSelectValue})`,
-        bottomMaterial: [],
-      };
-      break;
-    case 'z':     // nuclear charge
-      break;
-    default:
-      console.error("Unknown chart name: ", chartName);
-      break;
-  }
+//   switch (chartName) {
+//     case 'polarizability':
+//       chartInfo = {
+//         data: polarizability,
+//         title: "Polarizability (bohr)",
+//         bottomMaterial: ['DeKock 2012'],
+//       };
+//       break;
+//     case 'ionization-energy':
+//       chartInfo = {
+//         // convert the values depending on unit selection.
+//         data: unweightedIonizationEnergy.map((e) => e * conversions.get(unitSelectValue)!),
+//         title: `Ionization Energy (${unitSelectValue})`,
+//         bottomMaterial: ["Kramida, A., Ralchenko, Yu., Reader, J., and NIST ASD Team (2014). NIST Atomic Spectra Database (ver. 5.2),", "[Online]. Available: http://physics.nist.gov/asd [2016, February 22]. National Institute of Standards and Technology, Gaithersburg, MD."]
+//       };
+//       break;
+//     case 'electron-affinity':
+//       chartInfo = {
+//         data: electronAffinity.map((e) => e * conversions.get(unitSelectValue)!),
+//         title: `Electron Affinity (${unitSelectValue})`,
+//         bottomMaterial: ["https://cccbdb.nist.gov/elecaff1x.asp"],
+//       }
+//       break;
+//     case 'weighted-ion-energy':
+//       chartInfo = {
+//         data: weightedIonizationEnergy.map((e) => e * conversions.get(unitSelectValue)!),
+//         title: `Weighted Ionization Energy (${unitSelectValue})`,
+//         bottomMaterial: [],
+//       };
+//       break;
+//     case 'z':     // nuclear charge
+//       break;
+//     default:
+//       console.error("Unknown chart name: ", chartName);
+//       break;
+//   }
 
 
-  const data = chartInfo.data.slice(startElem, startElem + numElems);
+//   const data = chartInfo.data.slice(startElem, startElem + numElems);
 
-  const ctx = document.getElementById('chart-canv')! as HTMLCanvasElement;
-  chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: chartInfo.title,
-        data: [...data],
-        borderWidth: 1,
-        pointRadius: calcPointRadius,
-      }]
-    },
-    options: {
-      ...options,
-      plugins: {
-        title: {
-          text: chartInfo.bottomMaterial,
-          display: true,
-          position: "bottom",
-        },
-      },
-    },
-  });
+//   const ctx = document.getElementById('chart-canv')! as HTMLCanvasElement;
+//   chart = new Chart(ctx, {
+//     type: 'line',
+//     data: {
+//       labels,
+//       datasets: [{
+//         label: chartInfo.title,
+//         data: [...data],
+//         borderWidth: 1,
+//         pointRadius: calcPointRadius,
+//       }]
+//     },
+//     options: {
+//       ...options,
+//       plugins: {
+//         title: {
+//           text: chartInfo.bottomMaterial,
+//           display: true,
+//           position: "bottom",
+//         },
+//       },
+//     },
+//   });
 
-}
+// }
 
-export function drawGraphForRowAndElem() {
+export function drawGraphForRow() {
 
   const rowSelected: number | null = selectedElement$.get().rowSelected;
   if (!rowSelected) {
@@ -241,6 +245,94 @@ export function drawGraphForRowAndElem() {
 
 }
 
+export function drawGraphForElem() {
+
+  if (chart) {
+    chart.destroy();
+  }
+
+  let yLabel = '';
+  let data: XYpair[] = [];
+
+  switch (yValueChosen) {
+    case 'rad-prob-dist':
+      data = getRadProbDensityForElemAndOrbital(selectedElement$.get(), orbitalChosen);
+      yLabel = `Radial Probability Distribution for ${selectedElement$.get().selectedElementInfo!.symbol} ${eLevels[orbitalChosen]}`;
+      break;
+    case 'electron-density':
+      data = getWaveFunctionSquared(selectedElement$.get(), orbitalChosen);
+      yLabel = `Electron Density for ${selectedElement$.get().selectedElementInfo!.symbol} ${eLevels[orbitalChosen]}`;
+      break;
+    case 'wave-fcn':
+      data = getWaveFunction(selectedElement$.get(), orbitalChosen);
+      yLabel = `Wave Function for ${selectedElement$.get().selectedElementInfo!.symbol} ${eLevels[orbitalChosen]}`;
+      break;
+    default:
+      console.error("Unknown graph option choice: ", yValueChosen);
+      break;
+  }
+
+  const options = {
+    scales: {
+      x: {
+        title: {
+          text: 'r',
+          display: true,
+        },
+      },
+      y: {
+        title: {
+          text: yLabel,
+          display: true,
+        }
+      }
+    },
+
+  };
+
+  // https://www.youtube.com/watch?v=PNbDrDI97Ng
+  // const dataLabels = {
+  //   id: 'dataLabels',
+  //   afterDatasetsDraw: (chart: Chart) => {
+  //     const { ctx } = chart;
+  //     ctx.save();
+  //     ctx.font = "12px sans-serif";
+  //     for (let i = 0; i < data.length; i++) {
+  //       ctx.fillText(((chart.config.data.labels!) as string[])[i],
+  //         chart.getDatasetMeta(0).data[i].x + 10,
+  //         chart.getDatasetMeta(0).data[i].y);
+  //     }
+  //     ctx.restore();
+  //   },
+  // };
+
+  const ctx = document.getElementById('chart-canv')! as HTMLCanvasElement;
+  chart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      // labels: elemLabels.slice(startElem, startElem + numElems),
+      datasets: [{
+        data: [...data],
+        borderWidth: 1,
+        label: `r vs ${yLabel}`,
+      }]
+    },
+    options: {
+      ...options,
+      plugins: {
+        title: {
+          text: "chartInfo.bottomMaterial",
+          display: false,       // TODO
+          position: "bottom",
+        },
+      },
+    },
+    // plugins: [dataLabels],  // https://www.youtube.com/watch?v=PNbDrDI97Ng
+  });
+
+}
+
+
 
 function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numElems: number) {
   const units = unitsSelection$.get();
@@ -274,7 +366,7 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
     case 'ven': // effective nuclear charge / Z
       const Z = Array.from({ length: numElems }, (_, i) => startElem + i + 1);
       data = getVisForRowOfElementsAndOrbital(startElem, numElems, orbitalChosen).map(e => e * conversions.get(units)!);
-      label = `Effective Nuclear Charge for ${eLevels[orbitalChosen]}`;
+      label = `Electron-nuclear attraction for ${eLevels[orbitalChosen]}`;
       break;
     case 'vaoe': // orbital energy
       data = getVAOEsForRowOfElementsAndOrbital(startElem, numElems, orbitalChosen).map(e => e * conversions.get(units)!);
@@ -284,8 +376,9 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
       data = getRmaxForRowOfElementsAndOrbital(startElem, numElems, orbitalChosen);
       label = `Max Atomic Size for ${eLevels[orbitalChosen]}`;
       break;
+
     default:
-      console.error("Unknown graph choice: ", valueChosenToGraph);
+      console.error("Unknown graph option choice: ", valueChosenToGraph);
       break;
   }
   return { data, label };
@@ -522,9 +615,10 @@ type WizardSteps =
   | "chooseXForRowAndElem"
   | "chooseYForRowAndElem"
   | "chooseOrbitalForElem"
-  | "chooseXForElem"
   | "chooseYForElem"
   | "showingGraph";
+
+let currSelectionType: "row" | "element" | "" = "";
 
 const waitingForRowOrElem = document.getElementById('waiting-for-row-or-elem-to-be-selected')!;
 const waitingForRowOrElemText = document.getElementById('selected-row-or-elem-text')!
@@ -557,8 +651,9 @@ const chooseOrbitalForElem = document.getElementById('choose-orbital-for-elem')!
 const chooseOrbitalForElemText = document.getElementById('choose-orbital-for-elem-text')!;
 const chooseOrbitalForElemForm = document.getElementById('choose-orbital-for-elem-form')!;
 
-const chooseXForElem = document.getElementById('choose-x-for-elem')!;
 const chooseYForElem = document.getElementById('choose-y-for-elem')!;
+const chooseYForElemText = document.getElementById('choose-y-for-elem-text')!;
+const chooseYForElemForm = document.getElementById('choose-y-for-elem-form')!;
 
 
 let wizardStep: WizardSteps = "waitingForRowOrElemToBeSelected";
@@ -634,11 +729,6 @@ function updateWizardState(selElem: any) {
     return;
   }
   if (wizardStep === "chooseOrbitalForElem" && orbitalChosen !== -1) {
-    wizardStep = "chooseXForElem";
-    console.log("wizardStep is now: ", wizardStep);
-    return;
-  }
-  if (wizardStep === "chooseXForElem" && xValueChosen) {
     wizardStep = "chooseYForElem";
     console.log("wizardStep is now: ", wizardStep);
     return;
@@ -648,7 +738,7 @@ function updateWizardState(selElem: any) {
     console.log("wizardStep is now: ", wizardStep);
     return;
   }
-  console.log("💩💩💩💩💩Nothing matched when wizardStep = ", wizardStep);
+  console.log("💩💩💩💩💩 Nothing matched when wizardStep = ", wizardStep);
 }
 
 function updateDisplayWhenLeavingAStep(step: WizardSteps) {
@@ -694,6 +784,11 @@ function updateDisplayWhenLeavingAStep(step: WizardSteps) {
       chooseYForRowAndOrbitalText.innerText = yValueChosen;
       chooseYForRowAndOrbitalForm.style.display = 'none';
       return;
+    case "chooseYForElem":
+      chooseYForElem.dataset.wizardStep = "wizard-step-previous-selected";
+      chooseYForElemText.innerText = yValueChosen;
+      chooseYForElemForm.style.display = 'none';
+      return;
     default:
       console.error("Unknown wizard step: ", step);
   }
@@ -712,11 +807,13 @@ function resetAllSteps() {
   resetStep(chooseYForRowAndOrbital, chooseYForRowAndOrbitalText, chooseYForRowAndOrbitalForm);
   resetStep(chooseXForRowAndElem, chooseXForRowAndElemText, chooseXForRowAndElemForm);
   resetStep(chooseYForRowAndElem, chooseYForRowAndElemText, chooseYForRowAndElemForm);
-  chooseXForElem.dataset.wizardStep = "wizard-step-hidden";
-  chooseYForElem.dataset.wizardStep = "wizard-step-hidden";
+  resetStep(chooseOrbitalForElem, chooseOrbitalForElemText, chooseOrbitalForElemForm);
+  resetStep(chooseYForElem, chooseYForElemText, chooseYForElemForm);
+  waitingForRowOrElemText.innerText = "";
   if (chart) {
     chart.destroy();
   }
+  wizardStep = "waitingForRowOrElemToBeSelected";
 }
 
 // When the wizard state changes, we need to display different instructions
@@ -734,9 +831,6 @@ function updateDisplayForNextStep() {
     case "rowSelectedSoUserChoosesOrbitalOrElem":
       orbitalOrElemElem.dataset.wizardStep = 'wizard-step-current';
       chooseOrbitalOrElemText.innerText = "";
-      return;
-    case "chooseXForElem":
-      chooseXForElem.dataset.wizardStep = 'wizard-step-current';
       return;
     case "chooseOrbitalForRow":
       chooseOrbitalForRow.dataset.wizardStep = 'wizard-step-current';
@@ -756,8 +850,15 @@ function updateDisplayForNextStep() {
     case "chooseYForRowAndElem":
       chooseYForRowAndElem.dataset.wizardStep = 'wizard-step-current';
       return;
+    case "chooseYForElem":
+      chooseYForElem.dataset.wizardStep = 'wizard-step-current';
+      return;
     case "showingGraph":
-      drawGraphForRowAndElem();
+      if (selectedElement$.get().rowSelected) {
+        drawGraphForRow();
+      } else {
+        drawGraphForElem();
+      }
       return;
     default:
       console.error("Unknown wizard step: ", wizardStep);
@@ -800,7 +901,9 @@ processWizardSelection(chooseYForRowAndOrbitalForm, 'y-for-row-and-orbital', (va
 processWizardSelection(chooseOrbitalForElemForm, 'orb-for-elem', (val: string) => {
   orbitalChosen = Number(val);
 });
-
+processWizardSelection(chooseYForElemForm, 'y-for-elem', (val: string) => {
+  yValueChosen = val;
+});
 
 document.getElementById('reset-graphing')!.addEventListener('click', () => {
   wizardStep = "waitingForRowOrElemToBeSelected";
@@ -819,11 +922,28 @@ document.getElementById('reset-graphing')!.addEventListener('click', () => {
 });
 
 selectedElement$.listen((selElem) => {
+  if (selElem.rowSelected) {
+    // element or a different row was selected.
+    if (currSelectionType === "element" || currSelectionType === "row") {
+      resetAllSteps();
+    }
+    currSelectionType = "row";
+  } else if (selElem.selectedHTMLElement) {
+    if (currSelectionType === "row" || currSelectionType === "element") {
+      resetAllSteps();
+    }
+    currSelectionType = "element";
+  } else {      // nothing selected -- elem or row was unselected.
+    resetAllSteps();
+    currSelectionType = "";
+    return;
+  }
+
   updateDisplayWhenLeavingAStep(wizardStep);
   updateWizardState(selElem);
   updateDisplayForNextStep();
 });
 
 // When user changes the units, redraw the graph.
-unitsSelection$.listen(() => drawGraphForRowAndElem());
+unitsSelection$.listen(() => drawGraphForRow());
 

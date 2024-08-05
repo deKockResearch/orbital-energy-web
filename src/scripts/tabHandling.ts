@@ -1,4 +1,4 @@
-import { unSelectAllElements } from "./main";
+import { unSelectAllElements } from "./elementsTable";
 import { selectedElement$ } from "./stores";
 
 export function handleTabSwitching() {

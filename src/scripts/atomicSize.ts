@@ -8,10 +8,7 @@ import { eLevels, type Orbital } from "./types";
 
 Chart.register(annotationPlugin);
 
-interface DataType {
-  x: number;
-  y: number;
-}
+
 
 interface CanvAndChart {
   chart: Chart;
@@ -21,28 +18,6 @@ interface CanvAndChart {
 let charts: CanvAndChart[] = [];
 let allAtomicSizesInOneChart: CanvAndChart;
 let showAllGraphsInOneChart = false;
-
-// returns a list of lists of pairs of values, (r, r * r * psi * psi)
-function computeAtomicSizes(selElem: any, orbs: Orbital[]): DataType[][] {
-  const result: DataType[][] = [];
-  const atomicNumber = selElem.selectedElementInfo?.number!;
-  const zes = computeZis(atomicNumber, orbs, dynamic23Matrix);
-  zes.forEach((ze, index) => {
-    const row = [];
-    for (let r = 0.0; r < 10.0; r += 0.005) {
-      const w = waveFunction(r, orbs[index].level, ze);
-      const val = r * r * w * w;
-      // If value is basically 0 (and we are not at the beginning) then
-      // stop the loop -- good enough.
-      if (r > 3 && val < 1e-5) {
-        break;
-      }
-      row.push({ x: r, y: val });
-    }
-    result.push(row);
-  });
-  return result;
-}
 
 
 /*

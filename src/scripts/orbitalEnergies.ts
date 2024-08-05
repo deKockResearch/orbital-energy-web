@@ -159,9 +159,85 @@ export function computeMaxAtomicSizes(atomicNumber: number, orbs: Orbital[]): nu
   });
 }
 
-export function getRmaxForRowOfElementsAndOrbital(startElem: number, numElems: number, orbIndex: number) {
+export function getRmaxForRowOfElementsAndOrbital(startElem: number, numElems: number, orbIndex: number): number[] {
   return getValuesForRowOfElementsAndOrbital(startElem, numElems, orbIndex,
     (i) => {
       return computeMaxAtomicSizes(elements[i].number, computeOrbitals(elements[i].eConfig));
     });
+}
+
+export function getRadProbDensityForElemAndOrbital(selElem: any, orbIndex: number): XYpair[] {
+  const orbs = computeOrbitals(selElem.selectedElementInfo.eConfig);
+  if (orbIndex >= orbs.length) {
+    return [];
+  }
+  return computeAtomicSizes(selElem, orbs)[orbIndex];
+}
+
+
+export interface XYpair {
+  x: number;
+  y: number;
+}
+
+// returns a list of lists of pairs of values, (r, r * r * psi * psi)
+export function computeAtomicSizes(selElem: any, orbs: Orbital[]): XYpair[][] {
+  const result: XYpair[][] = [];
+  const atomicNumber = selElem.selectedElementInfo?.number!;
+  const zes = computeZis(atomicNumber, orbs, dynamic23Matrix);
+  zes.forEach((ze, index) => {
+    const row = [];
+    for (let r = 0.0; r < 10.0; r += 0.005) {
+      const w = waveFunction(r, orbs[index].level, ze);
+      const val = r * r * w * w;
+      // If value is basically 0 (and we are not at the beginning) then
+      // stop the loop -- good enough.
+      if (r > 3 && val < 1e-5) {
+        break;
+      }
+      row.push({ x: r, y: val });
+    }
+    result.push(row);
+  });
+  return result;
+}
+
+export function getWaveFunctionSquared(selElem: any, orbIndex: number): XYpair[] {
+  const result: XYpair[] = [];
+  const atomicNumber = selElem.selectedElementInfo?.number!;
+  const orbs = computeOrbitals(selElem.selectedElementInfo.eConfig);
+  if (orbIndex >= orbs.length) {
+    return [];
+  }
+  const zes = computeZis(atomicNumber, orbs, dynamic23Matrix);
+  for (let r = 0.0; r < 10.0; r += 0.005) {
+    const w = waveFunction(r, orbs[orbIndex].level, zes[orbIndex]);
+    // If w * w is basically 0 (and we are not at the beginning) then
+    // stop the loop -- good enough.
+    if (r > 3 && w * w < 1e-5) {
+      break;
+    }
+    result.push({ x: r, y: w * w });
+  }
+  return result;
+}
+
+export function getWaveFunction(selElem: any, orbIndex: number): XYpair[] {
+  const result: XYpair[] = [];
+  const atomicNumber = selElem.selectedElementInfo?.number!;
+  const orbs = computeOrbitals(selElem.selectedElementInfo.eConfig);
+  if (orbIndex >= orbs.length) {
+    return [];
+  }
+  const zes = computeZis(atomicNumber, orbs, dynamic23Matrix);
+  for (let r = 0.0; r < 10.0; r += 0.005) {
+    const w = waveFunction(r, orbs[orbIndex].level, zes[orbIndex]);
+    // If w * w is basically 0 (and we are not at the beginning) then
+    // stop the loop -- good enough.
+    if (r > 3 && w < 1e-5) {
+      break;
+    }
+    result.push({ x: r, y: w });
+  }
+  return result;
 }

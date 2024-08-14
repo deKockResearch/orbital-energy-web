@@ -39,8 +39,8 @@ export function drawDiagram(eConfig: string, energies: string[][], matrixNames: 
       }
 
       makeLevel(orbName: string, level: number, centerX: number, centerY: number) {
-        p.text(`${orbName} Energy: `, centerX - 100, centerY + UNIT_L / 8);
         const eCount = Number(orbName.slice(2));
+        p.text(`${orbName} Energy: `, centerX - 100, centerY + UNIT_L / 8);
         if (FULL_ORBITAL_CTS[level] === 2) {
           // if only 1 pair, it goes in the middle horizontally.
           this.makeOrbital(eCount === FULL_ORBITAL_CTS[level], centerX + (UNIT_L / 4 * 5), centerY);
@@ -52,7 +52,7 @@ export function drawDiagram(eConfig: string, energies: string[][], matrixNames: 
         }
         // If the level is not full, add a message above.
         if (eCount !== FULL_ORBITAL_CTS[level]) {
-          p.text(`occupied by ${eCount}/${FULL_ORBITAL_CTS[level]} of an electron`, centerX - 30, centerY - 30);
+          p.text(`${eCount}/${FULL_ORBITAL_CTS[level]} of an electron per symbol`, centerX - 30, centerY - 30);
         }
       }
 

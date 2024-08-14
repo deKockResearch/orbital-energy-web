@@ -47,7 +47,12 @@ function populateLeftTableDataRows() {
   const selectedElemNum = selectedElement$.get().selectedElementInfo!.number;
   const selectedElemOrbitals = selectedElement$.get().selectedElemOrbitals!;
   const zLst = computeZis(selectedElemNum, selectedElemOrbitals, dynamic23Matrix);
-  updateRow(electrons, 'ion-energy-z_e-static-row', zLst);
+  // This row does not change with a units change.
+  const row = document.getElementsByClassName('ion-energy-z_e-static-row')[0]!;
+  const cells: Element[] = [...row.getElementsByTagName('td')];
+  electrons.forEach((e, index) => {
+    cells[index].innerHTML = `${e === 0 ? "0.000" : zLst[index].toFixed(3)}`;
+  });
 
   // t(i) row
   updateRow(electrons, 'ion-energy-t_i-static-row', energies$.get()[0].t_i);
@@ -170,12 +175,16 @@ function handleNumElectronsChangedByUser() {
 function populateRightTableDataRows(orbs: Orbital[]) {
 
   const electrons = getElectronsFromOrbitals(orbs);
-
   const selectedElem = selectedElement$.get();
 
   // Update the values in the Z_e row in the right hand table.
-  const Zlst = computeZis(selectedElem!.selectedElementInfo!.number, orbs, dynamic23Matrix);
-  updateRow(electrons, 'ion-energy-z_e-dyn-row', Zlst);
+  const zLst = computeZis(selectedElem!.selectedElementInfo!.number, orbs, dynamic23Matrix);
+  // This row does not change with a units change.
+  const row = document.getElementsByClassName('ion-energy-z_e-dyn-row')[0]!;
+  const cells: Element[] = [...row.getElementsByTagName('td')];
+  electrons.forEach((e, index) => {
+    cells[index].innerHTML = `${e === 0 ? "0.000" : zLst[index].toFixed(3)}`;
+  });
 
   // t(i) row
   const energyComp = computeEnergiesForDyn23OrFauss('dynamic23', dynamic23Matrix, orbs);

@@ -1,12 +1,6 @@
-import { elements } from './elements';
-import { selectedElement$, matrixSelection$, unitsSelection$ } from './stores';
+import { matrixSelection$, unitsSelection$ } from './stores';
 import { updateSelectableMatrixContents, watchCustomMatrixForChanges } from './selectableMatrix';
 import { handleTabSwitching } from './tabHandling';
-import { drawCharts } from './graphData';
-import type { ElementType, Orbital } from './types';
-import { computeOrbitals } from './orbitalEnergies';
-// import { drawAtomicSizesCharts } from './atomicSize';
-
 
 
 /*
@@ -42,7 +36,5 @@ window.addEventListener("load", () => {
   });
 
   handleTabSwitching();
-  drawCharts();
-  // drawAtomicSizesCharts();
 });
 

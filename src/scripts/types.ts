@@ -13,6 +13,7 @@ export interface EnergyComponents {
   v_i: number[];
   t_i: number[];
   v_ij: number[][];
+  capV_ij: number[][];
   totalEnergies: number[];
 }
 

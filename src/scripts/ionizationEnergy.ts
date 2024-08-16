@@ -62,7 +62,9 @@ function populateLeftTableDataRows() {
 
   // Vee rows
   updateVeeRows(electrons, 'ion-energy-v_ee-static-row', energies$.get()[0].v_ij);
-  // 5 vee rows, one for each orbital
+
+  // CapVee rows: true means skip the bottom half of the table.
+  updateVeeRows(electrons, 'ion-energy-capv_ee-static-row', energies$.get()[0].capV_ij, true);
 
   // VAOE row
   const [totalOE, ...orbitalEnergies] = energies$.get()[0].totalEnergies;
@@ -193,9 +195,11 @@ function populateRightTableDataRows(orbs: Orbital[]) {
   // v(en) row
   updateRow(electrons, 'ion-energy-v_en-dyn-row', energyComp.v_i);
 
-  // Vee rows
-  // 5 vee rows, one for each orbital
+  // vee rows
   updateVeeRows(electrons, 'ion-energy-v_ee-dyn-row', energyComp.v_ij);
+
+  // CapVee rows: true means skip the bottom half of the table.
+  updateVeeRows(electrons, 'ion-energy-capv_ee-dyn-row', energyComp.capV_ij, true);
 
   // Update VAOE row
   const [totalOE, ...orbitalEnergies] = totalOrbitalEnergy(selectedElem!.selectedElementInfo!.number, orbs, dynamic23Matrix);
@@ -225,7 +229,7 @@ function updateRow(electrons: number[], rowClass: string, data: number[]) {
   });
 }
 
-function updateVeeRows(electrons: number[], rowClass: string, data: number[][]) {
+function updateVeeRows(electrons: number[], rowClass: string, data: number[][], skipBottomHalf = false) {
   const veeRows = document.getElementsByClassName(rowClass);
 
   const veeCells: Element[][] = [];
@@ -236,7 +240,7 @@ function updateVeeRows(electrons: number[], rowClass: string, data: number[][]) 
 
   for (let row = 0; row < electrons.length; row++) {
     for (let col = 0; col < electrons.length; col++) {
-      if (row > col) {
+      if (row > col && skipBottomHalf) {
         // bottom half of the table has empty cells.
         veeCells[row][col].innerHTML = "";
       } else {
@@ -247,7 +251,7 @@ function updateVeeRows(electrons: number[], rowClass: string, data: number[][]) 
           // if occupancy is 1, then diagonal value is 0.
           veeCells[row][col].innerHTML = "0.000";
         } else {
-          // value comes from v_ij table.
+          // value comes from capV_ij table.
           veeCells[row][col].innerHTML = `${convertEnergyFromHartrees(data[row][col])}`;
         }
       }

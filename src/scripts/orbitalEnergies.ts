@@ -41,38 +41,47 @@ export function totalOrbitalEnergy(atomicNumber: number, orbitalList: Orbital[],
   return energyArray;
 }
 
+interface EnergyComponentsReturnType {
+  t_i: number[],
+  v_i: number[],
+  v_ij: number[][],
+  capV_ij: number[][]
+}
+
 export function energyComponents(atomicNumber: number, orbs: Orbital[], mx: number[][]) {
-  let returnDict: {
-    t_i: number[],
-    v_i: number[],
-    v_ij: number[][]
-  } = {
+  let result: EnergyComponentsReturnType = {
     t_i: [],
     v_i: [],
-    v_ij: []
+    v_ij: [],
+    capV_ij: []
   };
 
   const Zlst = computeZis(atomicNumber, orbs, mx);
 
   for (let i = 0; i < orbs.length; i++) {
     let n_i = orbs[i].level;
-    returnDict.t_i.push((Zlst[i] * Zlst[i]) / (2 * n_i * n_i));
-    returnDict.v_i.push(0 - (atomicNumber * Zlst[i]) / (n_i * n_i));
+    result.t_i.push((Zlst[i] * Zlst[i]) / (2 * n_i * n_i));
+    result.v_i.push(0 - (atomicNumber * Zlst[i]) / (n_i * n_i));
   }
 
   for (let i in Zlst) {
     const n_i = orbs[i].level;
 
-    const tempArray: number[] = [];
+    const capV_js: number[] = [];
+    const v_js: number[] = [];
     for (let j in Zlst) {
       const n_j = orbs[j].level;
-      tempArray.push(
+      v_js.push((Zlst[i] * mx[i][j]) / (n_i * n_i));
+      capV_js.push(
         (Zlst[i] * mx[i][j]) / (n_i * n_i) + (Zlst[j] * mx[j][i]) / (n_j * n_j)
       );
     }
-    returnDict.v_ij.push(tempArray);
+    result.v_ij.push(v_js);
+    result.capV_ij.push(capV_js);
   }
-  return returnDict;
+  console.log('energyCompoenonts: ');
+  console.table(result.v_ij);
+  return result;
 }
 
 export function computeZis(atomicNumber: number, orbsList: Orbital[], mx: number[][]) {

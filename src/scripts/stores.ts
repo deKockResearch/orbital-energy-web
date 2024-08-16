@@ -3,14 +3,12 @@ import { dynamic23Matrix, faussurierMatrix, name2Matrix } from './matrices';
 import { totalOrbitalEnergy, energyComponents } from './orbitalEnergies';
 import type { ElementType, Orbital, EnergyComponents } from './types';
 
-
 interface State {
   selectedHTMLElement: HTMLElement | null;
   selectedElementInfo: ElementType | null;
   selectedElemOrbitals: Orbital[] | null;
   rowSelected: number | null;
 }
-
 
 export const selectedElement$ = atom<State>({
   selectedHTMLElement: null,
@@ -38,6 +36,7 @@ export function computeEnergiesForDyn23OrFauss(matName: string, matrix: number[]
     t_i: energyComps.t_i,
     v_i: energyComps.v_i,
     v_ij: energyComps.v_ij,
+    capV_ij: energyComps.capV_ij,
     totalEnergies,
   };
   return result;
@@ -69,6 +68,7 @@ export const energies$ = computed(
       t_i: energyComps.t_i,
       v_i: energyComps.v_i,
       v_ij: energyComps.v_ij,
+      capV_ij: energyComps.capV_ij,
       totalEnergies,
     }];
     // console.log('energies: returning result ', result);

@@ -71,7 +71,7 @@ export function energyComponents(atomicNumber: number, orbs: Orbital[], mx: numb
     const v_js: number[] = [];
     for (let j in Zlst) {
       const n_j = orbs[j].level;
-      v_js.push((Zlst[i] * mx[i][j]) / (n_i * n_i));
+      v_js.push((Zlst[j] * mx[j][i]) / (n_j * n_j));
       capV_js.push(
         (Zlst[i] * mx[i][j]) / (n_i * n_i) + (Zlst[j] * mx[j][i]) / (n_j * n_j)
       );
@@ -79,8 +79,8 @@ export function energyComponents(atomicNumber: number, orbs: Orbital[], mx: numb
     result.v_ij.push(v_js);
     result.capV_ij.push(capV_js);
   }
-  console.log('energyCompoenonts: ');
-  console.table(result.v_ij);
+  // console.log('energyCompoenonts: ');
+  // console.table(result.v_ij);
   return result;
 }
 

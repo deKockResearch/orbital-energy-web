@@ -27,7 +27,6 @@ export function computeEnergiesForDyn23OrFauss(matName: string, matrix: number[]
   if (atomicNumber === undefined) {
     atomicNumber = selectedElement$.get().selectedElementInfo!.number;
   }
-  // const orbs = selectedElement$.get().selectedElemOrbitals!;
   const totalEnergies = totalOrbitalEnergy(atomicNumber, orbs, matrix);
   const energyComps = energyComponents(atomicNumber, orbs, matrix);
   // console.log(`totalEnergies for ${matName} = ${totalEnergies}`);
@@ -71,7 +70,7 @@ export const energies$ = computed(
       capV_ij: energyComps.capV_ij,
       totalEnergies,
     }];
-    // console.log('energies: returning result ', result);
+    console.log('energies: returning result ', result);
     return result;
   });
 

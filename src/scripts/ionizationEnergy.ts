@@ -42,6 +42,7 @@ function populateLeftTableDataRows() {
     return;
   }
   const electrons = getElectronsFromElectronConfig();
+  console.log('populate left table,electrons = ', electrons);
 
   // Ze row
   const selectedElemNum = selectedElement$.get().selectedElementInfo!.number;
@@ -61,9 +62,12 @@ function populateLeftTableDataRows() {
   updateRow(electrons, 'ion-energy-v_en-static-row', energies$.get()[0].v_i);
 
   // Vee rows
+  console.log('left side, v_ij = ');
+  console.table(energies$.get()[0].v_ij);
   updateVeeRows(electrons, 'ion-energy-v_ee-static-row', energies$.get()[0].v_ij);
 
   // CapVee rows: true means skip the bottom half of the table.
+  console.log('left side, capV');
   updateVeeRows(electrons, 'ion-energy-capv_ee-static-row', energies$.get()[0].capV_ij, true);
 
   // VAOE row
@@ -177,6 +181,8 @@ function handleNumElectronsChangedByUser() {
 function populateRightTableDataRows(orbs: Orbital[]) {
 
   const electrons = getElectronsFromOrbitals(orbs);
+  console.log('populate right table,electrons = ', electrons);
+
   const selectedElem = selectedElement$.get();
 
   // Update the values in the Z_e row in the right hand table.
@@ -188,17 +194,21 @@ function populateRightTableDataRows(orbs: Orbital[]) {
     cells[index].innerHTML = `${e === 0 ? "0.000" : zLst[index].toFixed(3)}`;
   });
 
-  // t(i) row
   const energyComp = computeEnergiesForDyn23OrFauss('dynamic23', dynamic23Matrix, orbs);
+
+  // t(i) row
   updateRow(electrons, 'ion-energy-t_i-dyn-row', energyComp.t_i);
 
   // v(en) row
   updateRow(electrons, 'ion-energy-v_en-dyn-row', energyComp.v_i);
 
   // vee rows
+  console.log('right side, v');
+  console.table(energyComp.v_ij);
   updateVeeRows(electrons, 'ion-energy-v_ee-dyn-row', energyComp.v_ij);
 
   // CapVee rows: true means skip the bottom half of the table.
+  console.log('right side, capV');
   updateVeeRows(electrons, 'ion-energy-capv_ee-dyn-row', energyComp.capV_ij, true);
 
   // Update VAOE row
@@ -232,6 +242,9 @@ function updateRow(electrons: number[], rowClass: string, data: number[]) {
 function updateVeeRows(electrons: number[], rowClass: string, data: number[][], skipBottomHalf = false) {
   const veeRows = document.getElementsByClassName(rowClass);
 
+  console.log('updateVeeRows: electrons = ', electrons);
+  console.table(data);
+
   const veeCells: Element[][] = [];
   for (const row of veeRows) {
     const cells = [...row.getElementsByTagName('td')];
@@ -240,18 +253,22 @@ function updateVeeRows(electrons: number[], rowClass: string, data: number[][], 
 
   for (let row = 0; row < electrons.length; row++) {
     for (let col = 0; col < electrons.length; col++) {
-      if (row > col && skipBottomHalf) {
+      // We are iterating over a 5 x 5 matrix but the data will
+      // be smaller for low-numbered elements, like a 1x1 or 2x2 matrix.
+      // In that case, put 0.000 in the cell.
+      if (row > data.length - 1 || col > data[row].length - 1) {
+        veeCells[row][col].innerHTML = "0.000";
+      } else if (row > col && skipBottomHalf) {
         // bottom half of the table has empty cells.
         veeCells[row][col].innerHTML = "";
       } else {
         // if occupancy is 0, then all values in the column are 0.
-        if (electrons[col] === 0) {
+        if (electrons[col] === 0 || electrons[row] === 0) {
           veeCells[row][col].innerHTML = "0.000";
         } else if (electrons[col] === 1 && row === col) {
           // if occupancy is 1, then diagonal value is 0.
           veeCells[row][col].innerHTML = "0.000";
         } else {
-          // value comes from capV_ij table.
           veeCells[row][col].innerHTML = `${convertEnergyFromHartrees(data[row][col])}`;
         }
       }

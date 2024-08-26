@@ -26,60 +26,9 @@ export function populateIonEnergyTables() {
   // get array of occupancies for each orbital -- padded with 0s to 5 elements.
   const electrons = getElectronsFromElectronConfig();
 
-  // populateLeftTableDataRows();
   populateTable('left', electrons);
   populateTable('right', electrons);
 }
-/*
-if (false) {
-  function populateLeftTableDataRows() {
-    if (selectedElement$.get().selectedElemOrbitals === null) {
-      return;
-    }
-    const electrons = getElectronsFromElectronConfig();
-    console.log('populate left table,electrons = ', electrons);
-
-    // Ze row
-    const selectedElemNum = selectedElement$.get().selectedElementInfo!.number;
-    const selectedElemOrbitals = selectedElement$.get().selectedElemOrbitals!;
-    const zLst = computeZis(selectedElemNum, selectedElemOrbitals, dynamic23Matrix);
-    // This row does not change with a units change.
-    const row = document.getElementsByClassName('ion-energy-z_e-static-row')[0]!;
-    const cells: Element[] = [...row.getElementsByTagName('td')];
-    electrons.forEach((e, index) => {
-      cells[index].innerHTML = `${e === 0 ? "0.000" : zLst[index].toFixed(3)}`;
-    });
-
-    // t(i) row
-    updateRow(electrons, 'ion-energy-t_i-static-row', energies$.get()[0].t_i);
-
-    // v(en) row
-    updateRow(electrons, 'ion-energy-v_en-static-row', energies$.get()[0].v_i);
-
-    // Vee rows
-    console.log('left side, v_ij = ');
-    console.table(energies$.get()[0].v_ij);
-    updateVeeRows(electrons, 'ion-energy-v_ee-static-row', energies$.get()[0].v_ij);
-
-    // CapVee rows: true means skip the bottom half of the table.
-    console.log('left side, capV');
-    updateVeeRows(electrons, 'ion-energy-capv_ee-static-row', energies$.get()[0].capV_ij, true);
-
-    // VAOE row
-    const [totalOE, ...orbitalEnergies] = energies$.get()[0].totalEnergies;
-    updateRow(electrons, 'ion-energy-vaoe-static-row', orbitalEnergies);
-
-    // Et row
-    const etValues = orbitalEnergies.map((val, index) => val * electrons[index]);
-    updateRow(electrons, 'ion-energy-et-static-row', etValues);
-
-    // Summary information below the table
-    const totalEnergyCell = document.getElementById('ion-energy-left-table-total-energy');
-    totalEnergyCell!.innerText = `${convertEnergyFromHartrees(totalOE!)} ${unitsSelection$.get()}`;
-  }
-}
-  */
-
 
 function populateTable(leftOrRight: string, electrons: number[]) {
 
@@ -124,8 +73,8 @@ function populateTable(leftOrRight: string, electrons: number[]) {
 
     numElectronsRow.appendChild(cell);
   });
+
   // Populate the tables rows with default values.
-  // handleNumElectronsChangedByUser(tableElem);
   const selectedElemOrbitals = selectedElement$.get().selectedElemOrbitals!;
   populateTableDataRows(tableElem, selectedElemOrbitals);
 }
@@ -289,8 +238,12 @@ function updateIonEnergyTablesForUnitsChange(u: string) {
   const unitsLabel = document.getElementById('ion-energy-units')!;
   unitsLabel.innerHTML = `Energies shown in ${u}.`;
 
-  // populateLeftTableDataRows();
-  // populateTableDataRows('right', computeOrbitalsFromSelects());
+  let tableId = `ion-energy-left-table`;
+  let tableElem = document.querySelector(`#${tableId} table`)! as HTMLTableElement;
+  populateTableDataRows(tableElem, computeOrbitalsFromSelects(tableElem));
+  tableId = `ion-energy-right-table`;
+  tableElem = document.querySelector(`#${tableId} table`)! as HTMLTableElement;
+  populateTableDataRows(tableElem, computeOrbitalsFromSelects(tableElem));
 }
 
 energies$.listen(() => populateIonEnergyTables());

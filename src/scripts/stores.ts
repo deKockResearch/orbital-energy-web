@@ -70,7 +70,6 @@ export const energies$ = computed(
       capV_ij: energyComps.capV_ij,
       totalEnergies,
     }];
-    console.log('energies: returning result ', result);
     return result;
   });
 

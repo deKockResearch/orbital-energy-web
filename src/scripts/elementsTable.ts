@@ -4,15 +4,12 @@ import { elements } from './elements';
 import { computeOrbitals } from "./orbitalEnergies";
 
 // periodic table interactions
-console.log('elementsTable.ts: adding click listeners to elements');
 const pTableElements = document.querySelectorAll(".clickable > .element.ptable");
 for (let i = 0; i < pTableElements.length; i++) {
   pTableElements[i].addEventListener("click", toggleElement);
 }
 
-console.log('elementsTable.ts: adding click listeners to row elements');
 const pTableRowElements = document.querySelectorAll(".clickable > .element.row-selector");
-console.log('pTableRowElements: ', pTableRowElements);
 for (let i = 0; i < pTableRowElements.length; i++) {
   pTableRowElements[i].addEventListener("click", toggleElemRow);
 }

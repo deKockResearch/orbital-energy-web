@@ -4,6 +4,7 @@ import TabLayout from "../layouts/TabLayout.astro";
 
 <TabLayout tabName="Ionization Energy" id="ionization-energy-tab">
   <h3 id="ion-energy-units">Energies shown in Ha.</h3>
+  <button id="ion-energy-toggle-details-btn"> Show details in tables </button>
 
   <div class="ion-energy-area">
     <div id="ion-energy-left-table">
@@ -17,61 +18,62 @@ import TabLayout from "../layouts/TabLayout.astro";
             <th># of electrons</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-z_e-row">
+          <tr class="ion-energy-z_e-row ion-energy-details-row">
             <th>Z<sub>e</sub></th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-t_i-row">
+          <tr class="ion-energy-t_i-row ion-energy-details-row">
             <th>t<sub>i</sub></th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-v_en-row fat-bottom-sep">
+          <tr class="ion-energy-v_en-row fat-bottom-sep ion-energy-details-row">
             <th>v<sub>en</sub></th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
 
-          <tr class="ion-energy-v_ee-row">
+          <tr class="ion-energy-v_ee-row ion-energy-details-row">
             <th>v<sub>ee</sub> 1s</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-v_ee-row">
+          <tr class="ion-energy-v_ee-row ion-energy-details-row">
             <th>v<sub>ee</sub> 2s</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-v_ee-row">
+          <tr class="ion-energy-v_ee-row ion-energy-details-row">
             <th>v<sub>ee</sub> 2p</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-v_ee-row">
+          <tr class="ion-energy-v_ee-row ion-energy-details-row">
             <th>v<sub>ee</sub> 3s</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-v_ee-row fat-bottom-sep">
+          <tr class="ion-energy-v_ee-row fat-bottom-sep ion-energy-details-row">
             <th>v<sub>ee</sub> 3p</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
 
-          <tr class="ion-energy-capv_ee-row">
+          <tr class="ion-energy-capv_ee-row ion-energy-details-row">
             <th>V<sub>ee</sub> 1s</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-capv_ee-row">
+          <tr class="ion-energy-capv_ee-row ion-energy-details-row">
             <th>V<sub>ee</sub> 2s</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-capv_ee-row">
+          <tr class="ion-energy-capv_ee-row ion-energy-details-row">
             <th>V<sub>ee</sub> 2p</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-capv_ee-row">
+          <tr class="ion-energy-capv_ee-row ion-energy-details-row">
             <th>V<sub>ee</sub> 3s</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-capv_ee-row fat-bottom-sep">
+          <tr
+            class="ion-energy-capv_ee-row fat-bottom-sep ion-energy-details-row"
+          >
             <th>V<sub>ee</sub> 3p</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-
           <tr class="ion-energy-vaoe-row">
             <th>VAOE</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
@@ -97,57 +99,59 @@ import TabLayout from "../layouts/TabLayout.astro";
             <th># of electrons</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-z_e-row">
+          <tr class="ion-energy-z_e-row ion-energy-details-row">
             <th>Z<sub>e</sub></th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-t_i-row">
+          <tr class="ion-energy-t_i-row ion-energy-details-row">
             <th>t<sub>i</sub></th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-v_en-row fat-bottom-sep">
+          <tr class="ion-energy-v_en-row fat-bottom-sep ion-energy-details-row">
             <th>v<sub>en</sub></th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
 
-          <tr class="ion-energy-v_ee-row">
+          <tr class="ion-energy-v_ee-row ion-energy-details-row">
             <th>v<sub>ee</sub> 1s</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-v_ee-row">
+          <tr class="ion-energy-v_ee-row ion-energy-details-row">
             <th>v<sub>ee</sub> 2s</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-v_ee-row">
+          <tr class="ion-energy-v_ee-row ion-energy-details-row">
             <th>v<sub>ee</sub> 2p</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-v_ee-row">
+          <tr class="ion-energy-v_ee-row ion-energy-details-row">
             <th>v<sub>ee</sub> 3s</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-v_ee-row fat-bottom-sep">
+          <tr class="ion-energy-v_ee-row fat-bottom-sep ion-energy-details-row">
             <th>v<sub>ee</sub> 3p</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
 
-          <tr class="ion-energy-capv_ee-row">
+          <tr class="ion-energy-capv_ee-row ion-energy-details-row">
             <th>V<sub>ee</sub> 1s</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-capv_ee-row">
+          <tr class="ion-energy-capv_ee-row ion-energy-details-row">
             <th>V<sub>ee</sub> 2s</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-capv_ee-row">
+          <tr class="ion-energy-capv_ee-row ion-energy-details-row">
             <th>V<sub>ee</sub> 2p</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-capv_ee-row">
+          <tr class="ion-energy-capv_ee-row ion-energy-details-row">
             <th>V<sub>ee</sub> 3s</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
-          <tr class="ion-energy-capv_ee-row fat-bottom-sep">
+          <tr
+            class="ion-energy-capv_ee-row fat-bottom-sep ion-energy-details-row"
+          >
             <th>V<sub>ee</sub> 3p</th>
             <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
           </tr>
@@ -192,6 +196,14 @@ import TabLayout from "../layouts/TabLayout.astro";
       }
       .ion-energy-diff {
         color: red;
+      }
+
+      #ion-energy-toggle-details-btn {
+        margin-bottom: 1rem;
+      }
+
+      .ion-energy-details-row {
+        display: none;
       }
     </style>
   </div>

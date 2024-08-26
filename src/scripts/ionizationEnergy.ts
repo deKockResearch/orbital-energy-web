@@ -46,8 +46,6 @@ function populateTable(leftOrRight: string, electrons: number[]) {
   cell.innerText = "# of electrons";
   numElectronsRow.appendChild(cell);
 
-  console.log('populate table, electrons = ', electrons);
-
   // add cells with # of electrons for selected element
   // allow user to choose the dropdown to change # of electrons in that orbital
   // Do not show options which would make the total # of electrons be greater than
@@ -161,7 +159,6 @@ function populateTableDataRows(tableElem: HTMLTableElement, orbs: Orbital[]) {
   updateVeeRows(tableElem, electrons, 'ion-energy-v_ee-row', energyComp.v_ij);
 
   // CapVee rows: true means skip the bottom half of the table.
-  console.log('right side, capV');
   updateVeeRows(tableElem, electrons, 'ion-energy-capv_ee-row', energyComp.capV_ij, true);
 
   // Update VAOE row
@@ -196,9 +193,6 @@ function updateVeeRows(tableElem: HTMLTableElement, electrons: number[], rowClas
   data: number[][], skipBottomHalf = false) {
 
   const veeRows = tableElem.getElementsByClassName(rowClass);
-
-  console.log('updateVeeRows: electrons = ', electrons);
-  console.table(data);
 
   const veeCells: Element[][] = [];
   for (const row of veeRows) {
@@ -245,6 +239,24 @@ function updateIonEnergyTablesForUnitsChange(u: string) {
   tableElem = document.querySelector(`#${tableId} table`)! as HTMLTableElement;
   populateTableDataRows(tableElem, computeOrbitalsFromSelects(tableElem));
 }
+
+
+// Add click handler to ion-energy-toggle-details button.
+const showDetailsButton = document.getElementById('ion-energy-toggle-details-btn')!;
+showDetailsButton.addEventListener('click', toggleShowDetails);
+
+let showDetails = false;
+
+function toggleShowDetails() {
+  showDetails = !showDetails;
+  const detailsRowsElems = Array.from(document.getElementsByClassName('ion-energy-details-row')) as HTMLElement[];
+  detailsRowsElems.forEach((elem) => {
+    elem.style.display = showDetails ? 'table-row' : 'none';
+  });
+  showDetailsButton.innerText = (showDetails ? "Hide " : "Show") + " details in tables";
+
+}
+
 
 energies$.listen(() => populateIonEnergyTables());
 

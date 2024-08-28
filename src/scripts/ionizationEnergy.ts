@@ -73,8 +73,7 @@ function populateTable(leftOrRight: string, electrons: number[]) {
   });
 
   // Populate the tables rows with default values.
-  const selectedElemOrbitals = selectedElement$.get().selectedElemOrbitals!;
-  populateTableDataRows(tableElem, selectedElemOrbitals);
+  handleNumElectronsChangedByUser(tableElem);
 }
 
 function computeOrbitalsFromSelects(tableElem: HTMLTableElement): Orbital[] {
@@ -128,6 +127,16 @@ function handleNumElectronsChangedByUser(tableElem: HTMLTableElement) {
     }
     selCell.value = `${newOrbitals[index].numElectrons} `;
   });
+
+  // previous sibling is the label above the table.
+  const diffBtnGroundStateAndSelected = selectedElem.selectedElementInfo!.number - totalElectronsInNewOrbitals;
+  let superscript = '';
+  if (diffBtnGroundStateAndSelected === 0) {
+    superscript = '0';
+  } else {
+    superscript = `+${diffBtnGroundStateAndSelected}`;
+  }
+  tableElem.previousElementSibling!.innerHTML = `${selectedElem.selectedElementInfo?.symbol}<sup>${superscript}</sup>`;
 
   populateTableDataRows(tableElem, newOrbitals);
 }

@@ -8,7 +8,7 @@ import TabLayout from "../layouts/TabLayout.astro";
 
   <div class="ion-energy-area">
     <div id="ion-energy-left-table">
-      Species 1
+      <div class="table-label">Species 1</div>
       <table id="left-table">
         <thead>
           <th></th><th>1s</th><th>2s</th><th>2p</th><th>3s</th><th>3p</th>
@@ -89,7 +89,7 @@ import TabLayout from "../layouts/TabLayout.astro";
 
     <!-- Right side table starts here -->
     <div id="ion-energy-right-table">
-      Species 2
+      <div class="table-label">Species 2</div>
       <table id="right-table">
         <thead>
           <th></th><th>1s</th><th>2s</th><th>2p</th><th>3s</th><th>3p</th>
@@ -204,6 +204,11 @@ import TabLayout from "../layouts/TabLayout.astro";
 
       .ion-energy-details-row {
         display: none;
+      }
+
+      .table-label {
+        font-size: 1.5rem;
+        font-weight: bold;
       }
     </style>
   </div>

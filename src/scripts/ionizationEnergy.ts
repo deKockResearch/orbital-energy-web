@@ -16,6 +16,10 @@ function getElectronsFromElectronConfig(): number[] {
   return getElectronsFromOrbitals(selectedElement$.get().selectedElemOrbitals!);
 }
 
+function getTotalElectronsFromOrbitals(orbitals: Orbital[]): number {
+  return orbitals.reduce((acc, currVal) => acc + currVal.numElectrons, 0);
+}
+
 export function populateIonEnergyTables() {
 
   if (selectedElement$.get().selectedElementInfo === null ||
@@ -77,28 +81,21 @@ function populateTable(leftOrRight: string, electrons: number[]) {
 }
 
 function computeOrbitalsFromSelects(tableElem: HTMLTableElement): Orbital[] {
-  const selectedElem = selectedElement$.get();
 
   // https://stackoverflow.com/questions/597588/how-do-you-clone-an-array-of-objects-in-javascript
-  const newOrbitals = selectedElem.selectedElemOrbitals!.map(a => ({ ...a }));
+  // const newOrbitals = selectedElem.selectedElemOrbitals!.map(a => ({ ...a }));
+  const newOrbitals: Orbital[] = [];
 
-  // all selectors from both tables.
   const selectors = Array.from(tableElem.querySelectorAll(".ion-energy-econfig-select"));
   selectors.forEach((cell: any) => {
     // cell.id is ion-energy-num-ions-selected-#. Lop off everything except the number
     const index = Number(cell.id.charAt(cell.id.length - 1));
-    // newOrbitals may only be 1, 2, 3, etc. in length for low-numbered elements.
-    // but we have 5 selectors. only update if necessary.
-    if (index < newOrbitals.length) {
-      newOrbitals[index].numElectrons = Number(cell.value);
-    } else {
-      // add a new orbital record to the end with the # of electrons.
-      newOrbitals.push({
-        level: LEVELS[index],
-        sOrP: 'p', // not used in the calculation, so value does not matter.
-        numElectrons: Number(cell.value),
-      });
-    }
+    // add a new orbital record to the end with the # of electrons.
+    newOrbitals.push({
+      level: LEVELS[index],
+      sOrP: 'p', // not used in the calculation, so value does not matter.
+      numElectrons: Number(cell.value),
+    });
   });
   return newOrbitals;
 }
@@ -107,6 +104,34 @@ function handleNumElectronsChangedByUser(tableElem: HTMLTableElement) {
 
   const selectedElem = selectedElement$.get();
   const newOrbitals = computeOrbitalsFromSelects(tableElem);
+  const totalElectronsInNewOrbitals = getTotalElectronsFromOrbitals(newOrbitals);
+
+  const leftOrRight = tableElem.id.includes('left') ? 'left' : 'right';
+
+  // For the right table, its number of electrons needs to be <= the left table.
+  // If the user changes the left table to be < the right table, then wipe out
+  // what we have in the right table and set it to mimic the left table.
+  // Otherwise, if the user changes the right table, only allow the user to set
+  // the total # of electrons to be <= what is in the left table.
+  let numElectronsBelowMax;
+  if (leftOrRight === 'left') {
+    const rightTableElem = document.getElementById('ion-energy-right-table')!.querySelector('table') as HTMLTableElement;
+    const rightOrbitals = computeOrbitalsFromSelects(rightTableElem);
+    const rightTableTotalElectrons = getTotalElectronsFromOrbitals(rightOrbitals);
+    if (totalElectronsInNewOrbitals < rightTableTotalElectrons) {
+      // populate the right table with the left table's selectors' values.
+      populateTable('right', getElectronsFromOrbitals(newOrbitals));
+      // return;
+    }
+    // changing the left table: the max number of electrons is derived from the selected element.
+    numElectronsBelowMax = selectedElem.selectedElementInfo!.number - totalElectronsInNewOrbitals;
+  } else {
+    // Changing the right table: the max number of electrons is limited by total # of electrons in the
+    // left table.
+    const leftTableOrbitals = computeOrbitalsFromSelects(document.getElementById('ion-energy-left-table')!.querySelector('table') as HTMLTableElement)
+    const totalElectronsInLeftTableSelectors = getTotalElectronsFromOrbitals(leftTableOrbitals);
+    numElectronsBelowMax = totalElectronsInLeftTableSelectors - totalElectronsInNewOrbitals;
+  }
 
   // Change the selectors so that they do not allow the user to create anions --
   // the total # of electrons must be <= total # of protons (atomic number).
@@ -114,10 +139,7 @@ function handleNumElectronsChangedByUser(tableElem: HTMLTableElement) {
   // is less than the max, selectors will allow the number to go back up to the max.
   const numElectronsRow = tableElem.getElementsByClassName('ion-energy-econfig-row')[0];
   const selectorCells = numElectronsRow.querySelectorAll('select');
-  const totalElectronsInNewOrbitals = newOrbitals.reduce((acc, currVal) => {
-    return acc + currVal.numElectrons;
-  }, 0);
-  const numElectronsBelowMax = selectedElem.selectedElementInfo!.number - totalElectronsInNewOrbitals;
+  // const numElectronsBelowMax = selectedElem.selectedElementInfo!.number - totalElectronsInNewOrbitals;
   selectorCells.forEach((selCell, index) => {
     selCell.replaceChildren(); // remove all options (0, 1, 2, 3, ...)
     for (let i = 0; i <= Math.min(FULL_ORBITAL_CTS[index], newOrbitals[index].numElectrons + numElectronsBelowMax); i++) {
@@ -130,21 +152,16 @@ function handleNumElectronsChangedByUser(tableElem: HTMLTableElement) {
 
   // previous sibling is the label above the table.
   const diffBtnGroundStateAndSelected = selectedElem.selectedElementInfo!.number - totalElectronsInNewOrbitals;
-  let superscript = '';
-  if (diffBtnGroundStateAndSelected === 0) {
-    superscript = '0';
-  } else {
-    superscript = `+${diffBtnGroundStateAndSelected}`;
-  }
+  const superscript = (diffBtnGroundStateAndSelected === 0) ? '0' : `+${diffBtnGroundStateAndSelected}`;
   tableElem.previousElementSibling!.innerHTML = `${selectedElem.selectedElementInfo?.symbol}<sup>${superscript}</sup>`;
 
   populateTableDataRows(tableElem, newOrbitals);
 }
 
+
 function populateTableDataRows(tableElem: HTMLTableElement, orbs: Orbital[]) {
 
   const electrons = getElectronsFromOrbitals(orbs);
-
   const selectedElem = selectedElement$.get();
 
   // Update the values in the Z_e row in the right hand table.
@@ -265,7 +282,6 @@ function toggleShowDetails() {
   showDetailsButton.innerText = (showDetails ? "Hide " : "Show") + " details in tables";
 
 }
-
 
 energies$.listen(() => populateIonEnergyTables());
 

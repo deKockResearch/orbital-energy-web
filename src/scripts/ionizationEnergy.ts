@@ -1,8 +1,10 @@
+import { computeSuperscriptLocation } from "./atomicSize";
 import { dynamic23Matrix } from "./matrices";
 import { computeZis, totalOrbitalEnergy } from "./orbitalEnergies";
 import { computeEnergiesForDyn23OrFauss, energies$, selectedElement$, unitsSelection$ } from "./stores";
 import { LEVELS, FULL_ORBITAL_CTS, type Orbital } from "./types";
 import { convertEnergyFromHartrees } from "./utils";
+import p5 from "p5";
 
 /**
  * get number of electrons in each orbital. Pad the array with 0s out to 5 elements.
@@ -19,6 +21,15 @@ function getElectronsFromElectronConfig(): number[] {
 function getTotalElectronsFromOrbitals(orbitals: Orbital[]): number {
   return orbitals.reduce((acc, currVal) => acc + currVal.numElectrons, 0);
 }
+
+
+// Two global variables: easiest way to communicate values from the tables
+// to the graph below...
+let leftTableIonEnergy = 0;
+let rightTableIonEnergy = 0;
+let leftSuperscript = '0';
+let rightSuperscript = '0';
+
 
 export function populateIonEnergyTables() {
 
@@ -121,7 +132,6 @@ function handleNumElectronsChangedByUser(tableElem: HTMLTableElement) {
     if (totalElectronsInNewOrbitals < rightTableTotalElectrons) {
       // populate the right table with the left table's selectors' values.
       populateTable('right', getElectronsFromOrbitals(newOrbitals));
-      // return;
     }
     // changing the left table: the max number of electrons is derived from the selected element.
     numElectronsBelowMax = selectedElem.selectedElementInfo!.number - totalElectronsInNewOrbitals;
@@ -150,9 +160,16 @@ function handleNumElectronsChangedByUser(tableElem: HTMLTableElement) {
     selCell.value = `${newOrbitals[index].numElectrons} `;
   });
 
-  // previous sibling is the label above the table.
+  // Update the table's label
   const diffBtnGroundStateAndSelected = selectedElem.selectedElementInfo!.number - totalElectronsInNewOrbitals;
   const superscript = (diffBtnGroundStateAndSelected === 0) ? '0' : `+${diffBtnGroundStateAndSelected}`;
+  // Save this info for use in the p5 sketch below.
+  if (leftOrRight === 'left') {
+    leftSuperscript = superscript
+  } else {
+    rightSuperscript = superscript;
+  }
+  // previous sibling is the label above the table.
   tableElem.previousElementSibling!.innerHTML = `${selectedElem.selectedElementInfo?.symbol}<sup>${superscript}</sup>`;
 
   populateTableDataRows(tableElem, newOrbitals);
@@ -203,6 +220,13 @@ function populateTableDataRows(tableElem: HTMLTableElement, orbs: Orbital[]) {
   // const groundStateTotalEnergy = energies$.get()[0].totalEnergies[0];
   // const ionEnergy = Math.abs(groundStateTotalEnergy - totalOE!);
   // ionizationEnergyCell!.innerText = `${convertEnergyFromHartrees(ionEnergy)} ${unitsSelection$.get()}`;
+  const leftOrRight = tableElem.id.includes('left') ? 'left' : 'right';
+  if (leftOrRight === 'left') {
+    leftTableIonEnergy = totalOE;
+  } else {
+    rightTableIonEnergy = totalOE;
+  }
+  drawTotalIonizationEnergy();
 }
 
 // update the row, when data changes.
@@ -286,3 +310,93 @@ function toggleShowDetails() {
 energies$.listen(() => populateIonEnergyTables());
 
 unitsSelection$.listen((u) => updateIonEnergyTablesForUnitsChange(u));
+
+let p5js: p5 | null = null;
+
+export function drawTotalIonizationEnergy(): void {
+  let sketch = (p: p5) => {
+
+    // Basic p5 canvas setup
+    const CANV_W = 800;
+    const CANV_H = 300;
+    const COLUMN_W = CANV_W / 4;
+    const ROW_H = 20;
+    const BOTTOM_OFFSET = 20;
+    const LEFT_OFFSET = 50;
+    // const SCALE_Y = (CANV_H - BOTTOM_OFFSET - TOP_OFFSET) / 13;
+    const SCALE_Y = 3;
+
+    p.setup = () => {
+      p.createCanvas(CANV_W, CANV_H);
+      p.noLoop();  // remove interactivity
+    };
+
+
+    const flipYAxis = (y: number) => {
+      return CANV_H - y;
+    }
+
+    p.draw = () => {
+      // draw for reference only.
+      // draw axes: horizontal first, then vertical.
+      p.line(0, flipYAxis(0), CANV_W, flipYAxis(0));
+      p.line(0, flipYAxis(0), 0, flipYAxis(CANV_H));
+
+      // draw x-axis near the bottom
+      p.line(LEFT_OFFSET, flipYAxis(BOTTOM_OFFSET), CANV_W, flipYAxis(BOTTOM_OFFSET));
+      // draw y-axis
+      p.line(LEFT_OFFSET, flipYAxis(BOTTOM_OFFSET), LEFT_OFFSET, flipYAxis(CANV_H));
+
+      const energyDiff = rightTableIonEnergy - leftTableIonEnergy;
+
+      const xloc1 = LEFT_OFFSET + COLUMN_W;
+      const yloc1 = BOTTOM_OFFSET + ROW_H;
+      const s1 = leftTableIonEnergy.toFixed(3);
+      const text_width1 = p.textWidth(s1);
+      p.textSize(16);
+      p.text(s1, xloc1, flipYAxis(yloc1));
+      // draw line under the text with a little space between the text and the line.
+      p.line(xloc1, flipYAxis(yloc1 - 4), xloc1 + text_width1, flipYAxis(yloc1 - 4));
+
+      const xloc2 = LEFT_OFFSET + 3 * COLUMN_W;
+      const yloc2 = BOTTOM_OFFSET + ROW_H + energyDiff * SCALE_Y;
+      const s2 = rightTableIonEnergy.toFixed(3);
+      const text_width2 = p.textWidth(s2);
+      p.text(s2, xloc2, flipYAxis(yloc2));
+      p.line(xloc2, flipYAxis(yloc2 - 4), xloc2 + text_width2, flipYAxis(yloc2 - 4));
+
+      // set dashed lines
+      p.drawingContext.setLineDash([5, 5]);
+      p.line(xloc1 + text_width1, flipYAxis(yloc1 - 4), xloc2, flipYAxis(yloc2 - 4));
+      // no dashed lines anymore
+      p.drawingContext.setLineDash([]);
+      // write the difference in values.
+
+      // Write a descriptive string: El<sup>+n</sup>- El<sup>+m</sup> =
+      const elem = `${selectedElement$.get().selectedElementInfo?.symbol}`;
+      let [supX, supY] = computeSuperscriptLocation(p, elem, LEFT_OFFSET + COLUMN_W * 2 - 10, flipYAxis((yloc1 + yloc2) / 2 + 24), leftSuperscript);
+      p.text(elem, LEFT_OFFSET + COLUMN_W * 2 - 10, flipYAxis((yloc1 + yloc2) / 2 + 24));
+      p.textSize(12);
+      p.text(leftSuperscript, supX, supY);
+      p.textSize(16);
+      [supX, supY] = computeSuperscriptLocation(p, `- ${elem}`, LEFT_OFFSET + COLUMN_W * 2 + 20, flipYAxis((yloc1 + yloc2) / 2 + 24), rightSuperscript);
+      p.text(`- ${elem}`, LEFT_OFFSET + COLUMN_W * 2 + 20, flipYAxis((yloc1 + yloc2) / 2 + 24));
+      p.textSize(12);
+      p.text(rightSuperscript, supX, supY);
+      p.textSize(16);
+      p.text(" = ", LEFT_OFFSET + COLUMN_W * 2 + 55, flipYAxis((yloc1 + yloc2) / 2 + 24));
+      // And finally write the energy difference.
+      p.text(energyDiff.toFixed(3), LEFT_OFFSET + COLUMN_W * 2, flipYAxis((yloc1 + yloc2) / 2 + 10));
+    }
+  }
+
+  const canvas = document.getElementById("ionizationTotalCanvasAttachPoint")!;
+  // The following rigamarole is necessary to so that we don't recreate the canvas each time, which
+  // causes the window to scroll up a bit.
+  if (!p5js) {
+    p5js = new p5(sketch, canvas);
+  } else {
+    p5js.clear();
+    p5js.draw();
+  }
+}

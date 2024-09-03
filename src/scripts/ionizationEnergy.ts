@@ -331,17 +331,11 @@ export function drawTotalIonizationEnergy(): void {
       p.noLoop();  // remove interactivity
     };
 
-
     const flipYAxis = (y: number) => {
       return CANV_H - y;
     }
 
     p.draw = () => {
-      // draw for reference only.
-      // draw axes: horizontal first, then vertical.
-      p.line(0, flipYAxis(0), CANV_W, flipYAxis(0));
-      p.line(0, flipYAxis(0), 0, flipYAxis(CANV_H));
-
       // draw x-axis near the bottom
       p.line(LEFT_OFFSET, flipYAxis(BOTTOM_OFFSET), CANV_W, flipYAxis(BOTTOM_OFFSET));
       // draw y-axis
@@ -374,15 +368,15 @@ export function drawTotalIonizationEnergy(): void {
 
       // Write a descriptive string: El<sup>+n</sup>- El<sup>+m</sup> =
       const elem = `${selectedElement$.get().selectedElementInfo?.symbol}`;
-      let [supX, supY] = computeSuperscriptLocation(p, elem, LEFT_OFFSET + COLUMN_W * 2 - 10, flipYAxis((yloc1 + yloc2) / 2 + 24), leftSuperscript);
+      let [supX, supY] = computeSuperscriptLocation(p, elem, LEFT_OFFSET + COLUMN_W * 2 - 10, flipYAxis((yloc1 + yloc2) / 2 + 24), rightSuperscript);
       p.text(elem, LEFT_OFFSET + COLUMN_W * 2 - 10, flipYAxis((yloc1 + yloc2) / 2 + 24));
       p.textSize(12);
-      p.text(leftSuperscript, supX, supY);
+      p.text(rightSuperscript, supX, supY);
       p.textSize(16);
-      [supX, supY] = computeSuperscriptLocation(p, `- ${elem}`, LEFT_OFFSET + COLUMN_W * 2 + 20, flipYAxis((yloc1 + yloc2) / 2 + 24), rightSuperscript);
+      [supX, supY] = computeSuperscriptLocation(p, `- ${elem}`, LEFT_OFFSET + COLUMN_W * 2 + 20, flipYAxis((yloc1 + yloc2) / 2 + 24), leftSuperscript);
       p.text(`- ${elem}`, LEFT_OFFSET + COLUMN_W * 2 + 20, flipYAxis((yloc1 + yloc2) / 2 + 24));
       p.textSize(12);
-      p.text(rightSuperscript, supX, supY);
+      p.text(leftSuperscript, supX, supY);
       p.textSize(16);
       p.text(" = ", LEFT_OFFSET + COLUMN_W * 2 + 55, flipYAxis((yloc1 + yloc2) / 2 + 24));
       // And finally write the energy difference.

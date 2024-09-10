@@ -120,19 +120,14 @@ function handleNumElectronsChangedByUser(tableElem: HTMLTableElement) {
   const leftOrRight = tableElem.id.includes('left') ? 'left' : 'right';
 
   // For the right table, its number of electrons needs to be <= the left table.
-  // If the user changes the left table to be < the right table, then wipe out
+  // If the user changes the left table, then wipe out
   // what we have in the right table and set it to mimic the left table.
   // Otherwise, if the user changes the right table, only allow the user to set
   // the total # of electrons to be <= what is in the left table.
   let numElectronsBelowMax;
   if (leftOrRight === 'left') {
-    const rightTableElem = document.getElementById('ion-energy-right-table')!.querySelector('table') as HTMLTableElement;
-    const rightOrbitals = computeOrbitalsFromSelects(rightTableElem);
-    const rightTableTotalElectrons = getTotalElectronsFromOrbitals(rightOrbitals);
-    if (totalElectronsInNewOrbitals < rightTableTotalElectrons) {
-      // populate the right table with the left table's selectors' values.
-      populateTable('right', getElectronsFromOrbitals(newOrbitals));
-    }
+    // populate the right table with the left table's selectors' values.
+    populateTable('right', getElectronsFromOrbitals(newOrbitals));
     // changing the left table: the max number of electrons is derived from the selected element.
     numElectronsBelowMax = selectedElem.selectedElementInfo!.number - totalElectronsInNewOrbitals;
   } else {

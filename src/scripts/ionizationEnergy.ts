@@ -304,7 +304,10 @@ function toggleShowDetails() {
 
 energies$.listen(() => populateIonEnergyTables());
 
-unitsSelection$.listen((u) => updateIonEnergyTablesForUnitsChange(u));
+unitsSelection$.listen((u) => {
+  updateIonEnergyTablesForUnitsChange(u);
+  drawTotalIonizationEnergy();
+});
 
 let p5js: p5 | null = null;
 
@@ -340,7 +343,7 @@ export function drawTotalIonizationEnergy(): void {
 
       const xloc1 = LEFT_OFFSET + COLUMN_W;
       const yloc1 = BOTTOM_OFFSET + ROW_H;
-      const s1 = leftTableIonEnergy.toFixed(3);
+      const s1 = convertEnergyFromHartrees(leftTableIonEnergy);
       const text_width1 = p.textWidth(s1);
       p.textSize(16);
       p.text(s1, xloc1, flipYAxis(yloc1));
@@ -349,7 +352,7 @@ export function drawTotalIonizationEnergy(): void {
 
       const xloc2 = LEFT_OFFSET + 3 * COLUMN_W;
       const yloc2 = BOTTOM_OFFSET + ROW_H + energyDiff * SCALE_Y;
-      const s2 = rightTableIonEnergy.toFixed(3);
+      const s2 = convertEnergyFromHartrees(rightTableIonEnergy);
       const text_width2 = p.textWidth(s2);
       p.text(s2, xloc2, flipYAxis(yloc2));
       p.line(xloc2, flipYAxis(yloc2 - 4), xloc2 + text_width2, flipYAxis(yloc2 - 4));

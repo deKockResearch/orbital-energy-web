@@ -157,7 +157,7 @@ function handleNumElectronsChangedByUser(tableElem: HTMLTableElement) {
 
   // Update the table's label
   const diffBtnGroundStateAndSelected = selectedElem.selectedElementInfo!.number - totalElectronsInNewOrbitals;
-  const superscript = (diffBtnGroundStateAndSelected === 0) ? '0' : `+${diffBtnGroundStateAndSelected}`;
+  const superscript = (diffBtnGroundStateAndSelected === 0) ? '0' : `${diffBtnGroundStateAndSelected}+`;
   // Save this info for use in the p5 sketch below.
   if (leftOrRight === 'left') {
     leftSuperscript = superscript

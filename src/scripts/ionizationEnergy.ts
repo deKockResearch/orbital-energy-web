@@ -3,7 +3,7 @@ import { dynamic23Matrix } from "./matrices";
 import { computeZis, totalOrbitalEnergy } from "./orbitalEnergies";
 import { computeEnergiesForDyn23OrFauss, energies$, selectedElement$, unitsSelection$ } from "./stores";
 import { LEVELS, FULL_ORBITAL_CTS, type Orbital } from "./types";
-import { convertEnergyFromHartrees } from "./utils";
+import { conversions, convertEnergyFromHartrees } from "./utils";
 import p5 from "p5";
 
 /**
@@ -339,7 +339,7 @@ export function drawTotalIonizationEnergy(): void {
       // draw y-axis
       p.line(LEFT_OFFSET, flipYAxis(BOTTOM_OFFSET), LEFT_OFFSET, flipYAxis(CANV_H));
 
-      const energyDiff = rightTableIonEnergy - leftTableIonEnergy;
+      const energyDiff = (rightTableIonEnergy - leftTableIonEnergy) * conversions.get(unitsSelection$.get()!)!;
 
       const xloc1 = LEFT_OFFSET + COLUMN_W;
       const yloc1 = BOTTOM_OFFSET + ROW_H;

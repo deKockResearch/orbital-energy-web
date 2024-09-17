@@ -44,14 +44,10 @@ const items = await Astro.glob("../scripts/integrals/*.md");
     if (match) {
       noInfoToShowElem.style.display = "none";
     } else {
-      // No tables are shown -- all are hidden. Could be because the user
-      // selected an element above Ne -- the last element we show in for.
+      // No tables are shown -- all are hidden.
       noInfoToShowElem.style.display = "block";
       if (!elemNum) {
         noInfoToShowElem.textContent = "Select an element to see this info.";
-      } else if (elemNum > 10) {
-        noInfoToShowElem.textContent =
-          "No Integrals information available for elements above Ne.";
       }
     }
   });

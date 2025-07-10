@@ -5,7 +5,7 @@ export const elements: ElementType[] = [
     "name": "Hydrogen",
     "symbol": "H",
     "number": 1,
-    "aMass": 1.008,
+    "aMass": 1.00798(13),
     "eConfig": "1s1"
   },
   {

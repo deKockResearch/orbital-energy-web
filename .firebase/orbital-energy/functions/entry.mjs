@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import { e as appendForwardSlash$1, j as joinPaths, t as trimSlashes, s as slash, p as prependForwardSlash, r as removeTrailingForwardSlash, f as collapseDuplicateSlashes } from './chunks/astro/assets-service_vIlYgiZH.mjs';
 import { serialize, parse } from 'cookie';
 import { A as AstroError, R as ResponseSentError, l as MiddlewareNoDataOrNextCalled, n as MiddlewareNotAResponse, G as GetStaticPathsRequired, o as InvalidGetStaticPathsReturn, p as InvalidGetStaticPathsEntry, q as GetStaticPathsExpectedParams, t as GetStaticPathsInvalidRouteParam, P as PageNumberParamNotFound, N as NoMatchingStaticPathFound, v as PrerenderDynamicEndpointPathCollide, w as LocalsNotAnObject, x as ASTRO_VERSION, C as ClientAddressNotAvailable, S as StaticClientAddressNotAvailable, y as renderEndpoint, z as ReservedSlotName, B as renderSlotToString, D as renderJSX, H as chunkToString, J as CantRenderPage, K as renderPage$1 } from './chunks/astro_ML8uDNy_.mjs';
-import { l as levels, g as getEventPrefix, L as Logger, A as AstroIntegrationLogger, manifest } from './manifest_j-EnTCuS.mjs';
+import { l as levels, g as getEventPrefix, L as Logger, A as AstroIntegrationLogger, manifest } from './manifest_zu1hnPvw.mjs';
 import 'kleur/colors';
 import 'clsx';
 import buffer from 'node:buffer';
@@ -2331,7 +2331,7 @@ const adapter = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 const _page0  = () => import('./chunks/node___WZOMBX.mjs');
 const _page1  = () => import('./chunks/intro_x8N0eRU2.mjs');
 const _page2  = () => import('./chunks/references__XPUt0n-.mjs');
-const _page3  = () => import('./chunks/index_H3WEiYW1.mjs');const pageMap = new Map([["node_modules/astro/dist/assets/endpoint/node.js", _page0],["src/pages/intro.md", _page1],["src/pages/references.md", _page2],["src/pages/index.astro", _page3]]);
+const _page3  = () => import('./chunks/index_mrY5jia9.mjs');const pageMap = new Map([["node_modules/astro/dist/assets/endpoint/node.js", _page0],["src/pages/intro.md", _page1],["src/pages/references.md", _page2],["src/pages/index.astro", _page3]]);
 const _manifest = Object.assign(manifest, {
 	pageMap,
 	renderers,

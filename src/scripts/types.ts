@@ -3,7 +3,25 @@ export interface ElementType {
   symbol: string;
   number: number;
   aMass: number;
-  eConfig: string;
+  eConfig: string; // e.g., "1s2 2s2 2p1"
+  density: number;
+  meltingPoint: number;
+  boilingPoint: number;
+  oxidationState: number;
+  electronegativityPauling: number;
+  electronegativityTandO: number;
+  firstIonizationEnergy: number;
+  valenceAtomicRadiusRDK: number | null;
+  valenceAtomicRadiusClement: number | null;
+  valenceAtomicRadiusRahm: number;
+  R001AtomicRadius: number;
+  vanderWallRadius: number;
+  metallicRadius: number;
+  covalentRadius: number;
+  valenceEffectiveNuclearChargeRDK: number | null;
+  valenceEffectiveNuclearChargeGuerra: number;
+  electricalConductivity: number;
+  thermalConductivity: number;
 }
 
 // Holds information calculated from element, matrix,

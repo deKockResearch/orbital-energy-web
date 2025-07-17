@@ -2,26 +2,26 @@ export interface ElementType {
   name: string;
   symbol: string;
   number: number;
-  aMass: number;
+  aMass: number; // its units are amu or g/mol (These two units are equal)
+  amassunc: string; // These values should be added right next to the "aMass"above (on the same line)
   eConfig: string; // e.g., "1s2 2s2 2p1"
-  density: number;
-  meltingPoint: number;
-  boilingPoint: number;
-  oxidationState: number;
-  electronegativityPauling: number;
-  electronegativityTandO: number;
-  firstIonizationEnergy: number;
-  valenceAtomicRadiusRDK: number | null;
-  valenceAtomicRadiusClement: number | null;
-  valenceAtomicRadiusRahm: number;
-  R001AtomicRadius: number;
-  vanderWallRadius: number;
-  metallicRadius: number;
-  covalentRadius: number;
-  valenceEffectiveNuclearChargeRDK: number | null;
-  valenceEffectiveNuclearChargeGuerra: number;
-  electricalConductivity: number;
-  thermalConductivity: number;
+  density: string; // its units are either g/mL or g/L (Elements 1,2,7,8,9,10,17,18,36,54 and 86 are g/L, all others are g/mL)
+  meltingPoint: string; // its unit is K
+  boilingPoint: string; // its unit is K
+  oxidationStates: string;
+  electronegativityPauling: string;
+  electronegativityTandO: string;
+  firstIonizationEnergy: string; // its unit is eV
+  valenceAtomicRadiusRDK: string; // its unit is ...
+  valenceAtomicRadiusClement: string; // its unit is pm
+  R001AtomicRadius: string; // its unit is pm
+  vanderWallRadius: string; // its unit is pm
+  metallicRadius: string; // its unit is pm
+  covalentRadius: string; // its unit is pm
+  valenceEffectiveNuclearChargeRDK: string;
+  valenceEffectiveNuclearChargeGuerra: string;
+  electricalConductivity: string; // its unit is S/m
+  thermalConductivity: string; // its unit is W/(mK)
 }
 
 // Holds information calculated from element, matrix,

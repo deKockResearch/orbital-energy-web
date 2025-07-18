@@ -74,8 +74,8 @@ const selRow = selectableRow === "true";
         <a class="element ptable group-nm row3">Cl<br />17</a>
         <a class="element ptable group-nm row3">Ar<br />18</a>
       </div>
-      <div class="not-clickable">
-        <div class="row">
+      <!-- <div class="not-clickable"> -->
+        <div class="row clickable">
           {selRow && <a class="element">4</a>}
           <a class="element ptable group-12">K<br />19</a>
           <a class="element ptable group-12">Ca<br />20</a>
@@ -96,7 +96,7 @@ const selRow = selectableRow === "true";
           <a class="element ptable group-nm">Br<br />35</a>
           <a class="element ptable group-nm">Kr<br />36</a>
         </div>
-        <div class="row">
+        <div class="row clickable">
           {selRow && <a class="element">5</a>}
           <a class="element ptable group-12">Rb<br />37</a>
           <a class="element ptable group-12">Sr<br />38</a>
@@ -117,7 +117,7 @@ const selRow = selectableRow === "true";
           <a class="element ptable group-nm">I<br />53</a>
           <a class="element ptable group-nm">Xe<br />54</a>
         </div>
-        <div class="row">
+        <div class="row clickable">
           {selRow && <a class="element">6</a>}
           <a class="element ptable group-12">Cs<br />55</a>
           <a class="element ptable group-12">Ba<br />56</a>
@@ -138,7 +138,7 @@ const selRow = selectableRow === "true";
           <a class="element ptable group-nm">At<br />85</a>
           <a class="element ptable group-nm">Rn<br />86</a>
         </div>
-        <div class="row">
+        <div class="row clickable">
           {selRow && <a class="element">7</a>}
           <a class="element ptable group-12">Fr<br />87</a>
           <a class="element ptable group-12">Ra<br />88</a>
@@ -159,7 +159,7 @@ const selRow = selectableRow === "true";
           <a class="element ptable group-nm">Ts<br />117</a>
           <a class="element ptable group-nm">Og<br />118</a>
         </div>
-        <div class="row">
+        <div class="row clickable">
           <div class="element empty-element"></div>
           <div class="element empty-element"></div>
           <div class="element empty-element"></div>
@@ -179,7 +179,7 @@ const selRow = selectableRow === "true";
           <div class="element empty-element"></div>
           <div class="element empty-element"></div>
         </div>
-        <div class="row">
+        <div class="row clickable">
           {selRow && <a class="element">6</a>}
           <div class="element empty-element"></div>
           <div class="element empty-element"></div>
@@ -200,7 +200,7 @@ const selRow = selectableRow === "true";
           <a class="element ptable group-la">Lu<br />71</a>
           <div class="element empty-element"></div>
         </div>
-        <div class="row">
+        <div class="row clickable">
           {selRow && <a class="element">7</a>}
           <div class="element empty-element"></div>
           <div class="element empty-element"></div>
@@ -221,7 +221,7 @@ const selRow = selectableRow === "true";
           <a class="element ptable group-la">Lr<br />103</a>
           <div class="element empty-element"></div>
         </div>
-      </div>
+      <!-- </div> -->
     </div>
     <DetailedElemBox id={id} selectableRow={selectableRow} />
   </div>

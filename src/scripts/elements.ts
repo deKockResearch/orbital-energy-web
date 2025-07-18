@@ -1,5 +1,8 @@
 import { type ElementType } from './types';
 
+export const startElemInPeriodicTableRows = [0, 2, 10];
+export const numElemsInPeriodicTableRows = [2, 8, 8];
+
 export const elements: ElementType[] = [
   {
     "name": "Hydrogen",

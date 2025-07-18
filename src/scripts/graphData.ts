@@ -14,13 +14,13 @@ import {
 } from "./orbitalEnergies";
 import { eLevels } from "./types";
 import { unSelectAllElements } from "./elementsTable";
-// import { conversions, energyToUnitsAsString } from "./utils";
+import { numElemsInPeriodicTableRows, startElemInPeriodicTableRows } from "./elements";
 
 
 // https://doi.org/10.1016/j.cplett.2012.07.072
 // https://doi.org/10.1002/chem.201602949
-const atomicSize =
-  [1.00, 0.57, 3.10, 2.05, 1.54, 1.22, 1.00, 0.85, 0.73, 0.65, 3.39, 2.59, 2.29, 1.99, 1.74, 1.55, 1.40, 1.27];
+// const atomicSize =
+// [1.00, 0.57, 3.10, 2.05, 1.54, 1.22, 1.00, 0.85, 0.73, 0.65, 3.39, 2.59, 2.29, 1.99, 1.74, 1.55, 1.40, 1.27];
 
 // https://cccbdb.nist.gov/pollistx.asp
 const polarizability =
@@ -38,8 +38,7 @@ const weightedIonizationEnergy =
 const electronAffinity =
   [0.027715971, 0, 0.022696014, 0, 0.010280366, 0.046381834, 0, 0.053726774, 0.124995102, 0, 0.020136828, 0, 0.015942444, 0.051063845, 0.027433736, 0.076332127, 0.132765158, 0];
 
-const startElemInPeriodicTableRows = [0, 2, 10];
-const numElemsInPeriodicTableRows = [2, 8, 8];
+
 const elemLabels = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
   'Na', 'Mg', 'Al', 'Si', 'P', 'S', 'Cl', 'Ar'];
 

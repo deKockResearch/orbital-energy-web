@@ -20,13 +20,35 @@ const selRow = selectableRow === "true";
     </p>
   </div>
   <!-- the following is hidden until an element is selected -->
-  <div class="detailsElemBox showcase" style="display: none">
+  <div class="detailsElemBox showcase" style="display: none; position: relative">
     <div class="rowSelectedInfo"></div>
-    <div class="aNumber"></div>
-    <div class="aSymbol"></div>
-    <div class="aName"></div>
-    <div class="aMass"></div>
-    <div class="aEconfig"></div>
+    <div>
+      <span class="aSymbol"></span>
+      <span class="aEconfig"></span>
+    </div>
+    <div class=float-right-box>
+      <div class="aMass"> <span id="aMass"> </span> amu</div>
+      <div class="aNumber">Z = <span id="aNumber"></span></div>
+    </div>
+    <div class="density">Density: <span id="density"> </span></div>
+    <div class="meltingPoint">Melting point: <span id="meltingPoint"></span> K </div>
+    <div class="boilingPoint">Boiling point: <span id="boilingPoint"></span> K </div>
+    <div class="amassunc">Mass uncertainty: <span id="amassunc"></span></div>
+    <div class="oxidationStates">Oxidation states: <span id="oxidationStates"></span></div>
+    <div class="electronegativityPauling">Electronegativity (Pauling): <span id="electronegativityPauling"></span></div>
+    <div class="electronegativityTandO">Electronegativity (T&O): <span id="electronegativityTandO"></span></div>
+    <div class="firstIonizationEnergy">First ionization energy: <span id="firstIonizationEnergy"></span> eV</div>
+    <div class="valenceAtomicRadiusRDK">Valence atomic radius (RDK): <span id="valenceAtomicRadiusRDK"></span></div>
+    <div class="valenceAtomicRadiusClement">Valence atomic radius (Clement): <span id="valenceAtomicRadiusClement"></span> pm</div>
+    <div class="R001AtomicRadius">R001 atomic radius: <span id="R001AtomicRadius"></span> pm</div>
+    <div class="vanderWallRadius">Van der Waals radius: <span id="vanderWallRadius"></span> pm</div>
+    <div class="metallicRadius">Metallic radius: <span id="metallicRadius"></span> pm</div>
+    <div class="covalentRadius">Covalent radius: <span id="covalentRadius"></span> pm</div>
+    <div class="valenceEffectiveNuclearChargeRDK">Valence eff. nuclear charge (RDK): <span id="valenceEffectiveNuclearChargeRDK"></span></div>
+    <div class="valenceEffectiveNuclearChargeGuerra">Valence eff. nuclear charge (Guerra): <span id="valenceEffectiveNuclearChargeGuerra"></span></div>
+    <div class="electricalConductivity">Electrical conductivity: <span id="electricalConductivity"></span> S/m</div>
+    <div class="thermalConductivity">Thermal conductivity: <span id="thermalConductivity"></span> W/(mK)</div>
+    </div>
   </div>
 </div>
 <script>
@@ -35,7 +57,7 @@ const selRow = selectableRow === "true";
 
 <style>
   .showcase {
-    text-align: center;
+    text-align: left;
     color: black;
     box-sizing: border-box;
     border-radius: 3px;
@@ -44,6 +66,7 @@ const selRow = selectableRow === "true";
     border-color: black;
     text-decoration: none;
     aspect-ratio: 1;
+    padding-inline: 8px;
   }
 
   .detailedView {
@@ -51,26 +74,27 @@ const selRow = selectableRow === "true";
     width: 20%;
     display: inline-block;
     font-family: "Times New Roman", Times, serif;
+
     .aNumber {
-      font-size: 2.4vw;
+      font-size: 1.0vw;
       margin-top: 7%;
-    }
-    .aName {
-      font-size: 2.5vw;
-      margin: 2%;
+      text-align: right;
     }
     .aSymbol {
-      font-size: 4vw;
+      font-size: 3vw;
       font-weight: bold;
       margin: 2%;
     }
     .aMass {
-      font-size: 2vw;
+      font-size: 1.0vw;
       margin: 2%;
+      text-align: right;
     }
     .aEconfig {
-      font-size: 1.2vw;
+      font-size: 1.0vw;
       margin: 2%;
+      /* move the baseline of the econfig string up */
+      vertical-align: 0.5vw;
     }
     .rowSelectedInfo {
       font-size: 2vw;
@@ -79,5 +103,11 @@ const selRow = selectableRow === "true";
   }
   .detailedViewRowSelected {
     background-color: #f0f0f0;
+  }
+
+  .float-right-box {
+    position: absolute;
+    right: 4px;
+    left: 50%;
   }
 </style>

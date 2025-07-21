@@ -41,8 +41,8 @@ export interface Orbital {
   numElectrons: number;
 }
 
-export const eLevels = ["1s", "2s", "2p", "3s", "3p"];
+export const eLevels = ["1s", "2s", "2p", "3s", "3p", "4s"];
 // max # of electrons in each orbital.
-export const FULL_ORBITAL_CTS = [2, 2, 6, 2, 6];
+export const FULL_ORBITAL_CTS = [2, 2, 6, 2, 6, 2];
 // just the first digits from the orbitals.
-export const LEVELS = [1, 2, 2, 3, 3];
+export const LEVELS = [1, 2, 2, 3, 3, 4];

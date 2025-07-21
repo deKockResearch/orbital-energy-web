@@ -17,6 +17,13 @@ export const selectedElement$ = atom<State>({
   rowSelected: null,
 });
 
+export const selectedElement2$ = atom<State>({
+  selectedHTMLElement: null,
+  selectedElementInfo: null,
+  selectedElemOrbitals: null,
+  rowSelected: null,
+});
+
 export const matrixSelection$ = atom<string>('custom');
 export const customMatrixVers$ = atom<number>(0);
 export const unitsSelection$ = atom<string>('Ha');

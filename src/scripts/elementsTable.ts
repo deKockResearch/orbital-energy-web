@@ -1,4 +1,4 @@
-import { selectedElement$ } from "./stores";
+import { selectedElement$, selectedElement2$ } from "./stores";
 import type { ElementType } from "./types";
 import { elements } from './elements';
 import { computeOrbitals } from "./orbitalEnergies";
@@ -9,6 +9,11 @@ for (let i = 0; i < pTableElements.length; i++) {
   pTableElements[i].addEventListener("click", toggleElement);
 }
 
+const pTableElements2 = document.querySelectorAll(".clickable > .element.ptable2");
+for (let i = 0; i < pTableElements2.length; i++) {
+  pTableElements2[i].addEventListener("click", toggleElement2);
+}
+
 const pTableRowElements = document.querySelectorAll(".clickable > .element.row-selector");
 for (let i = 0; i < pTableRowElements.length; i++) {
   pTableRowElements[i].addEventListener("click", toggleElemRow);
@@ -17,6 +22,15 @@ for (let i = 0; i < pTableRowElements.length; i++) {
 
 export function unSelectAllElements(): void {
   const pTableElements = document.getElementsByClassName("element ptable");
+  for (let pTableElem of pTableElements) {
+    if (pTableElem.classList.contains("clicked")) {
+      pTableElem.classList.remove("clicked");
+    }
+  }
+}
+
+export function unSelectAllElements2(): void {
+  const pTableElements = document.getElementsByClassName("element ptable2");
   for (let pTableElem of pTableElements) {
     if (pTableElem.classList.contains("clicked")) {
       pTableElem.classList.remove("clicked");
@@ -81,6 +95,58 @@ function toggleElement(e: Event): void {
     });
   }
 }
+
+function toggleElement2(e: Event): void {
+
+  const target =
+    (e.target as HTMLElement).nodeName === "A"
+      ? (e.target as HTMLElement)!
+      : (e.target as HTMLElement).parentElement!;
+
+  // User clicked on the already-selected element
+  if (target.classList.contains("clicked")) {
+
+    unSelectAllElements2();
+
+    // clear the values changed when changing elements.
+    selectedElement2$.set({
+      selectedHTMLElement: null,
+      selectedElementInfo: null,
+      selectedElemOrbitals: null,
+      rowSelected: null,
+    });
+
+  } else {
+
+    unSelectAllElements2();
+
+    // User clicked on an element (and perhaps another element was already clicked).
+    // So, they are switching target elements.
+    const pTableElements = document.getElementsByClassName("element ptable2");
+    for (let pTableElem of pTableElements) {
+      // Add clicked to all the elements with the same innerHTML as the actual
+      // clicked element. (Necessary because we have the ElementTable in multiple
+      // tabs).
+      if (pTableElem.innerHTML === target.innerHTML) {
+        pTableElem.classList.add("clicked");
+      }
+    }
+
+    // retrieve element information
+    const elementID = target.textContent!.replace(/\D/g, "");
+    const selectedElementInfo = getElementByAtomicNumber(parseInt(elementID));
+    const selectedElemOrbitals = computeOrbitals(selectedElementInfo!.eConfig);
+
+    // Set the state, which will trigger dependent components to update.
+    selectedElement2$.set({
+      selectedHTMLElement: target,
+      selectedElementInfo,
+      selectedElemOrbitals,
+      rowSelected: null,
+    });
+  }
+}
+
 
 function toggleElemRow(e: Event): void {
 

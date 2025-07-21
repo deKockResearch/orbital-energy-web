@@ -1,7 +1,7 @@
 import { type ElementType } from './types';
 
-export const startElemInPeriodicTableRows = [0, 2, 10];
-export const numElemsInPeriodicTableRows = [2, 8, 8];
+export const startElemInPeriodicTableRows = [0, 2, 10, 18, 36, 54, 86, 118];
+export const numElemsInPeriodicTableRows = [2, 8, 8, 18, 18, 32, 32, 32];
 
 export const elements: ElementType[] = [
   {
@@ -1435,7 +1435,7 @@ export const elements: ElementType[] = [
     "number": 58,
     "aMass": 140.116,
     "amassunc": "(1)",
-    "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f1 5d 6s2",
+    "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f1 5d1 6s2",
     "density": "6.77",
     "meltingPoint": "1071",
     "boilingPoint": "3697",
@@ -1585,7 +1585,7 @@ export const elements: ElementType[] = [
     "number": 64,
     "aMass": 157.249,
     "amassunc": "(2)",
-    "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f7 5d 6s2",
+    "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f7 5d1 6s2",
     "density": "7.9",
     "meltingPoint": "1586",
     "boilingPoint": "3546",
@@ -1760,7 +1760,7 @@ export const elements: ElementType[] = [
     "number": 71,
     "aMass": 174.96669,
     "amassunc": "(5)",
-    "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d 6s2",
+    "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d1 6s2",
     "density": "9.84",
     "meltingPoint": "1936",
     "boilingPoint": "3675",
@@ -2535,7 +2535,7 @@ export const elements: ElementType[] = [
     "number": 102,
     "aMass": NaN,
     "amassunc": "N/A",
-    "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f14 6d 7s2",
+    "eConfig": "1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 4f14 5d6 6s2 6p6 5f14 6d1 7s2",
     "density": "N/A",
     "meltingPoint": "1100",
     "boilingPoint": "N/A",

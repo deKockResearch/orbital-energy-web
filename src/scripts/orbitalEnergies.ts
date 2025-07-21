@@ -8,7 +8,7 @@ export function computeOrbitals(eConfigStr: string): Orbital[] {
   const res: Orbital[] = [];
   const groups = eConfigStr.split(" ");
   for (const group of groups) {
-    const re = /(\d+)([sp])(\d+)/;
+    const re = /(\d+)([spdf])(\d+)/;
     const matches = group.match(re)!;
     res.push({
       level: Number(matches[1]),

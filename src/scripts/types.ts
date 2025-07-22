@@ -22,6 +22,7 @@ export interface ElementType {
   valenceEffectiveNuclearChargeGuerra: string;
   electricalConductivity: string; // its unit is S/m
   thermalConductivity: string; // its unit is W/(mK)
+  crystallineStructure: string; 
 }
 
 // Holds information calculated from element, matrix,

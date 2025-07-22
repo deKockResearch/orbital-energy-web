@@ -4,6 +4,7 @@ import IntroTab from "../components/IntroTab.astro";
 import VirialAOsTab from "../components/VirialAOsTab.astro";
 import CanonicalAOsTab from "../components/CanonicalAOsTab.astro";
 import GraphsTab from "../components/GraphsTab.astro";
+import GraphsTab2 from "../components/GraphsTab2.astro";
 import ReferencesEtcTab from "../components/ReferencesEtcTab.astro";
 import Layout from "../layouts/Layout.astro";
 ---
@@ -27,13 +28,15 @@ import Layout from "../layouts/Layout.astro";
         <li class="tab" data-target="#graphs-tab">Graphs</li>
         <li class="tab" data-target="#references-tab">References and more</li>
         <li class="tab" data-target="#main-tab">Main</li>
+        <li class="tab" data-target="#graphs2-tab">New Graphs</li>
       </ul>
-      <MainTab />
       <IntroTab />
       <VirialAOsTab />
       <CanonicalAOsTab />
       <GraphsTab />
       <ReferencesEtcTab />
+      <MainTab />
+      <GraphsTab2 />
     </div>
   </main>
 

@@ -1,0 +1,176 @@
+---
+import TabLayout from "../layouts/TabLayout.astro";
+---
+
+<TabLayout tabName="New Graphs" id="graphs2-tab">
+
+  <div class="container">
+    <div class="y-menu radio-collection">
+      <div>Choose Y-axis item</div>
+      <div>
+        <label for="y_z">Atomic number</label>
+        <input type="radio" id="y_z" value="z" name="y-graph-value" />
+      </div>
+      <div>
+        <label for="y_amass">Atomic mass</label>
+        <input type="radio" id="y_amass" value="amass" name="y-graph-value" />
+      </div>
+      <div>
+        <label for="y_effnuccharge">Eff. Nuclear Charge (Z<sub>eff</sub>)</label>
+        <input type="radio" id="y_effnuccharge" value="effnuccharge" name="y-graph-value" />
+      </div>
+      <div>
+        <label for="y_atomrad">Atomic Radius (Rp)</label>
+        <input type="radio" id="y_atomrad" value="atomrad" name="y-graph-value" />
+      </div>
+      <div>
+        <label for="y_ke">Kinetic Energy</label>
+        <input type="radio" id="y_ke" value="ke" name="y-graph-value" />
+      </div>
+      <div>
+        <label for="y_pe">Potential Energy (PE)</label>
+        <input type="radio" id="y_pe" value="pe" name="y-graph-value" />
+      </div>
+      <div>
+        <label for="y_te">Total Energy (TE)</label>
+        <input type="radio" id="y_te" value="te" name="y-graph-value" />
+      </div>
+      <div>
+        <label for="y_ie">Ionization Energy</label>
+        <input type="radio" id="y_ie" value="ie" name="y-graph-value" />
+      </div>
+      <div>
+        <label for="y_electroneg">Electronegativity</label>
+        <input type="radio" id="y_electroneg" value="electroneg" name="y-graph-value" />
+      </div>
+      <div>
+        <label for="y_density">Density</label>
+        <input type="radio" id="y_density" value="density" name="y-graph-value" />
+      </div>
+      <div>
+        <label for="y_melting">Melting Point</label>
+        <input type="radio" id="y_melting" value="melting" name="y-graph-value" />
+      </div>
+      <div>
+        <label for="y_boiling">Boiling Point</label>
+        <input type="radio" id="y_boiling" value="boiling" name="y-graph-value" />
+      </div>
+      <div>
+        <label for="y_polarizability">Polarizability</label>
+        <input type="radio" id="y_polarizability" value="polarizability" name="y-graph-value" />
+      </div>
+
+    </div>
+    <div id="chart-attachment">
+      <canvas id="chart2-canv"></canvas>
+    </div>
+    <div class="x-menu radio-collection">
+      <div>Choose X-axis item</div>
+      <div>
+        <label for="x_z">Atomic number</label>
+        <input type="radio" id="x_z" value="z" name="x-graph-value" />
+      </div>
+      <div>
+        <label for="x_amass">Atomic mass</label>
+        <input type="radio" id="x_amass" value="amass" name="x-graph-value" />
+      </div>
+      <div>
+        <label for="x_effnuccharge">Eff. Nuclear Charge (Z<sub>eff</sub>)</label>
+        <input type="radio" id="x_effnuccharge" value="effnuccharge" name="x-graph-value" />
+      </div>
+      <div>
+        <label for="x_atomrad">Atomic Radius (Rp)</label>
+        <input type="radio" id="x_atomrad" value="atomrad" name="x-graph-value" />
+      </div>
+      <div>
+        <label for="x_ke">Kinetic Energy</label>
+        <input type="radio" id="x_ke" value="ke" name="x-graph-value" />
+      </div>
+      <div>
+        <label for="x_pe">Potential Energy (PE)</label>
+        <input type="radio" id="x_pe" value="pe" name="x-graph-value" />
+      </div>
+      <div>
+        <label for="x_te">Total Energy (TE)</label>
+        <input type="radio" id="x_te" value="te" name="x-graph-value" />
+      </div>
+      <div>
+        <label for="x_ie">Ionization Energy</label>
+        <input type="radio" id="x_ie" value="ie" name="x-graph-value" />
+      </div>
+      <div>
+        <label for="x_electroneg">Electronegativity</label>
+        <input type="radio" id="x_electroneg" value="electroneg" name="x-graph-value" />
+      </div>
+      <div>
+        <label for="x_density">Density</label>
+        <input type="radio" id="x_density" value="density" name="x-graph-value" />
+      </div>
+      <div>
+        <label for="x_melting">Melting Point</label>
+        <input type="radio" id="x_melting" value="melting" name="x-graph-value" />
+      </div>
+      <div>
+        <label for="x_boiling">Boiling Point</label>
+        <input type="radio" id="x_boiling" value="boiling" name="x-graph-value" />
+      </div>
+      <div>
+        <label for="x_polarizability">Polarizability</label>
+        <input type="radio" id="x_polarizability" value="polarizability" name="x-graph-value" />
+      </div>
+    </div>
+  </div>
+
+</TabLayout>
+
+<script>
+  import "../scripts/graphData2.ts";
+</script>
+
+<style>
+
+  .container {
+    display: grid;
+    grid-template-columns: 220px auto;
+  }
+
+  #chart-attachment {
+    grid-row-start: 1;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    width: 1200px;
+    height: 600px;
+  }
+
+  .y-menu {
+    grid-column-start: 1;
+    grid-row-start: 1;
+    width: 220px;
+  }
+
+  .x-menu {
+    grid-row-start: 2;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    width: 300px;
+  }
+
+  .radio-collection > div {
+    margin-left: auto;
+    margin-right: 0;
+    display: table;   /* not sure why this works... */
+  }
+
+
+  #charts-wrapper {
+    width: 90%;
+  }
+
+  #charts-wrapper > canvas {
+    margin-bottom: 2rem;
+  }
+
+
+
+
+</style>

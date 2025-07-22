@@ -43,7 +43,7 @@ function displayDetailedElementBox(): void {
   // console.log("displayDetailedElementBox called!");
 
   const detailsTempTexts = document.getElementsByClassName("detailsTempText")!;
-  const detailsElemBoxes = document.getElementsByClassName("detailsElemBox")!;
+  const detailsElemBoxes = document.getElementsByClassName("detailsElemBox2")!;
 
   const selectedElement = selectedElement2$.get().selectedElementInfo;
   const row = selectedElement2$.get().rowSelected;
@@ -105,14 +105,22 @@ function displayDetailedElementBox(): void {
   for (let detailsElemBox of detailsElemBoxes) {
 
     detailsElemBox.className = ""; // remove all classes.
-    // add "detailsElemBox", "showcase", and copy the color styling (e.g., group-nm) to the details box.
-    detailsElemBox.classList.add("detailsElemBox", "showcase", selectedHTMLElem.classList[2]);
+    // add "detailsElemBox2", "showcase", and copy the color styling (e.g., group-nm) to the details box.
+    detailsElemBox.classList.add("detailsElemBox2", "showcase", selectedHTMLElem.classList[2]);
 
     detailsElemBox.querySelector(".rowSelectedInfo")!.textContent = "";
+
+    const aNumber = selectedElement2$.get().selectedElementInfo?.number!
 
     detailsElemBox.querySelector("#aNumber")!.textContent = String(selectedElement.number);
     detailsElemBox.querySelector(".aSymbol")!.textContent = selectedElement.symbol;
     detailsElemBox.querySelector("#aMass")!.textContent = String(selectedElement.aMass) + selectedElement.amassunc;
+    if (elements[aNumber - 1].crystallineStructure === 'N/A') {
+      detailsElemBox.querySelector(".crystalline-struct-img")!.setAttribute('src', '');
+    } else {
+      detailsElemBox.querySelector(".crystalline-struct-img")!.setAttribute('src',
+        'src/' + elements[aNumber].crystallineStructure);
+    }
     detailsElemBox.querySelector(".aEconfig")!.innerHTML = convertElectronConfigToHTML();
     detailsElemBox.querySelector("#density")!.innerHTML = selectedElement.density;
     detailsElemBox.querySelector("#meltingPoint")!.innerHTML = selectedElement.meltingPoint;

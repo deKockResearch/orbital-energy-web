@@ -11,13 +11,14 @@ const { id } = Astro.props;
     </p>
   </div>
   <!-- the following is hidden until an element is selected -->
-  <div class="detailsElemBox showcase" style="display: none; position: relative">
+  <div class="detailsElemBox2 showcase" style="display: none">
     <div class="rowSelectedInfo"></div>
     <div>
       <span class="aSymbol"></span>
       <span class="aEconfig"></span>
     </div>
-    <div class=float-right-box>
+    <div class="float-right-box">
+      <img class="crystalline-struct-img" src="src/assets/BCC.jpg">
       <div class="aMass"> <span id="aMass"> </span> amu</div>
       <div class="aNumber">Z = <span id="aNumber"></span></div>
     </div>
@@ -46,6 +47,10 @@ const { id } = Astro.props;
 </script>
 
 <style>
+
+  .detailsElemBox2 {
+    position: relative;
+  }
   .showcase {
     text-align: left;
     color: black;
@@ -97,7 +102,13 @@ const { id } = Astro.props;
 
   .float-right-box {
     position: absolute;
+    top: 4px;
     right: 4px;
     left: 50%;
+  }
+
+  .crystalline-struct-img {
+    max-width: 60px;
+    padding-left: 70px;
   }
 </style>

@@ -25,6 +25,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "1",
     "electricalConductivity": "N/A",
     "thermalConductivity": "0.1805",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Helium",
@@ -50,6 +51,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "1.618",
     "electricalConductivity": "N/A",
     "thermalConductivity": "0.1513",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Lithium",
@@ -75,6 +77,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "1.55",
     "electricalConductivity": "1.1×10⁷",
     "thermalConductivity": "85",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Beryllium",
@@ -100,6 +103,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "2.266",
     "electricalConductivity": "2.5×10⁷",
     "thermalConductivity": "190",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Boron",
@@ -125,6 +129,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "2.268",
     "electricalConductivity": "1×10⁻⁴",
     "thermalConductivity": "27",
+    "crystallineStructure": "assets/RHOM.png",
   },
   {
     "name": "Carbon",
@@ -150,6 +155,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "2.916",
     "electricalConductivity": "1×10⁴",
     "thermalConductivity": "140",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Nitrogen",
@@ -175,6 +181,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "3.546",
     "electricalConductivity": "N/A",
     "thermalConductivity": "0.02583",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Oxygen",
@@ -200,6 +207,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "4.022",
     "electricalConductivity": "N/A",
     "thermalConductivity": "0.02658",
+    "crystallineStructure": "assets/BCM.png",
   },
   {
     "name": "Fluorine",
@@ -225,6 +233,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "4.598",
     "electricalConductivity": "N/A",
     "thermalConductivity": "0.0277",
+    "crystallineStructure": "assets/BCM.png",
   },
   {
     "name": "Neon",
@@ -250,6 +259,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "5.175",
     "electricalConductivity": "N/A",
     "thermalConductivity": "0.0491",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Sodium",
@@ -275,6 +285,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "3.211",
     "electricalConductivity": "2.1×10⁷",
     "thermalConductivity": "140",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Magnesium",
@@ -300,6 +311,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "4.156",
     "electricalConductivity": "2.3×10⁷",
     "thermalConductivity": "160",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Aluminum",
@@ -325,6 +337,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "3.642",
     "electricalConductivity": "3.8×10⁷",
     "thermalConductivity": "235",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Silicon",
@@ -350,6 +363,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "4.541",
     "electricalConductivity": "1.0×10³",
     "thermalConductivity": "150",
+    "crystallineStructure": "assets/Diamond.png",
   },
   {
     "name": "Phosphorus",
@@ -375,6 +389,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "5.376",
     "electricalConductivity": "1.0×10⁷",
     "thermalConductivity": "0.236",
+    "crystallineStructure": "assets/T.png",
   },
   {
     "name": "Sulfur",
@@ -400,6 +415,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "6.041",
     "electricalConductivity": "1.0×10⁻¹⁵",
     "thermalConductivity": "0.205",
+    "crystallineStructure": "assets/FCO.png",
   },
   {
     "name": "Chlorine",
@@ -425,6 +441,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "6.781",
     "electricalConductivity": "1.0×10⁻²",
     "thermalConductivity": "0.0089",
+    "crystallineStructure": "assets/BO.png",
   },
   {
     "name": "Argon",
@@ -450,6 +467,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "7.502",
     "electricalConductivity": "N/A",
     "thermalConductivity": "0.01772",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Potassium",
@@ -475,6 +493,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "4.593",
     "electricalConductivity": "1.4×10⁷",
     "thermalConductivity": "100",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Calcium",
@@ -500,6 +519,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "5.709",
     "electricalConductivity": "2.9×10⁷",
     "thermalConductivity": "200",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Scandium",
@@ -525,6 +545,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "6.09",
     "electricalConductivity": "1.8×10⁶",
     "thermalConductivity": "16",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Titanium",
@@ -550,6 +571,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "6.388",
     "electricalConductivity": "2.5×10⁶",
     "thermalConductivity": "22",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Vanadium",
@@ -575,6 +597,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "6.664",
     "electricalConductivity": "5.0×10⁶",
     "thermalConductivity": "31",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Chromium",
@@ -600,6 +623,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "6.615",
     "electricalConductivity": "7.9×10⁶",
     "thermalConductivity": "94",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Manganese",
@@ -625,6 +649,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "7.161",
     "electricalConductivity": "6.2×10⁵",
     "thermalConductivity": "7.7",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Iron",
@@ -650,6 +675,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "7.442",
     "electricalConductivity": "1.0×10⁷",
     "thermalConductivity": "79",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Cobalt",
@@ -675,6 +701,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "7.699",
     "electricalConductivity": "1.7×10⁷",
     "thermalConductivity": "100",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Nickel",
@@ -700,6 +727,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "7.948",
     "electricalConductivity": "1.4×10⁷",
     "thermalConductivity": "91",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Copper",
@@ -725,6 +753,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "7.351",
     "electricalConductivity": "5.9×10⁷",
     "thermalConductivity": "400",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Zinc",
@@ -750,6 +779,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "8.416",
     "electricalConductivity": "1.7×10⁷",
     "thermalConductivity": "120",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Gallium",
@@ -775,6 +805,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "6.779",
     "electricalConductivity": "7.1×10⁶",
     "thermalConductivity": "29",
+    "crystallineStructure": "assets/BO.png",
   },
   {
     "name": "Germanium",
@@ -800,6 +831,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "8.052",
     "electricalConductivity": "2.0×10³",
     "thermalConductivity": "60",
+    "crystallineStructure": "assets/Diamond.png",
   },
   {
     "name": "Arsenic",
@@ -825,6 +857,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "9.137",
     "electricalConductivity": "3.3×10⁶",
     "thermalConductivity": "50",
+    "crystallineStructure": "assets/RHOM.png",
   },
   {
     "name": "Selenium",
@@ -850,6 +883,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "10",
     "electricalConductivity": "N/A",
     "thermalConductivity": "0.52",
+    "crystallineStructure": "assets/SM.png",
   },
   {
     "name": "Bromine",
@@ -875,6 +909,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "10.849",
     "electricalConductivity": "1.0×10⁻¹⁰",
     "thermalConductivity": "0.12",
+    "crystallineStructure": "assets/BO.png",
   },
   {
     "name": "Krypton",
@@ -900,6 +935,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "11.731",
     "electricalConductivity": "N/A",
     "thermalConductivity": "0.00943",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Rubidium",
@@ -925,6 +961,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "6.76",
     "electricalConductivity": "8.3×10⁶",
     "thermalConductivity": "58",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Strontium",
@@ -950,6 +987,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "8.21",
     "electricalConductivity": "7.7×10⁶",
     "thermalConductivity": "35",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Yttrium",
@@ -975,6 +1013,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "8.401",
     "electricalConductivity": "1.8×10⁶",
     "thermalConductivity": "17",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Zirconium",
@@ -1000,6 +1039,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "9.372",
     "electricalConductivity": "2.4×10⁶",
     "thermalConductivity": "23",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Niobium",
@@ -1025,6 +1065,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "9.751",
     "electricalConductivity": "6.7×10⁶",
     "thermalConductivity": "54",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Molybdenum",
@@ -1050,6 +1091,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "10.162",
     "electricalConductivity": "2.0×10⁷",
     "thermalConductivity": "139",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Technetium",
@@ -1075,6 +1117,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "10.498",
     "electricalConductivity": "5.0×10⁶",
     "thermalConductivity": "51",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Ruthenium",
@@ -1100,6 +1143,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "10.518",
     "electricalConductivity": "1.4×10⁷",
     "thermalConductivity": "120",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Rhodium",
@@ -1125,6 +1169,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "10.649",
     "electricalConductivity": "2.3×10⁷",
     "thermalConductivity": "150",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Palladium",
@@ -1150,6 +1195,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "13.417",
     "electricalConductivity": "1.0×10⁷",
     "thermalConductivity": "71",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Silver",
@@ -1175,6 +1221,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "10.848",
     "electricalConductivity": "6.2×10⁷",
     "thermalConductivity": "430",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Cadmium",
@@ -1200,6 +1247,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "12.118",
     "electricalConductivity": "1.4×10⁷",
     "thermalConductivity": "96",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Indium",
@@ -1225,6 +1273,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "9.943",
     "electricalConductivity": "1.2×10⁷",
     "thermalConductivity": "82",
+    "crystallineStructure": "assets/CT.png",
   },
   {
     "name": "Tin",
@@ -1250,6 +1299,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "11.382",
     "electricalConductivity": "9.1×10⁶",
     "thermalConductivity": "67",
+    "crystallineStructure": "assets/CT.png",
   },
   {
     "name": "Antimony",
@@ -1275,6 +1325,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "12.549",
     "electricalConductivity": "2.5×10⁶",
     "thermalConductivity": "24 ",
+    "crystallineStructure": "assets/RHOM.png",
   },
   {
     "name": "Tellerium",
@@ -1300,6 +1351,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "13.503",
     "electricalConductivity": "1.0×10⁴",
     "thermalConductivity": "3",
+    "crystallineStructure": "assets/RHOM.png",
   },
   {
     "name": "Iodine",
@@ -1325,6 +1377,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "14.478",
     "electricalConductivity": "1.0×10⁻⁷",
     "thermalConductivity": "0.449",
+    "crystallineStructure": "assets/BO.png",
   },
   {
     "name": "Xenon",
@@ -1350,6 +1403,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "15.498",
     "electricalConductivity": "N/A",
     "thermalConductivity": "0.00565",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Caesium",
@@ -1375,6 +1429,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "8.869",
     "electricalConductivity": "5.0×10⁶",
     "thermalConductivity": "36",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Barium",
@@ -1400,6 +1455,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "10.612",
     "electricalConductivity": "2.9×10⁶",
     "thermalConductivity": "18",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Lanthanum",
@@ -1425,6 +1481,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "11.407",
     "electricalConductivity": "1.6×10⁶",
     "thermalConductivity": "13",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Cerium",
@@ -1450,6 +1507,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "11.539",
     "electricalConductivity": "1.4×10⁶",
     "thermalConductivity": "11",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Preseodymium",
@@ -1475,6 +1533,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "11.134",
     "electricalConductivity": "1.4×10⁶",
     "thermalConductivity": "13",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Neodymium",
@@ -1500,6 +1559,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "11.285",
     "electricalConductivity": "1.6×10⁶",
     "thermalConductivity": "17",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Promethium",
@@ -1525,6 +1585,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "11.434",
     "electricalConductivity": "1.3×10⁶",
     "thermalConductivity": "15",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Samarium",
@@ -1550,6 +1611,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "11.577",
     "electricalConductivity": "1.1×10⁶",
     "thermalConductivity": "13",
+    "crystallineStructure": "assets/RHOM.png",
   },
   {
     "name": "Europium",
@@ -1575,6 +1637,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "11.714",
     "electricalConductivity": "1.1×10⁶",
     "thermalConductivity": "14",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Gadolinium",
@@ -1600,6 +1663,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "12.493",
     "electricalConductivity": "7.7×10⁵",
     "thermalConductivity": "11",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Terbium",
@@ -1625,6 +1689,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "12.019",
     "electricalConductivity": "8.3×10⁵",
     "thermalConductivity": "11",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Dysprosium",
@@ -1650,6 +1715,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "12.164",
     "electricalConductivity": "1.1×10⁶",
     "thermalConductivity": "11",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Holmium",
@@ -1675,6 +1741,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "12.31",
     "electricalConductivity": "1.1×10⁶",
     "thermalConductivity": "16",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Erbium",
@@ -1700,6 +1767,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "12.457",
     "electricalConductivity": "1.2×10⁶",
     "thermalConductivity": "15",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Thulium",
@@ -1725,6 +1793,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "12.601",
     "electricalConductivity": "1.4×10⁶",
     "thermalConductivity": "17",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Ytterbium",
@@ -1750,6 +1819,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "12.741",
     "electricalConductivity": "3.6×10⁶",
     "thermalConductivity": "39",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Lutetium",
@@ -1775,6 +1845,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "12.841",
     "electricalConductivity": "1.8×10⁶",
     "thermalConductivity": "16",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Hafnium",
@@ -1800,6 +1871,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "14.473",
     "electricalConductivity": "3.3×10⁶",
     "thermalConductivity": "23",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Tantalum",
@@ -1825,6 +1897,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "15.109",
     "electricalConductivity": "7.7×10⁶",
     "thermalConductivity": "57",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Tungsten",
@@ -1850,6 +1923,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "15.691",
     "electricalConductivity": "2.0×10⁷",
     "thermalConductivity": "170",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Rhenium",
@@ -1875,6 +1949,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "16.244",
     "electricalConductivity": "5.6×10⁶",
     "thermalConductivity": "48",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Osmium",
@@ -1900,6 +1975,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "16.843",
     "electricalConductivity": "1.2×10⁷",
     "thermalConductivity": "87",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Iridium",
@@ -1925,6 +2001,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "17.391",
     "electricalConductivity": "2.1×10⁷",
     "thermalConductivity": "150",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Platinum",
@@ -1950,6 +2027,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "17.381",
     "electricalConductivity": "9.4×10⁶",
     "thermalConductivity": "71",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Gold",
@@ -1975,6 +2053,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "17.586",
     "electricalConductivity": "4.5×10⁷",
     "thermalConductivity": "320",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Mercury",
@@ -2000,6 +2079,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "18.926",
     "electricalConductivity": "1.0×10⁶",
     "thermalConductivity": "8.3",
+    "crystallineStructure": "assets/RHOM.png",
   },
   {
     "name": "Thallium",
@@ -2025,6 +2105,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "15.075",
     "electricalConductivity": "6.7×10⁶",
     "thermalConductivity": "46",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Lead",
@@ -2050,6 +2131,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "16.455",
     "electricalConductivity": "4.8×10⁶",
     "thermalConductivity": "35",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Bismuth",
@@ -2075,6 +2157,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "16.925",
     "electricalConductivity": "7.7×10⁵",
     "thermalConductivity": "8",
+    "crystallineStructure": "assets/BCM.png",
   },
   {
     "name": "Polonium",
@@ -2100,6 +2183,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "17.956",
     "electricalConductivity": "2.3×10⁶",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "assets/Cubic.png",
   },
   {
     "name": "Astatine",
@@ -2125,6 +2209,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "19.199",
     "electricalConductivity": "N/A",
     "thermalConductivity": "2",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Radon",
@@ -2150,6 +2235,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "20.478",
     "electricalConductivity": "N/A",
     "thermalConductivity": "0.00361",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Francium",
@@ -2175,6 +2261,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "12.4",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Radium",
@@ -2200,6 +2287,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "14.583",
     "electricalConductivity": "1.0×10⁶",
     "thermalConductivity": "19",
+    "crystallineStructure": "assets/BCC.jpg",
   },
   {
     "name": "Actinium",
@@ -2225,6 +2313,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "14.908",
     "electricalConductivity": "N/A",
     "thermalConductivity": "12",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Thorium",
@@ -2250,6 +2339,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "16.547",
     "electricalConductivity": "6.7×10⁶",
     "thermalConductivity": "54",
+    "crystallineStructure": "assets/FCC.png",
   },
   {
     "name": "Protactinium,",
@@ -2275,6 +2365,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "16.414",
     "electricalConductivity": "5.6×10⁶",
     "thermalConductivity": "47",
+    "crystallineStructure": "assets/CT.png",
   },
   {
     "name": "Uranium",
@@ -2300,6 +2391,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "16.657",
     "electricalConductivity": "3.6×10⁶",
     "thermalConductivity": "27",
+    "crystallineStructure": "assets/BO.png",
   },
   {
     "name": "Neptunium",
@@ -2325,6 +2417,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "16.897",
     "electricalConductivity": "8.3×10⁵",
     "thermalConductivity": "6",
+    "crystallineStructure": "assets/SO.png",
   },
   {
     "name": "Plutonium",
@@ -2350,6 +2443,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "16.345",
     "electricalConductivity": "6.7×10⁵",
     "thermalConductivity": "6",
+    "crystallineStructure": "assets/SM.png",
   },
   {
     "name": "Americium",
@@ -2375,6 +2469,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "16.553",
     "electricalConductivity": "N/A",
     "thermalConductivity": "10",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Curium",
@@ -2400,6 +2495,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "17.687",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Berkelium",
@@ -2425,6 +2521,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "17.041",
     "electricalConductivity": "N/A",
     "thermalConductivity": "10",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Californium",
@@ -2450,6 +2547,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "17.27",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "assets/HEX.png",
   },
   {
     "name": "Einsteinium",
@@ -2475,6 +2573,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "17.501",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Fermium",
@@ -2500,6 +2599,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "17.735",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Mendelevium",
@@ -2525,6 +2625,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "17.964",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Nobelium",
@@ -2550,6 +2651,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "18.19",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Lawrencium",
@@ -2575,6 +2677,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "15.583",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Rutherfordium",
@@ -2600,6 +2703,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "18.825",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Dubnium",
@@ -2625,6 +2729,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "20.607",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Seaborgium",
@@ -2650,6 +2755,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "22.386",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Bohrium",
@@ -2675,6 +2781,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "23.36",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Hassium",
@@ -2700,6 +2807,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "24.188",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Meitnerium",
@@ -2725,6 +2833,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "25.159",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Darmstadium",
@@ -2750,6 +2859,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "25.44",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Roentgenium",
@@ -2775,6 +2885,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "26.668",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Copernicium",
@@ -2800,6 +2911,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "28.358",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Nihonium",
@@ -2825,6 +2937,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "23.835",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Flerovium",
@@ -2850,6 +2963,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "23.952",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Moscovium",
@@ -2875,6 +2989,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "18.858",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Livermorium",
@@ -2900,6 +3015,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "20.984",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Tennessine",
@@ -2925,6 +3041,7 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "22.716",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
+    "crystallineStructure": "N/A",
   },
   {
     "name": "Oganesson",
@@ -2950,5 +3067,6 @@ export const elements: ElementType[] = [
     "valenceEffectiveNuclearChargeGuerra": "24.366",
     "electricalConductivity": "N/A",
     "thermalConductivity": "N/A",
-  }
+   "crystallineStructure": "N/A"
+,   }
 ];

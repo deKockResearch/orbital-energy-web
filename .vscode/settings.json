@@ -1,5 +1,12 @@
 {
   "files.associations": {
     "iostream": "cpp"
-  }
+  },
+  "cSpell.words": [
+    "atomrad",
+    "canv",
+    "effnuccharge",
+    "electroneg",
+    "Electronegativity"
+  ]
 }

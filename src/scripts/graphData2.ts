@@ -1,44 +1,35 @@
 import { Chart, type ScatterDataPoint } from "chart.js/auto";
-import { conversions } from "./utils";
+// import { conversions } from "./utils";
 
 import { eLevels } from "./types";
 import { elements, numElemsInPeriodicTableRows, startElemInPeriodicTableRows } from "./elements";
+import { getZisForRowOfElementsAndOrbital } from "./orbitalEnergies";
 
+const dataFromExcelSheet = JSON.parse(document.getElementById('excel-data')!.dataset.excelsheet!);
 
-// https://doi.org/10.1016/j.cplett.2012.07.072
-// https://doi.org/10.1002/chem.201602949
-// const atomicSize =
-// [1.00, 0.57, 3.10, 2.05, 1.54, 1.22, 1.00, 0.85, 0.73, 0.65, 3.39, 2.59, 2.29, 1.99, 1.74, 1.55, 1.40, 1.27];
+// For some reason, in Firefox, if I don't explicitly uncheck the radio boxes, the selected
+// values from previously are still displayed.
+Array.from(document.getElementsByTagName('input')).forEach(x => {
+  x.checked = false;
+})
 
-// https://cccbdb.nist.gov/pollistx.asp
-const polarizability =
-  [4.50, 1.41, 164.19, 37.79, 20.45, 11.88, 7.42, 5.41, 3.76, 2.57, 162.70, 71.53, 56.28, 36.31, 24.50, 19.57, 14.71, 11.23];
-
-// https://physics.nist.gov/PhysRefData/ASD/ionEnergy.html
-const unweightedIonizationEnergy =
-  [0.49973, 0.90357, 0.198142, 0.342603, 0.304947, 0.413808, 0.53412, 0.500454, 0.640277, 0.792482, 0.188858, 0.280994, 0.219973, 0.299569, 0.385379, 0.380723, 0.476552, 0.579155];
-
-const weightedIonizationEnergy =
-  [0.5, 1.452, 0.198, 0.506, 0.874, 1.36, 1.962, 2.653, 3.459, 4.381, 0.189, 0.417, 0.652, 0.948, 1.3, 1.693, 2.147, 2.654];
-
-
-// https://cccbdb.nist.gov/elecaff1x.asp
-const electronAffinity =
-  [0.027715971, 0, 0.022696014, 0, 0.010280366, 0.046381834, 0, 0.053726774, 0.124995102, 0, 0.020136828, 0, 0.015942444, 0.051063845, 0.027433736, 0.076332127, 0.132765158, 0];
-
-const elemLabels = elements.map(el => el.symbol);
 
 let chart: Chart;
 
 let xGraphChoice = '';
 let yGraphChoice = '';
 
+const elemLabels = elements.map(el => el.symbol);
+
+// This is for when the user has to pick Guerra or Slater or RDK sub-choices.
+const ySubChoice = document.getElementById('y-subchoice')!;
+
 const yradioInputs = document.querySelectorAll('.y-menu.radio-collection input');
 for (let ri of yradioInputs) {
   ri.addEventListener('click', (event: Event) => {
     const targ: any = event.target!;
-    console.log('y choice: ', targ.value);
     yGraphChoice = targ.value;
+    ySubChoice.style.display = (yGraphChoice === 'effnuccharge') ? 'block' : 'none';
     drawGraph();
   });
 }
@@ -47,31 +38,66 @@ const xradioInputs = document.querySelectorAll('.x-menu.radio-collection input')
 for (let ri of xradioInputs) {
   ri.addEventListener('click', (event: Event) => {
     const targ: any = event.target!;
-    console.log('x choice: ', targ.value);
     xGraphChoice = targ.value;
     drawGraph();
   });
 }
 
+const lowerBoundSelection = document.getElementById('lower-bound')! as HTMLSelectElement;
+const upperBoundSelection = document.getElementById('upper-bound')! as HTMLSelectElement;
+
+// Redraw the graph when user changes the range of values to be graphed.
+lowerBoundSelection.addEventListener('change', () => {
+  drawGraph();
+});
+upperBoundSelection.addEventListener('change', drawGraph);
+
+const zeffCheckboxes = Array.from(document.getElementsByClassName("y-zeff-checkbox"));
+zeffCheckboxes.forEach((ch) => {
+  ch.addEventListener('change', () => updateChecked(ch as HTMLInputElement));
+});
+
+const selectedZeffCheckboxes = new Set<string>();
+
+function updateChecked(ch: HTMLInputElement) {
+  if (ch.checked) {
+    selectedZeffCheckboxes.add(ch.id);
+  } else {
+    selectedZeffCheckboxes.delete(ch.id);
+  }
+  drawGraph();
+}
+
+function method2Formal(method: string) {
+  switch (method) {
+    case 'guerra': return 'Guerra';
+    case 'slater': return 'Slater';
+    case 'rdk': return 'DeKock';
+  }
+}
+
 
 export function drawGraph() {
 
-  const startElem = 0
-  const numElems = 70;
+  // the + is a trick to convert string to number.
+  const startElem = +lowerBoundSelection.value - 1;
+  const numElems = +upperBoundSelection.value - startElem;
+  console.log(`selction from ${startElem} for numElems: ${numElems}`);
 
   if (chart) {
     chart.destroy();
   }
 
+  // xData will only be one array of values.
   const xdataAndLabel = getValuesAndLabel(xGraphChoice, startElem, numElems);
-  const xData = xdataAndLabel.data;
-  const xLabel = xdataAndLabel.label;
+  if (xdataAndLabel.length === 0) {
+    return;
+  }
+  const xData = xdataAndLabel[0].data;
+  const xLabel = xdataAndLabel[0].label;
 
+  // yData could be multiple arrays of values, e.g., if user chooses multiple Zeff's.
   const ydataAndLabel = getValuesAndLabel(yGraphChoice, startElem, numElems);
-  const yData = ydataAndLabel.data;
-  const yLabel = ydataAndLabel.label;
-
-  const data: ScatterDataPoint[] = xData.map((x, i) => ({ x, y: yData[i] }));
 
   const options = {
     scales: {
@@ -83,13 +109,24 @@ export function drawGraph() {
       },
       y: {
         title: {
-          text: yLabel,
+          text: ydataAndLabel[0].label,
           display: true,
         }
       }
     },
-
   };
+
+  // Merge xData values and yData values.
+  // console.log('ydata = ', ydataAndLabel);
+
+  if (ydataAndLabel[0].data.length === 0) {
+    return;
+  }
+
+  const data: ScatterDataPoint[][] = ydataAndLabel.map((ydAndL) => {
+    return ydAndL.data.map((y, i) => ({ x: xData[i], y }));
+  });
+  const yLabels = ydataAndLabel.map(ydAndL => ydAndL.label);
 
   // https://www.youtube.com/watch?v=PNbDrDI97Ng
   const dataLabels = {
@@ -98,25 +135,32 @@ export function drawGraph() {
       const { ctx } = chart;
       ctx.save();
       ctx.font = "12px sans-serif";
-      for (let i = 0; i < data.length; i++) {
-        ctx.fillText(((chart.config.data.labels!) as string[])[i],
-          chart.getDatasetMeta(0).data[i].x + 10,
-          chart.getDatasetMeta(0).data[i].y);
+      for (let numDataSet = 0; numDataSet < chart.getVisibleDatasetCount(); numDataSet++) {
+        for (let i = 0; i < data[0].length; i++) {
+          // Add labels to each point, above and slightly to the right.
+          ctx.fillText(((chart.config.data.labels!) as string[])[i],
+            chart.getDatasetMeta(numDataSet).data[i].x,
+            chart.getDatasetMeta(numDataSet).data[i].y - 10);
+        }
       }
       ctx.restore();
     },
   };
 
   const ctx = document.getElementById('chart2-canv')! as HTMLCanvasElement;
+
   chart = new Chart(ctx, {
     type: 'scatter',
     data: {
       labels: elemLabels.slice(startElem, startElem + numElems),
-      datasets: [{
-        data: [...data],
-        borderWidth: 1,
-        label: `${xLabel} vs ${yLabel}`,
-      }]
+      datasets:
+        data.map((values: ScatterDataPoint[], index: number) => {
+          return {
+            data: [...values],
+            borderWidth: 1,
+            label: `${xLabel} vs ${yLabels[index]}`,
+          };
+        })
     },
     options: {
       ...options,
@@ -133,83 +177,12 @@ export function drawGraph() {
 
 }
 
-// export function drawGraphForElem() {
-
-//   if (chart) {
-//     chart.destroy();
-//   }
-
-//   let yLabel = '';
-//   let data: XYpair[] = [];
-
-//   switch (yValueChosen) {
-//     case 'rad-prob-dist':
-//       data = getRadProbDensityForElemAndOrbital(selectedElement$.get(), orbitalChosen);
-//       yLabel = `Radial Probability Distribution for ${selectedElement$.get().selectedElementInfo!.symbol} ${eLevels[orbitalChosen]}`;
-//       break;
-//     case 'electron-density':
-//       data = getWaveFunctionSquared(selectedElement$.get(), orbitalChosen);
-//       yLabel = `Electron Density for ${selectedElement$.get().selectedElementInfo!.symbol} ${eLevels[orbitalChosen]}`;
-//       break;
-//     case 'wave-fcn':
-//       data = getWaveFunction(selectedElement$.get(), orbitalChosen);
-//       yLabel = `Wave Function for ${selectedElement$.get().selectedElementInfo!.symbol} ${eLevels[orbitalChosen]}`;
-//       break;
-//     default:
-//       console.error("Unknown graph option choice: ", yValueChosen);
-//       break;
-//   }
-
-//   const options = {
-//     scales: {
-//       x: {
-//         title: {
-//           text: 'r',
-//           display: true,
-//         },
-//       },
-//       y: {
-//         title: {
-//           text: yLabel,
-//           display: true,
-//         }
-//       }
-//     },
-
-//   };
-
-
-//   const ctx = document.getElementById('chart2-canv')! as HTMLCanvasElement;
-//   chart = new Chart(ctx, {
-//     type: 'scatter',
-//     data: {
-//       // labels: elemLabels.slice(startElem, startElem + numElems),
-//       datasets: [{
-//         data: [...data],
-//         borderWidth: 1,
-//         label: `r vs ${yLabel}`,
-//       }]
-//     },
-//     options: {
-//       ...options,
-//       plugins: {
-//         title: {
-//           text: "chartInfo.bottomMaterial",
-//           display: false,       // TODO
-//           position: "bottom",
-//         },
-//       },
-//     },
-//     // plugins: [dataLabels],  // https://www.youtube.com/watch?v=PNbDrDI97Ng
-//   });
-
-// }
-
-
-
-function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numElems: number) {
-  let data: number[] = [];
-  let label: string = '';
+function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numElems: number): { data: number[], label: string }[] {
+  let data: number[][] = [];
+  let labels: string[] = [];
+  if (valueChosenToGraph === "") {
+    return [{ data: [], label: '' }];
+  }
   switch (valueChosenToGraph) {
     // case 'polarizability':
     //   data = polarizability.slice(startElem, startElem + numElems);
@@ -224,40 +197,71 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
     //   label = `Weighted Ionization Energy (${unitsSelection$.get()})`;
     //   break;
     case 'z':  // nuclear charge
-      data = Array.from({ length: numElems }, (_, i) => startElem + i + 1);
-      label = `Nuclear Charge`;
+      // Array containing 0, 1, 2, 3, 4, 5, ... , 118.
+      data = [Array.from({ length: 118 }, (_, i) => i)];
+      labels = [`Nuclear Charge`];
       break;
     case 'amass': // atomic mass
-      data = elements.map(el => el.aMass);
-      label = "Atomic mass";
+      data = [elements.map(el => el.aMass)];
+      labels = ["Atomic mass"];
       break;
-    // case 'Zi': // effective nuclear charge
-    //   data = getZisForRowOfElementsAndOrbital(startElem, numElems, orbitalChosen).map(e => e * conversions.get(units)!);
-    //   label = `Effective Nuclear Charge for ${eLevels[orbitalChosen]}`;
-    //   break;
+    case 'effnuccharge': // effective nuclear charge
+      if (selectedZeffCheckboxes.size === 0) {
+        return [{ data: [], label: '' }];
+      }
+      selectedZeffCheckboxes.keys().forEach((checkbox: string, index: number) => {
+
+        // checkbox has the format of <method>-<orbital>. Need to convert to
+        // Zeff - method orbital
+        const [method, orbital] = checkbox.split('-');
+        const methodAndOrb = `${checkbox.split('-')[0]} ${checkbox.split('-')[1]}`;
+        labels.push(`Effective Nuclear Charge for ${orbital} - ${method2Formal(method)}`);
+
+        const fieldname = `Zeff - ${methodAndOrb}`;
+        // Push on an array of numbers
+        data.push(dataFromExcelSheet.map((d: { [fieldname: string]: number }) => d[fieldname] || undefined));
+      });
+
+      break;
     // case 'ti': // kinetic energy
     //   data = getTisForRowOfElementsAndOrbital(startElem, numElems, orbitalChosen).map(e => e * conversions.get(units)!);
-    //   label = `Kinetic Energy for ${eLevels[orbitalChosen]}`;
+    //   label = `Kinetic Energy for ${ eLevels[orbitalChosen]}`;
     //   break;
     // case 'ven': // effective nuclear charge / Z
     //   const Z = Array.from({ length: numElems }, (_, i) => startElem + i + 1);
     //   data = getVisForRowOfElementsAndOrbital(startElem, numElems, orbitalChosen).map(e => e * conversions.get(units)!);
-    //   label = `Electron-nuclear attraction for ${eLevels[orbitalChosen]}`;
+    //   label = `Electron - nuclear attraction for ${ eLevels[orbitalChosen]}`;
     //   break;
     // case 'vaoe': // orbital energy
     //   data = getVAOEsForRowOfElementsAndOrbital(startElem, numElems, orbitalChosen).map(e => e * conversions.get(units)!);
-    //   label = `Orbital Energy for ${eLevels[orbitalChosen]}`;
+    //   label = `Orbital Energy for ${ eLevels[orbitalChosen]}`;
     //   break;
     // case 'rmax':
     //   data = getRmaxForRowOfElementsAndOrbital(startElem, numElems, orbitalChosen);
-    //   label = `Max Atomic Size for ${eLevels[orbitalChosen]}`;
+    //   label = `Max Atomic Size for ${ eLevels[orbitalChosen]}`;
     //   break;
+    case 'density':
+      data = [elements.map(el => +el.density)];
+      labels = ["Density"];
+      break;
+    case 'melting':
+      data = [elements.map(el => +el.meltingPoint)];
+      labels = ["Melting Point"];
+      break;
+    case 'boiling':
+      data = [elements.map(el => +el.boilingPoint)];
+      labels = ["Boiling Point"];
+      break;
 
     default:
       console.error("Unknown graph option choice: ", valueChosenToGraph);
       break;
   }
-  return { data, label };
+
+  return data.map((valuesArr, i) => ({
+    data: valuesArr.slice(startElem, startElem + numElems),
+    label: labels[i],
+  }));
 }
 
 drawGraph();

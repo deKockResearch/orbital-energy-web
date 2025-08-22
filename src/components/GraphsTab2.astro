@@ -1,43 +1,63 @@
 ---
 import TabLayout from "../layouts/TabLayout.astro";
+
+import { elements } from "../scripts/elements";
+import { type ElementType } from '../scripts/types';
+
+import { COLUMN_NAMES } from "../scripts/excelSheet";
+
+import { read, utils } from "xlsx";
+
+/* parse workbook */
+import b64 from "../assets/081425Data.xlsx";
+const wb = read(b64, { type: "base64" });
+
+const dataFromExcelSheet = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],
+  {
+    range: 'C5:FB122',
+    header: COLUMN_NAMES,
+  });
+
 ---
 
 <TabLayout tabName="New Graphs" id="graphs2-tab">
+  <!-- Put the data into the DOM, so it can be extracted by the client-side code. -->
+  <div id="excel-data" data-excelsheet={JSON.stringify(dataFromExcelSheet)}></div>
 
   <div class="container">
     <div class="y-menu radio-collection">
       <div>Choose Y-axis item</div>
       <div>
         <label for="y_z">Atomic number</label>
-        <input type="radio" id="y_z" value="z" name="y-graph-value" />
+        <input type="radio" id="y_z" value="z" name="y-graph-value"  />
       </div>
       <div>
         <label for="y_amass">Atomic mass</label>
-        <input type="radio" id="y_amass" value="amass" name="y-graph-value" />
+        <input type="radio" id="y_amass" value="amass" name="y-graph-value"  />
       </div>
       <div>
         <label for="y_effnuccharge">Eff. Nuclear Charge (Z<sub>eff</sub>)</label>
-        <input type="radio" id="y_effnuccharge" value="effnuccharge" name="y-graph-value" />
+        <input type="radio" id="y_effnuccharge" value="effnuccharge" name="y-graph-value"  />
       </div>
       <div>
         <label for="y_atomrad">Atomic Radius (Rp)</label>
-        <input type="radio" id="y_atomrad" value="atomrad" name="y-graph-value" />
+        <input type="radio" id="y_atomrad" value="atomrad" name="y-graph-value"  />
       </div>
       <div>
         <label for="y_ke">Kinetic Energy</label>
-        <input type="radio" id="y_ke" value="ke" name="y-graph-value" />
+        <input type="radio" id="y_ke" value="ke" name="y-graph-value"  />
       </div>
       <div>
         <label for="y_pe">Potential Energy (PE)</label>
-        <input type="radio" id="y_pe" value="pe" name="y-graph-value" />
+        <input type="radio" id="y_pe" value="pe" name="y-graph-value"  />
       </div>
       <div>
         <label for="y_te">Total Energy (TE)</label>
-        <input type="radio" id="y_te" value="te" name="y-graph-value" />
+        <input disabled type="radio" id="y_te" value="te" name="y-graph-value"  />
       </div>
       <div>
         <label for="y_ie">Ionization Energy</label>
-        <input type="radio" id="y_ie" value="ie" name="y-graph-value" />
+        <input type="radio" id="y_ie" value="ie" name="y-graph-value"  />
       </div>
       <div>
         <label for="y_electroneg">Electronegativity</label>
@@ -59,11 +79,83 @@ import TabLayout from "../layouts/TabLayout.astro";
         <label for="y_polarizability">Polarizability</label>
         <input type="radio" id="y_polarizability" value="polarizability" name="y-graph-value" />
       </div>
+      <div class="space-above">
+        Display from...
+        <select id="lower-bound" autocomplete="off">
+          {elements.map(e => {
+            return <option value={e.number}>{e.number} {e.symbol}</option>;
+          })}
 
+        </select>
+      </div>
+      <div>
+        Up to...
+        <select id="upper-bound" autocomplete="off">
+          {elements.map((e: ElementType) => (
+            e.number === 18 ? ( // Argon
+              <option selected value={e.number}>{e.number} {e.symbol}</option>
+            ) : (
+              <option value={e.number}>{e.number} {e.symbol}</option>
+            )
+          ))}
+
+        </select>
+      </div>
     </div>
+
     <div id="chart-attachment">
       <canvas id="chart2-canv"></canvas>
     </div>
+
+    <div id="y-subchoice">
+      <table class="table table-header-rotated">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="rotate"><div><span>Guerra</span></div></th>
+            <th class="rotate"><div><span>Slater</span></div></th>
+            <th class="rotate"><div><span>RDK</span></div></th>
+          </tr>
+        </thead>
+        <tbody>
+          {() => {
+            // We don't have values for all orbitals for all methods. We have for Guerra,
+            // but we don't have, e.g., 4d, for either slater or rdk. So, don't put
+            // checkboxes for those ones for which we have no vales.
+            const orbitals = {
+              "guerra": [
+                "1s", "2s", "2p", "3s", "3p", "3d", "4s", "4p", "4d", "4f",
+                "5s", "5p", "5d", "5f", "6s", "6p", "6d", "7s", "7p"
+              ],
+              "slater": ["1s", "2s", "2p", "3s", "3p"],
+              "rdk":    ["1s", "2s", "2p", "3s", "3p", "4s"]
+            };
+            const methods: Array<'guerra' | 'slater' | 'rdk'> = ["guerra", "slater", "rdk"];
+            return orbitals["guerra"].map((orbital) => (
+              <tr>
+                <th class="row-header">{orbital}</th>
+                {methods.map((method) => (
+                  orbitals[method].includes(orbital) ?
+                  (
+                    <td>
+                      <input
+                        type="checkbox"
+                        id={`${method}-${orbital}`}
+                        value={`${method}-${orbital}`}
+                        class="y-zeff-checkbox"
+                      />
+                    </td>
+                  ) : (<td></td>)
+              ))  }
+              </tr>
+            ));
+          }}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- The above divs are laid out horizontally using css grid -->
+
     <div class="x-menu radio-collection">
       <div>Choose X-axis item</div>
       <div>
@@ -119,19 +211,22 @@ import TabLayout from "../layouts/TabLayout.astro";
         <input type="radio" id="x_polarizability" value="polarizability" name="x-graph-value" />
       </div>
     </div>
+
   </div>
 
 </TabLayout>
 
+<!-- dataFromExcelSheet is parsed in the frontmatter of index.astro -->
+<!-- <script define:vars={{ dataFromExcelSheet }}> -->
 <script>
-  import "../scripts/graphData2.ts";
+  import "../scripts/graphData2.ts"
 </script>
 
 <style>
 
   .container {
     display: grid;
-    grid-template-columns: 220px auto;
+    grid-template-columns: 220px auto 160px 160px;
   }
 
   #chart-attachment {
@@ -140,6 +235,10 @@ import TabLayout from "../layouts/TabLayout.astro";
     grid-column-end: 3;
     width: 1200px;
     height: 600px;
+  }
+
+  .space-above {
+    margin-block-start: 3rem;
   }
 
   .y-menu {
@@ -161,16 +260,36 @@ import TabLayout from "../layouts/TabLayout.astro";
     display: table;   /* not sure why this works... */
   }
 
-
-  #charts-wrapper {
-    width: 90%;
+  table, th, td {
+    border-width: 0;
+  }
+  .table-header-rotated td {
+    border-collapse: collapse;
+    border-width: 0;
+    width: 30px;
   }
 
-  #charts-wrapper > canvas {
-    margin-bottom: 2rem;
+
+  .table-header-rotated tr:nth-child(odd) {
+    background-color: inherit
   }
 
+  th.rotate {
+    height: 2em;
+    white-space: nowrap;
+  }
 
+  th.rotate > div {
+    transform:
+      rotate(270deg);
+    width: 30px;
+  }
+  th.rotate > div > span {
+    /* padding: 5px 10px; */
+  }
 
+  #y-subchoice {
+    display: none;
+  }
 
 </style>

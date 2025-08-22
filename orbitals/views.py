@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
+from .calculations import calculate_element_energy
 
 
 def index(request):
@@ -27,3 +28,16 @@ def tab_content(request, tab_name):
     
     html = render_to_string(template_name, request=request)
     return HttpResponse(html)
+
+
+def calculate_energy(request):
+    """API endpoint for orbital energy calculations"""
+    atomic_number = request.GET.get('atomic_number', 8)  # Default to oxygen
+    e_config = request.GET.get('e_config', '1s2 2s2 2p4')  # Default oxygen config
+    
+    try:
+        atomic_number = int(atomic_number)
+        result = calculate_element_energy(atomic_number, e_config)
+        return JsonResponse(result)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)

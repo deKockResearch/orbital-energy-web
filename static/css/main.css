@@ -1,0 +1,129 @@
+@import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700);
+@import url(https://fonts.googleapis.com/css?family=Raleway:100,400,700);
+
+/* Base styles from Layout.astro */
+html {
+    background-color: #bababa;
+    background-size: cover;
+    height: 100%;
+    font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+    width: 90%;
+    width: 90vw;
+    margin: 1vh auto;
+    color: black;
+}
+
+/* Styles from index.astro */
+.version {
+    font-size: small;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #fff;
+}
+
+h2 {
+    text-align: center;
+    padding-bottom: 8px;
+    margin-top: 0px;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    background-color: rgb(112, 128, 144, 1);
+    /* to make the selected element which is transformed, and the lower part of
+       the element table slide under the header. */
+    z-index: 7;
+}
+
+.tabs-wrapper {
+    margin-top: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 2px 1px 20px #888;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+.nav-tabs {
+    display: flex;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.nav-tabs li {
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    cursor: pointer;
+}
+
+.nav-tabs li.tab {
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    font-size: larger;
+}
+
+.nav-tabs .tab {
+    background-color: #888;
+}
+
+.nav-tabs .tab.is-active {
+    background-color: #cacaca;
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.is-active {
+    display: block;
+    background-color: #cacaca;
+    padding-top: 0px;
+    padding-left: 8px;
+    border-radius: 0 10px 10px 10px;
+}
+
+/* for sub-tabs, make color even lighter */
+.tabs-wrapper .tabs-wrapper .tab-panel.is-active {
+    background-color: #dadada;
+}
+
+.tabs-wrapper .tabs-wrapper .nav-tabs .tab.is-active {
+    background-color: #dadada;
+}
+
+.group-12 {
+    background-color: #6480ba;
+}
+
+.group-12.ptable:hover {
+    transform: scale(1.1);
+    background-color: #6699ff;
+}
+
+.description.group-base {
+    background-color: rgba(225, 170, 173, 0.5);
+}
+
+.description.group-base.ptable:hover {
+    background-color: rgba(212, 132, 137, 0.8);
+}
+
+.key li.group-base:before {
+    background-color: #d48489;
+}
+
+.hover-group-base .element {
+    opacity: 0.5;
+}

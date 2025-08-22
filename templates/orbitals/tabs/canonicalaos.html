@@ -1,0 +1,58 @@
+<div class="tab-panel" id="canonicalaos-tab">
+    <h2>Canonical AOs</h2>
+    <div style="margin: 20px 0;">
+        <h3>Orbital Energy Calculator</h3>
+        <div style="margin: 10px 0;">
+            <label for="atomic-number">Atomic Number:</label>
+            <input type="number" id="atomic-number" value="8" min="1" max="118" style="margin-left: 10px; width: 60px;">
+        </div>
+        <div style="margin: 10px 0;">
+            <label for="electron-config">Electron Configuration:</label>
+            <input type="text" id="electron-config" value="1s2 2s2 2p4" style="margin-left: 10px; width: 150px;">
+        </div>
+        <button id="calculate-btn" style="margin: 10px 0; padding: 5px 15px; background-color: #6480ba; color: white; border: none; border-radius: 3px; cursor: pointer;">Calculate</button>
+        
+        <div id="calculation-results" style="margin-top: 20px; padding: 15px; background-color: #f0f0f0; border-radius: 5px; display: none;">
+            <h4>Results:</h4>
+            <div id="results-content"></div>
+        </div>
+    </div>
+    
+    <script>
+    document.getElementById('calculate-btn').addEventListener('click', async function() {
+        const atomicNumber = document.getElementById('atomic-number').value;
+        const electronConfig = document.getElementById('electron-config').value;
+        const resultsDiv = document.getElementById('calculation-results');
+        const resultsContent = document.getElementById('results-content');
+        
+        try {
+            const response = await fetch(`/orbitals/calculate/?atomic_number=${atomicNumber}&e_config=${encodeURIComponent(electronConfig)}`);
+            const data = await response.json();
+            
+            if (response.ok) {
+                let html = `
+                    <p><strong>Element:</strong> Atomic Number ${data.atomic_number}</p>
+                    <p><strong>Electron Configuration:</strong> ${data.electron_config}</p>
+                    <p><strong>Total Energy:</strong> ${data.total_energy.toFixed(4)} Hartree</p>
+                    <h5>Orbital Energies:</h5>
+                    <ul>
+                `;
+                
+                data.orbitals.forEach((orbital, index) => {
+                    html += `<li>${orbital.level}${orbital.type}<sup>${orbital.electrons}</sup>: ${data.orbital_energies[index].toFixed(4)} Hartree</li>`;
+                });
+                
+                html += '</ul>';
+                resultsContent.innerHTML = html;
+                resultsDiv.style.display = 'block';
+            } else {
+                resultsContent.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+                resultsDiv.style.display = 'block';
+            }
+        } catch (error) {
+            resultsContent.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            resultsDiv.style.display = 'block';
+        }
+    });
+    </script>
+</div>

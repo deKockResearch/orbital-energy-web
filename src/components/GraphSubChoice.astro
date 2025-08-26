@@ -1,0 +1,172 @@
+---
+// This component contains a few blocks, only one of which is displayed at a time.
+// The block with id=y-method-and-orbital-subchoice, e.g., (or x-method-and...)
+// displays a table of checkboxes for graphing items that have
+// up to 3 methods (Guerra, Slater, RDK), and orbitals (1s, 2s, 2p, etc.)
+// These are items like kinetic energy, potential energy, total energy, eff.
+// nuclear charge, etc.
+// These choices exist when graphing x vs. y. The y-direction (vertical) allows
+// the user to choose multiple ones. The x-direction (horizontal) allows the
+// user to choose just one (via radio box group).
+
+// Then, there is the block with id='y-ionization-choices' (or x-ionization...)
+// is displayed when the user has chosen to graph ionization energies.
+
+
+// xOrY will have value 'x' or 'y'. If 'y' (vertical axis), then the code creates
+// checkboxes so the user can graph multiple values against the x axis.
+// Otherwise, the code creates radio boxes, so only one things can be selected.
+const { xOrY } = Astro.props;
+
+---
+
+<div id={xOrY + '-method-and-orbital-subchoice'}>
+  <table class="table table-header-rotated">
+    <thead>
+      <tr>
+        <th></th>
+        <th class="rotate"><div><span>Guerra</span></div></th>
+        <th class="rotate"><div><span>Slater</span></div></th>
+        <th class="rotate"><div><span>RDK</span></div></th>
+      </tr>
+    </thead>
+    <tbody>
+      {() => {
+        // We don't have values for all orbitals for all methods. We have for Guerra,
+        // but we don't have, e.g., 4d, for either slater or rdk. So, don't put
+        // checkboxes for those ones for which we have no vales.
+        const orbitals = {
+          "guerra": [
+          "1s", "2s", "2p", "3s", "3p", "3d", "4s", "4p", "4d", "4f",
+          "5s", "5p", "5d", "5f", "6s", "6p", "6d", "7s", "7p"
+          ],
+          "slater": ["1s", "2s", "2p", "3s", "3p"],
+          "rdk":    ["1s", "2s", "2p", "3s", "3p", "4s"]
+        };
+        const methods: Array<'guerra' | 'slater' | 'rdk'> = ["guerra", "slater", "rdk"];
+        return orbitals["guerra"].map((orbital) => (
+        <tr>
+          <th class="row-header">{orbital}</th>
+          {methods.map((method) => (
+            orbitals[method].includes(orbital) ?
+            (
+            <td>
+              <input
+              type="checkbox"
+              id={`${method}-${orbital}`}
+              value={`${method}-${orbital}`}
+              class={`y-method-and-orbital-subchoice-checkbox ${method}`}
+              />
+            </td>
+            ) : (<td></td>)
+            ))  }
+          </tr>
+          ));
+        }}
+      </tbody>
+    </table>
+  </div>
+
+  <div id={xOrY + '-ionization-choice'}>
+    <table class="table table-header-rotated">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="rotate"><div><span>Ionization<br>Energy</span></div></th>
+        </tr>
+      </thead>
+      <tbody>
+        {['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th']
+          .map(io => (
+            <tr>
+              <th class="row-header">{io}</th>
+              <td>
+                <input
+                  type="checkbox"
+                  id={`${io}-ionization-checkbox`}
+                  value={io}
+                  class={`y-ionization-checkbox`}
+                />
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div id={xOrY + '-electronegativity-choice'}>
+    <table class="table table-header-rotated">
+      <thead>
+        <tr>
+          <th></th>
+          <th><div><span>Method</span></div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Tantardini and Oganov</th>
+          <td>
+            <input
+              type="checkbox" id='y-tAndO-electro-neg-checkbox'
+              value='tAndO-electro-neg'
+              class='y-electro-neg-checkbox'
+            />
+          </td>
+        </tr>
+        <tr>
+          <th>Pauling's</th>
+          <td>
+            <input
+              type="checkbox" id='y-paulings-electro-neg-checkbox'
+              value='paulings-electro-neg'
+              class='y-electro-neg-checkbox'
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    import "../scripts/graphSubChoice.ts"
+
+  </script>
+
+  <style>
+  table, th, td {
+    border-width: 0;
+  }
+  .table-header-rotated td {
+    border-collapse: collapse;
+    border-width: 0;
+    width: 30px;
+  }
+
+
+  .table-header-rotated tr:nth-child(odd) {
+    background-color: inherit
+  }
+
+  th.rotate {
+    height: 2em;
+    white-space: nowrap;
+  }
+
+  th.rotate > div {
+    transform:
+      rotate(270deg);
+    width: 30px;
+  }
+  th.rotate > div > span {
+    /* padding: 5px 10px; */
+  }
+
+  #y-method-and-orbital-subchoice,
+  #x-method-and-orbital-subchoice,
+  #x-ionization-choice,
+  #y-ionization-choice,
+  #y-electronegativity-choice {
+    display: none;
+  }
+  </style>

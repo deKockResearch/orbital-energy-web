@@ -10,6 +10,7 @@ import { read, utils } from "xlsx";
 
 /* parse workbook */
 import b64 from "../assets/081425Data.xlsx";
+import GraphSubChoice from "./GraphSubChoice.astro";
 const wb = read(b64, { type: "base64" });
 
 const dataFromExcelSheet = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],
@@ -53,7 +54,7 @@ const dataFromExcelSheet = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],
       </div>
       <div>
         <label for="y_te">Total Energy (TE)</label>
-        <input disabled type="radio" id="y_te" value="te" name="y-graph-value"  />
+        <input type="radio" id="y_te" value="te" name="y-graph-value"  />
       </div>
       <div>
         <label for="y_ie">Ionization Energy</label>
@@ -92,7 +93,7 @@ const dataFromExcelSheet = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],
         Up to...
         <select id="upper-bound" autocomplete="off">
           {elements.map((e: ElementType) => (
-            e.number === 18 ? ( // Argon
+            e.number === 18 ? ( // make Argon be the default upper bound selection
               <option selected value={e.number}>{e.number} {e.symbol}</option>
             ) : (
               <option value={e.number}>{e.number} {e.symbol}</option>
@@ -107,52 +108,8 @@ const dataFromExcelSheet = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],
       <canvas id="chart2-canv"></canvas>
     </div>
 
-    <div id="y-subchoice">
-      <table class="table table-header-rotated">
-        <thead>
-          <tr>
-            <th></th>
-            <th class="rotate"><div><span>Guerra</span></div></th>
-            <th class="rotate"><div><span>Slater</span></div></th>
-            <th class="rotate"><div><span>RDK</span></div></th>
-          </tr>
-        </thead>
-        <tbody>
-          {() => {
-            // We don't have values for all orbitals for all methods. We have for Guerra,
-            // but we don't have, e.g., 4d, for either slater or rdk. So, don't put
-            // checkboxes for those ones for which we have no vales.
-            const orbitals = {
-              "guerra": [
-                "1s", "2s", "2p", "3s", "3p", "3d", "4s", "4p", "4d", "4f",
-                "5s", "5p", "5d", "5f", "6s", "6p", "6d", "7s", "7p"
-              ],
-              "slater": ["1s", "2s", "2p", "3s", "3p"],
-              "rdk":    ["1s", "2s", "2p", "3s", "3p", "4s"]
-            };
-            const methods: Array<'guerra' | 'slater' | 'rdk'> = ["guerra", "slater", "rdk"];
-            return orbitals["guerra"].map((orbital) => (
-              <tr>
-                <th class="row-header">{orbital}</th>
-                {methods.map((method) => (
-                  orbitals[method].includes(orbital) ?
-                  (
-                    <td>
-                      <input
-                        type="checkbox"
-                        id={`${method}-${orbital}`}
-                        value={`${method}-${orbital}`}
-                        class="y-zeff-checkbox"
-                      />
-                    </td>
-                  ) : (<td></td>)
-              ))  }
-              </tr>
-            ));
-          }}
-        </tbody>
-      </table>
-    </div>
+    <GraphSubChoice xOrY="y" />
+
 
     <!-- The above divs are laid out horizontally using css grid -->
 
@@ -260,36 +217,6 @@ const dataFromExcelSheet = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],
     display: table;   /* not sure why this works... */
   }
 
-  table, th, td {
-    border-width: 0;
-  }
-  .table-header-rotated td {
-    border-collapse: collapse;
-    border-width: 0;
-    width: 30px;
-  }
 
-
-  .table-header-rotated tr:nth-child(odd) {
-    background-color: inherit
-  }
-
-  th.rotate {
-    height: 2em;
-    white-space: nowrap;
-  }
-
-  th.rotate > div {
-    transform:
-      rotate(270deg);
-    width: 30px;
-  }
-  th.rotate > div > span {
-    /* padding: 5px 10px; */
-  }
-
-  #y-subchoice {
-    display: none;
-  }
 
 </style>

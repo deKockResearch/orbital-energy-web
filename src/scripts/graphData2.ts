@@ -1,9 +1,6 @@
 import { Chart, type ScatterDataPoint } from "chart.js/auto";
-// import { conversions } from "./utils";
-
-import { eLevels } from "./types";
-import { elements, numElemsInPeriodicTableRows, startElemInPeriodicTableRows } from "./elements";
-import { getZisForRowOfElementsAndOrbital } from "./orbitalEnergies";
+import { elements } from "./elements";
+import { displaySubChoice } from "./graphSubChoice";
 
 const dataFromExcelSheet = JSON.parse(document.getElementById('excel-data')!.dataset.excelsheet!);
 
@@ -16,20 +13,20 @@ Array.from(document.getElementsByTagName('input')).forEach(x => {
 
 let chart: Chart;
 
-let xGraphChoice = '';
-let yGraphChoice = '';
+export let xGraphChoice = '';
+export let yGraphChoice = '';
 
 const elemLabels = elements.map(el => el.symbol);
 
 // This is for when the user has to pick Guerra or Slater or RDK sub-choices.
-const ySubChoice = document.getElementById('y-subchoice')!;
+const ySubChoice = document.getElementById('y-method-and-orbital-subchoice')!;
 
 const yradioInputs = document.querySelectorAll('.y-menu.radio-collection input');
 for (let ri of yradioInputs) {
   ri.addEventListener('click', (event: Event) => {
     const targ: any = event.target!;
     yGraphChoice = targ.value;
-    ySubChoice.style.display = (yGraphChoice === 'effnuccharge') ? 'block' : 'none';
+    displaySubChoice(yGraphChoice);
     drawGraph();
   });
 }
@@ -52,18 +49,45 @@ lowerBoundSelection.addEventListener('change', () => {
 });
 upperBoundSelection.addEventListener('change', drawGraph);
 
-const zeffCheckboxes = Array.from(document.getElementsByClassName("y-zeff-checkbox"));
-zeffCheckboxes.forEach((ch) => {
-  ch.addEventListener('change', () => updateChecked(ch as HTMLInputElement));
+const yMethodAndOrbSubChoiceCheckboxes = Array.from(document.getElementsByClassName("y-method-and-orbital-subchoice-checkbox"));
+yMethodAndOrbSubChoiceCheckboxes.forEach((ch) => {
+  ch.addEventListener('change', () => recordSelectedMethodAndOrbSubchoices(ch as HTMLInputElement));
 });
-
-const selectedZeffCheckboxes = new Set<string>();
-
-function updateChecked(ch: HTMLInputElement) {
+const selectedYMethodAndOrbSubchoiceCheckboxes = new Set<string>();
+function recordSelectedMethodAndOrbSubchoices(ch: HTMLInputElement) {
   if (ch.checked) {
-    selectedZeffCheckboxes.add(ch.id);
+    selectedYMethodAndOrbSubchoiceCheckboxes.add(ch.id);
   } else {
-    selectedZeffCheckboxes.delete(ch.id);
+    selectedYMethodAndOrbSubchoiceCheckboxes.delete(ch.id);
+  }
+  drawGraph();
+}
+
+const yIonizationSubChoiceCheckboxes = Array.from(document.getElementsByClassName("y-ionization-checkbox"));
+yIonizationSubChoiceCheckboxes.forEach((ch) => {
+  ch.addEventListener('change', () => recordSelectedIonizationSubchoices(ch as HTMLInputElement));
+});
+const selectedYIonizationSubchoiceCheckboxes = new Set<string>();
+function recordSelectedIonizationSubchoices(ch: HTMLInputElement) {
+  if (ch.checked) {
+    selectedYIonizationSubchoiceCheckboxes.add(ch.id);
+  } else {
+    selectedYIonizationSubchoiceCheckboxes.delete(ch.id);
+  }
+  drawGraph();
+}
+
+
+const yElectroNegSubChoiceCheckboxes = Array.from(document.getElementsByClassName("y-electro-neg-checkbox"));
+yElectroNegSubChoiceCheckboxes.forEach((ch) => {
+  ch.addEventListener('change', () => recordSelectedElectroNegSubchoices(ch as HTMLInputElement));
+});
+const selectedYElectroNegSubchoiceCheckboxes = new Set<string>();
+function recordSelectedElectroNegSubchoices(ch: HTMLInputElement) {
+  if (ch.checked) {
+    selectedYElectroNegSubchoiceCheckboxes.add(ch.id);
+  } else {
+    selectedYElectroNegSubchoiceCheckboxes.delete(ch.id);
   }
   drawGraph();
 }
@@ -177,12 +201,31 @@ export function drawGraph() {
 
 }
 
+
 function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numElems: number): { data: number[], label: string }[] {
   let data: number[][] = [];
   let labels: string[] = [];
+
+  function getDataFromSpreadSheetData(labelPrefix: string, fieldNamePrefix: string) {
+    selectedYMethodAndOrbSubchoiceCheckboxes.keys().forEach((checkbox: string, index: number) => {
+
+      // checkbox has the format of <method>-<orbital>. Need to convert to
+      // Rp - method orbital
+      const [method, orbital] = checkbox.split('-');
+      const methodAndOrb = `${checkbox.split('-')[0]} ${checkbox.split('-')[1]}`;
+      labels.push(`${labelPrefix} for ${orbital} - ${method2Formal(method)}`);
+
+      const fieldname = `${fieldNamePrefix} - ${methodAndOrb}`;
+      // Push on an array of numbers
+      data.push(dataFromExcelSheet.map((d: { [fieldname: string]: number }) => d[fieldname] || undefined));
+    });
+  }
+
   if (valueChosenToGraph === "") {
     return [{ data: [], label: '' }];
   }
+
+
   switch (valueChosenToGraph) {
     // case 'polarizability':
     //   data = polarizability.slice(startElem, startElem + numElems);
@@ -206,40 +249,72 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
       labels = ["Atomic mass"];
       break;
     case 'effnuccharge': // effective nuclear charge
-      if (selectedZeffCheckboxes.size === 0) {
+      if (selectedYMethodAndOrbSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
-      selectedZeffCheckboxes.keys().forEach((checkbox: string, index: number) => {
+      getDataFromSpreadSheetData('Effective Nuclear Charge', 'Zeff');
+      break;
 
-        // checkbox has the format of <method>-<orbital>. Need to convert to
-        // Zeff - method orbital
-        const [method, orbital] = checkbox.split('-');
-        const methodAndOrb = `${checkbox.split('-')[0]} ${checkbox.split('-')[1]}`;
-        labels.push(`Effective Nuclear Charge for ${orbital} - ${method2Formal(method)}`);
+    case 'atomrad': // Atomic radius (Rp)
+      if (selectedYMethodAndOrbSubchoiceCheckboxes.size === 0) {
+        return [{ data: [], label: '' }];
+      }
+      getDataFromSpreadSheetData('Atomic Radius', 'Rp');
+      break;
 
-        const fieldname = `Zeff - ${methodAndOrb}`;
+    case 'ke': // kinetic energy
+      if (selectedYMethodAndOrbSubchoiceCheckboxes.size === 0) {
+        return [{ data: [], label: '' }];
+      }
+      getDataFromSpreadSheetData('Kinetic Energy', 'KE');
+      break;
+
+    case 'pe': // potential energy
+      if (selectedYMethodAndOrbSubchoiceCheckboxes.size === 0) {
+        return [{ data: [], label: '' }];
+      }
+      getDataFromSpreadSheetData('Potential Energy', 'PE');
+      break;
+    case 'te': // total energy
+      if (selectedYMethodAndOrbSubchoiceCheckboxes.size === 0) {
+        return [{ data: [], label: '' }];
+      }
+      getDataFromSpreadSheetData('Total Energy', 'TE');
+      break;
+
+    case 'ie':   // ionization energy
+      if (selectedYIonizationSubchoiceCheckboxes.size === 0) {
+        return [{ data: [], label: '' }];
+      }
+      selectedYIonizationSubchoiceCheckboxes.keys().forEach((checkbox: string, index: number) => {
+        // checkbox has the format '1st-ionization-checkbox', '2nd-ionization-checkbox', etc. Remove the latter part.
+        const checkboxValue = checkbox.split('-')[0];
+
+        // Name in the json structure extracted from the excel spreadsheeet
+        const fieldname = `Ionization Energy: ${checkboxValue}`;
+        labels.push(`${fieldname} Ionization (eV)`);
+
         // Push on an array of numbers
         data.push(dataFromExcelSheet.map((d: { [fieldname: string]: number }) => d[fieldname] || undefined));
       });
-
       break;
-    // case 'ti': // kinetic energy
-    //   data = getTisForRowOfElementsAndOrbital(startElem, numElems, orbitalChosen).map(e => e * conversions.get(units)!);
-    //   label = `Kinetic Energy for ${ eLevels[orbitalChosen]}`;
-    //   break;
-    // case 'ven': // effective nuclear charge / Z
-    //   const Z = Array.from({ length: numElems }, (_, i) => startElem + i + 1);
-    //   data = getVisForRowOfElementsAndOrbital(startElem, numElems, orbitalChosen).map(e => e * conversions.get(units)!);
-    //   label = `Electron - nuclear attraction for ${ eLevels[orbitalChosen]}`;
-    //   break;
-    // case 'vaoe': // orbital energy
-    //   data = getVAOEsForRowOfElementsAndOrbital(startElem, numElems, orbitalChosen).map(e => e * conversions.get(units)!);
-    //   label = `Orbital Energy for ${ eLevels[orbitalChosen]}`;
-    //   break;
-    // case 'rmax':
-    //   data = getRmaxForRowOfElementsAndOrbital(startElem, numElems, orbitalChosen);
-    //   label = `Max Atomic Size for ${ eLevels[orbitalChosen]}`;
-    //   break;
+    case 'electroneg':
+      if (selectedYElectroNegSubchoiceCheckboxes.size === 0) {
+        return [{ data: [], label: '' }];
+      }
+      selectedYElectroNegSubchoiceCheckboxes.keys().forEach((checkbox: string, index: number) => {
+        // checkbox has the format 'y-<method>-electro-neg-checkbox'.
+        const checkboxValue = checkbox.split('-')[1];
+        const methodName = (checkboxValue === 'tAndO') ? 'Tantardini and Oganov' : 'Pauling\'s';
+
+        // Name in the json structure extracted from the excel spreadsheeet
+        const fieldname = methodName + ' Electronegativity';
+        labels.push(`${methodName} Electronegativity`);
+
+        // Push on an array of numbers
+        data.push(dataFromExcelSheet.map((d: { [fieldname: string]: number }) => d[fieldname] || undefined));
+      });
+      break;
     case 'density':
       data = [elements.map(el => +el.density)];
       labels = ["Density"];

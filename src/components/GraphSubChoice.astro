@@ -16,51 +16,54 @@
 // xOrY will have value 'x' or 'y'. If 'y' (vertical axis), then the code creates
 // checkboxes so the user can graph multiple values against the x axis.
 // Otherwise, the code creates radio boxes, so only one things can be selected.
+
 const { xOrY } = Astro.props;
 
 ---
 
-<div id={xOrY + '-method-and-orbital-subchoice'}>
-  <table class="table table-header-rotated">
-    <thead>
-      <tr>
-        <th></th>
-        <th class="rotate"><div><span>Guerra</span></div></th>
-        <th class="rotate"><div><span>Slater</span></div></th>
-        <th class="rotate"><div><span>RDK</span></div></th>
-      </tr>
-    </thead>
-    <tbody>
-      {() => {
-        // We don't have values for all orbitals for all methods. We have for Guerra,
-        // but we don't have, e.g., 4d, for either slater or rdk. So, don't put
-        // checkboxes for those ones for which we have no vales.
-        const orbitals = {
-          "guerra": [
-          "1s", "2s", "2p", "3s", "3p", "3d", "4s", "4p", "4d", "4f",
-          "5s", "5p", "5d", "5f", "6s", "6p", "6d", "7s", "7p"
-          ],
-          "slater": ["1s", "2s", "2p", "3s", "3p"],
-          "rdk":    ["1s", "2s", "2p", "3s", "3p", "4s"]
-        };
-        const methods: Array<'guerra' | 'slater' | 'rdk'> = ["guerra", "slater", "rdk"];
-        return orbitals["guerra"].map((orbital) => (
+<div id="subchoice-column">
+  <div id={xOrY + '-method-and-orbital-subchoice'}>
+    <table class="table table-header-rotated">
+      <thead>
         <tr>
-          <th class="row-header">{orbital}</th>
-          {methods.map((method) => (
-            orbitals[method].includes(orbital) ?
-            (
-            <td>
-              <input
-              type="checkbox"
-              id={`${method}-${orbital}`}
-              value={`${method}-${orbital}`}
-              class={`y-method-and-orbital-subchoice-checkbox ${method}`}
-              />
-            </td>
-            ) : (<td></td>)
-            ))  }
-          </tr>
+          <th></th>
+          <th class="rotate"><div><span>Guerra</span></div></th>
+          <th class="rotate"><div><span>Slater</span></div></th>
+          <th class="rotate"><div><span>RDK</span></div></th>
+        </tr>
+      </thead>
+      <tbody>
+        {() => {
+          // We don't have values for all orbitals for all methods. We have for Guerra,
+          // but we don't have, e.g., 4d, for either slater or rdk. So, don't put
+          // checkboxes for those ones for which we have no vales.
+          const orbitals = {
+            "guerra": [
+            "1s", "2s", "2p", "3s", "3p", "3d", "4s", "4p", "4d", "4f",
+            "5s", "5p", "5d", "5f", "6s", "6p", "6d", "7s", "7p"
+            ],
+            "slater": ["1s", "2s", "2p", "3s", "3p"],
+            "rdk":    ["1s", "2s", "2p", "3s", "3p", "4s"]
+          };
+          const methods: Array<'guerra' | 'slater' | 'rdk'> = ["guerra", "slater", "rdk"];
+          return orbitals["guerra"].map((orbital) => (
+          <tr>
+            <th class="row-header">{orbital}</th>
+            {methods.map((method) => (
+              orbitals[method].includes(orbital) ?
+              (
+              <td>
+                <input
+                  type={xOrY === 'y' ? ("checkbox") : ("radio")}
+                  name={`${xOrY}-subchoice-value`}
+                  id={`${method}-${orbital}`}
+                  value={`${method}-${orbital}`}
+                  class={`${xOrY}-method-and-orbital-subchoice-checkbox ${xOrY}-${method}`}
+                >
+              </td>
+              ) : (<td></td>)
+              ))  }
+            </tr>
           ));
         }}
       </tbody>
@@ -85,7 +88,7 @@ const { xOrY } = Astro.props;
                   type="checkbox"
                   id={`${io}-ionization-checkbox`}
                   value={io}
-                  class={`y-ionization-checkbox`}
+                  class={`${xOrY}-ionization-checkbox`}
                 />
               </td>
             </tr>
@@ -100,7 +103,7 @@ const { xOrY } = Astro.props;
       <thead>
         <tr>
           <th></th>
-          <th><div><span>Method</span></div></th>
+          <th class="rotate"><div><span>Method</span></div></th>
         </tr>
       </thead>
       <tbody>
@@ -108,9 +111,9 @@ const { xOrY } = Astro.props;
           <th>Tantardini and Oganov</th>
           <td>
             <input
-              type="checkbox" id='y-tAndO-electro-neg-checkbox'
+              type="checkbox" id={`${xOrY}-tAndO-electro-neg-checkbox`}
               value='tAndO-electro-neg'
-              class='y-electro-neg-checkbox'
+              class={`${xOrY}-electro-neg-checkbox`}
             />
           </td>
         </tr>
@@ -118,55 +121,61 @@ const { xOrY } = Astro.props;
           <th>Pauling's</th>
           <td>
             <input
-              type="checkbox" id='y-paulings-electro-neg-checkbox'
+              type="checkbox" id={`${xOrY}-paulings-electro-neg-checkbox`}
               value='paulings-electro-neg'
-              class='y-electro-neg-checkbox'
+              class={`${xOrY}-electro-neg-checkbox`}
             />
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-
-  <script>
-    import "../scripts/graphSubChoice.ts"
-
-  </script>
-
-  <style>
-  table, th, td {
-    border-width: 0;
-  }
-  .table-header-rotated td {
-    border-collapse: collapse;
-    border-width: 0;
-    width: 30px;
-  }
+</div>
 
 
-  .table-header-rotated tr:nth-child(odd) {
-    background-color: inherit
-  }
+<script>
+  import "../scripts/graphSubChoice.ts"
+</script>
 
-  th.rotate {
-    height: 2em;
-    white-space: nowrap;
-  }
+<style>
+table, th, td {
+  border-width: 0;
+}
+.table-header-rotated td {
+  border-collapse: collapse;
+  border-width: 0;
+  width: 30px;
+}
 
-  th.rotate > div {
-    transform:
-      rotate(270deg);
-    width: 30px;
-  }
-  th.rotate > div > span {
-    /* padding: 5px 10px; */
-  }
+#subchoice-column {
+  padding-left: 0.7rem;
+}
 
-  #y-method-and-orbital-subchoice,
-  #x-method-and-orbital-subchoice,
-  #x-ionization-choice,
-  #y-ionization-choice,
-  #y-electronegativity-choice {
-    display: none;
-  }
-  </style>
+.table-header-rotated tr:nth-child(odd) {
+  background-color: inherit
+}
+
+th.rotate {
+  height: 2em;
+  white-space: nowrap;
+}
+
+th.rotate > div {
+  transform:
+    rotate(270deg);
+  width: 30px;
+}
+th.rotate > div > span {
+  /* padding: 5px 10px; */
+}
+
+#y-method-and-orbital-subchoice,
+#x-method-and-orbital-subchoice,
+#x-ionization-choice,
+#y-ionization-choice,
+#x-electronegativity-choice,
+#y-electronegativity-choice {
+  display: none;
+}
+
+</style>

@@ -26,7 +26,7 @@ for (let ri of yradioInputs) {
   ri.addEventListener('click', (event: Event) => {
     const targ: any = event.target!;
     yGraphChoice = targ.value;
-    displaySubChoice(yGraphChoice);
+    displaySubChoice("y", yGraphChoice);
     drawGraph();
   });
 }
@@ -36,6 +36,7 @@ for (let ri of xradioInputs) {
   ri.addEventListener('click', (event: Event) => {
     const targ: any = event.target!;
     xGraphChoice = targ.value;
+    displaySubChoice("x", xGraphChoice)
     drawGraph();
   });
 }
@@ -49,48 +50,38 @@ lowerBoundSelection.addEventListener('change', () => {
 });
 upperBoundSelection.addEventListener('change', drawGraph);
 
-const yMethodAndOrbSubChoiceCheckboxes = Array.from(document.getElementsByClassName("y-method-and-orbital-subchoice-checkbox"));
-yMethodAndOrbSubChoiceCheckboxes.forEach((ch) => {
-  ch.addEventListener('change', () => recordSelectedMethodAndOrbSubchoices(ch as HTMLInputElement));
-});
-const selectedYMethodAndOrbSubchoiceCheckboxes = new Set<string>();
-function recordSelectedMethodAndOrbSubchoices(ch: HTMLInputElement) {
-  if (ch.checked) {
-    selectedYMethodAndOrbSubchoiceCheckboxes.add(ch.id);
-  } else {
-    selectedYMethodAndOrbSubchoiceCheckboxes.delete(ch.id);
+// Helper to handle checkbox selection and set management
+function setupCheckboxSet(className: string) {
+  const checkboxes = Array.from(document.getElementsByClassName(className));
+  const selectedSet = new Set<string>();
+  function recordSelection(ch: HTMLInputElement) {
+    if (ch.checked) {
+      selectedSet.add(ch.id);
+    } else {
+      selectedSet.delete(ch.id);
+    }
+    drawGraph();
   }
-  drawGraph();
+  checkboxes.forEach((ch) => {
+    ch.addEventListener('change', () => recordSelection(ch as HTMLInputElement));
+  });
+  return selectedSet;
 }
 
-const yIonizationSubChoiceCheckboxes = Array.from(document.getElementsByClassName("y-ionization-checkbox"));
-yIonizationSubChoiceCheckboxes.forEach((ch) => {
-  ch.addEventListener('change', () => recordSelectedIonizationSubchoices(ch as HTMLInputElement));
-});
-const selectedYIonizationSubchoiceCheckboxes = new Set<string>();
-function recordSelectedIonizationSubchoices(ch: HTMLInputElement) {
-  if (ch.checked) {
-    selectedYIonizationSubchoiceCheckboxes.add(ch.id);
-  } else {
-    selectedYIonizationSubchoiceCheckboxes.delete(ch.id);
+// Some of these are actually radio boxes... but... whatever!
+const checkboxElems = {
+  x: {
+    methodAndOrbSubchoiceCheckboxes: setupCheckboxSet("x-method-and-orbital-subchoice-checkbox"),
+    ionizationSubchoiceCheckboxes: setupCheckboxSet("x-ionization-checkbox"),
+    electroNegSubchoiceCheckboxes: setupCheckboxSet("x-electro-neg-checkbox"),
+  },
+  y: {
+    methodAndOrbSubchoiceCheckboxes: setupCheckboxSet("y-method-and-orbital-subchoice-checkbox"),
+    ionizationSubchoiceCheckboxes: setupCheckboxSet("y-ionization-checkbox"),
+    electroNegSubchoiceCheckboxes: setupCheckboxSet("y-electro-neg-checkbox"),
   }
-  drawGraph();
 }
 
-
-const yElectroNegSubChoiceCheckboxes = Array.from(document.getElementsByClassName("y-electro-neg-checkbox"));
-yElectroNegSubChoiceCheckboxes.forEach((ch) => {
-  ch.addEventListener('change', () => recordSelectedElectroNegSubchoices(ch as HTMLInputElement));
-});
-const selectedYElectroNegSubchoiceCheckboxes = new Set<string>();
-function recordSelectedElectroNegSubchoices(ch: HTMLInputElement) {
-  if (ch.checked) {
-    selectedYElectroNegSubchoiceCheckboxes.add(ch.id);
-  } else {
-    selectedYElectroNegSubchoiceCheckboxes.delete(ch.id);
-  }
-  drawGraph();
-}
 
 function method2Formal(method: string) {
   switch (method) {
@@ -113,15 +104,22 @@ export function drawGraph() {
   }
 
   // xData will only be one array of values.
-  const xdataAndLabel = getValuesAndLabel(xGraphChoice, startElem, numElems);
+  const xdataAndLabel = getValuesAndLabel('x', xGraphChoice, startElem, numElems);
   if (xdataAndLabel.length === 0) {
     return;
   }
   const xData = xdataAndLabel[0].data;
   const xLabel = xdataAndLabel[0].label;
 
+  console.log('xdataAndLabel = ', xdataAndLabel);
+
   // yData could be multiple arrays of values, e.g., if user chooses multiple Zeff's.
-  const ydataAndLabel = getValuesAndLabel(yGraphChoice, startElem, numElems);
+  const ydataAndLabel = getValuesAndLabel('y', yGraphChoice, startElem, numElems);
+  if (ydataAndLabel.length === 0) {
+    return;
+  }
+
+  console.log('ydataAndLabel = ', ydataAndLabel);
 
   const options = {
     scales: {
@@ -142,10 +140,6 @@ export function drawGraph() {
 
   // Merge xData values and yData values.
   // console.log('ydata = ', ydataAndLabel);
-
-  if (ydataAndLabel[0].data.length === 0) {
-    return;
-  }
 
   const data: ScatterDataPoint[][] = ydataAndLabel.map((ydAndL) => {
     return ydAndL.data.map((y, i) => ({ x: xData[i], y }));
@@ -202,12 +196,13 @@ export function drawGraph() {
 }
 
 
-function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numElems: number): { data: number[], label: string }[] {
+function getValuesAndLabel(xOry: 'x' | 'y', valueChosenToGraph: string, startElem: number, numElems: number): { data: number[], label: string }[] {
   let data: number[][] = [];
   let labels: string[] = [];
 
   function getDataFromSpreadSheetData(labelPrefix: string, fieldNamePrefix: string) {
-    selectedYMethodAndOrbSubchoiceCheckboxes.keys().forEach((checkbox: string, index: number) => {
+    checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.keys().forEach((checkbox: string, index: number) => {
+      console.log('getting data for key ', checkbox);
 
       // checkbox has the format of <method>-<orbital>. Need to convert to
       // Rp - method orbital
@@ -227,18 +222,6 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
 
 
   switch (valueChosenToGraph) {
-    // case 'polarizability':
-    //   data = polarizability.slice(startElem, startElem + numElems);
-    //   label = `Polarizability (bohr)`;
-    //   break;
-    // case 'ionization-energy':
-    //   data = unweightedIonizationEnergy.map(e => e * conversions.get(units)!).slice(startElem, startElem + numElems);
-    //   label = `Ionization Energy (${unitsSelection$.get()})`;
-    //   break;
-    // case 'weighted-ionization-energy':
-    //   data = weightedIonizationEnergy.map(e => e * conversions.get(units)!).slice(startElem, startElem + numElems);;
-    //   label = `Weighted Ionization Energy (${unitsSelection$.get()})`;
-    //   break;
     case 'z':  // nuclear charge
       // Array containing 0, 1, 2, 3, 4, 5, ... , 118.
       data = [Array.from({ length: 118 }, (_, i) => i)];
@@ -249,44 +232,45 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
       labels = ["Atomic mass"];
       break;
     case 'effnuccharge': // effective nuclear charge
-      if (selectedYMethodAndOrbSubchoiceCheckboxes.size === 0) {
+      console.log('for effnuccharge: size of checkboxes set is ', checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.size);
+      if (checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
       getDataFromSpreadSheetData('Effective Nuclear Charge', 'Zeff');
       break;
 
     case 'atomrad': // Atomic radius (Rp)
-      if (selectedYMethodAndOrbSubchoiceCheckboxes.size === 0) {
+      if (checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
       getDataFromSpreadSheetData('Atomic Radius', 'Rp');
       break;
 
     case 'ke': // kinetic energy
-      if (selectedYMethodAndOrbSubchoiceCheckboxes.size === 0) {
+      if (checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
       getDataFromSpreadSheetData('Kinetic Energy', 'KE');
       break;
 
     case 'pe': // potential energy
-      if (selectedYMethodAndOrbSubchoiceCheckboxes.size === 0) {
+      if (checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
       getDataFromSpreadSheetData('Potential Energy', 'PE');
       break;
     case 'te': // total energy
-      if (selectedYMethodAndOrbSubchoiceCheckboxes.size === 0) {
+      if (checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
       getDataFromSpreadSheetData('Total Energy', 'TE');
       break;
 
     case 'ie':   // ionization energy
-      if (selectedYIonizationSubchoiceCheckboxes.size === 0) {
+      if (checkboxElems[xOry].ionizationSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
-      selectedYIonizationSubchoiceCheckboxes.keys().forEach((checkbox: string, index: number) => {
+      checkboxElems[xOry].ionizationSubchoiceCheckboxes.keys().forEach((checkbox: string, index: number) => {
         // checkbox has the format '1st-ionization-checkbox', '2nd-ionization-checkbox', etc. Remove the latter part.
         const checkboxValue = checkbox.split('-')[0];
 
@@ -299,10 +283,10 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
       });
       break;
     case 'electroneg':
-      if (selectedYElectroNegSubchoiceCheckboxes.size === 0) {
+      if (checkboxElems[xOry].electroNegSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
-      selectedYElectroNegSubchoiceCheckboxes.keys().forEach((checkbox: string, index: number) => {
+      checkboxElems[xOry].electroNegSubchoiceCheckboxes.keys().forEach((checkbox: string, index: number) => {
         // checkbox has the format 'y-<method>-electro-neg-checkbox'.
         const checkboxValue = checkbox.split('-')[1];
         const methodName = (checkboxValue === 'tAndO') ? 'Tantardini and Oganov' : 'Pauling\'s';
@@ -327,6 +311,8 @@ function getValuesAndLabel(valueChosenToGraph: string, startElem: number, numEle
       data = [elements.map(el => +el.boilingPoint)];
       labels = ["Boiling Point"];
       break;
+    case 'polarizability':
+
 
     default:
       console.error("Unknown graph option choice: ", valueChosenToGraph);

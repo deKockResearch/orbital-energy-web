@@ -85,7 +85,8 @@ const { xOrY } = Astro.props;
               <th class="row-header">{io}</th>
               <td>
                 <input
-                  type="checkbox"
+                  type={xOrY === 'y' ? ("checkbox") : ("radio")}
+                  name={`${xOrY}-ionization-value`}
                   id={`${io}-ionization-checkbox`}
                   value={io}
                   class={`${xOrY}-ionization-checkbox`}
@@ -111,7 +112,9 @@ const { xOrY } = Astro.props;
           <th>Tantardini and Oganov</th>
           <td>
             <input
-              type="checkbox" id={`${xOrY}-tAndO-electro-neg-checkbox`}
+              type={xOrY === 'y' ? ("checkbox") : ("radio")}
+              name={`${xOrY}-electroneg-value`}
+              id={`${xOrY}-tAndO-electro-neg-checkbox`}
               value='tAndO-electro-neg'
               class={`${xOrY}-electro-neg-checkbox`}
             />
@@ -121,7 +124,9 @@ const { xOrY } = Astro.props;
           <th>Pauling's</th>
           <td>
             <input
-              type="checkbox" id={`${xOrY}-paulings-electro-neg-checkbox`}
+              type={xOrY === 'y' ? ("checkbox") : ("radio")}
+              name={`${xOrY}-electroneg-value`}
+              id={`${xOrY}-paulings-electro-neg-checkbox`}
               value='paulings-electro-neg'
               class={`${xOrY}-electro-neg-checkbox`}
             />
@@ -130,6 +135,40 @@ const { xOrY } = Astro.props;
       </tbody>
     </table>
   </div>
+
+  {/* Sub-choice for Atomic Radius:   */}
+  <div id={xOrY + '-atomicrad-choice'}>
+    <table class="table table-header-rotated">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="rotate"><div><span>Method</span></div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {['Guerra (valence)', 'RDK (valence)', 'R0.001/Rahm', 'Van der Waals', 'Metallic', 'Covalent', 'Clementi', 'Ghosh']
+          .map(method => (
+            <tr>
+              <th class="row-header">{method}</th>
+              <td>
+                <input
+                  type={xOrY === 'y' ? ("checkbox") : ("radio")}
+                  name={`${xOrY}-atomicrad-value`}
+                  id={`${method}-atomicrad-checkbox`}
+                  value={method}
+                  class={`${xOrY}-atomicrad-checkbox`}
+                />
+              </td>
+            </tr>
+          ))
+        }
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
 </div>
 
 
@@ -174,7 +213,9 @@ th.rotate > div > span {
 #x-ionization-choice,
 #y-ionization-choice,
 #x-electronegativity-choice,
-#y-electronegativity-choice {
+#y-electronegativity-choice,
+#x-atomicrad-choice,
+#y-atomicrad-choice {
   display: none;
 }
 

@@ -54,11 +54,25 @@ upperBoundSelection.addEventListener('change', drawGraph);
 function setupCheckboxSet(className: string) {
   const checkboxes = Array.from(document.getElementsByClassName(className));
   const selectedSet = new Set<string>();
+  let prevBtn: HTMLInputElement | null = null;
   function recordSelection(ch: HTMLInputElement) {
+    // @ts-ignore
     if (ch.checked) {
       selectedSet.add(ch.id);
+      // Radio btn change event fires when a radio button is clicked,
+      // but not when it is unclicked when another radio button in
+      // the group was selected. So, we have to check if we had another
+      // button clicked previously and if so, remove that previous one from
+      // our 'clicked' set.
+      if (ch.type === 'radio' && prevBtn) {
+        selectedSet.delete(prevBtn.id);
+      }
     } else {
       selectedSet.delete(ch.id);
+    }
+    // remember the previous one.
+    if (prevBtn !== ch) {
+      prevBtn = ch;
     }
     drawGraph();
   }
@@ -74,11 +88,13 @@ const checkboxElems = {
     methodAndOrbSubchoiceCheckboxes: setupCheckboxSet("x-method-and-orbital-subchoice-checkbox"),
     ionizationSubchoiceCheckboxes: setupCheckboxSet("x-ionization-checkbox"),
     electroNegSubchoiceCheckboxes: setupCheckboxSet("x-electro-neg-checkbox"),
+    atomicRadSubchoiceCheckboxes: setupCheckboxSet("x-atomicrad-checkbox")
   },
   y: {
     methodAndOrbSubchoiceCheckboxes: setupCheckboxSet("y-method-and-orbital-subchoice-checkbox"),
     ionizationSubchoiceCheckboxes: setupCheckboxSet("y-ionization-checkbox"),
     electroNegSubchoiceCheckboxes: setupCheckboxSet("y-electro-neg-checkbox"),
+    atomicRadSubchoiceCheckboxes: setupCheckboxSet("y-atomicrad-checkbox")
   }
 }
 
@@ -200,10 +216,8 @@ function getValuesAndLabel(xOry: 'x' | 'y', valueChosenToGraph: string, startEle
   let data: number[][] = [];
   let labels: string[] = [];
 
-  function getDataFromSpreadSheetData(labelPrefix: string, fieldNamePrefix: string) {
+  function getMethodAndOrbDataFromSpreadSheetData(labelPrefix: string, fieldNamePrefix: string) {
     checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.keys().forEach((checkbox: string, index: number) => {
-      console.log('getting data for key ', checkbox);
-
       // checkbox has the format of <method>-<orbital>. Need to convert to
       // Rp - method orbital
       const [method, orbital] = checkbox.split('-');
@@ -224,7 +238,7 @@ function getValuesAndLabel(xOry: 'x' | 'y', valueChosenToGraph: string, startEle
   switch (valueChosenToGraph) {
     case 'z':  // nuclear charge
       // Array containing 0, 1, 2, 3, 4, 5, ... , 118.
-      data = [Array.from({ length: 118 }, (_, i) => i)];
+      data = [Array.from({ length: 118 }, (_, i) => i + 1)];
       labels = [`Nuclear Charge`];
       break;
     case 'amass': // atomic mass
@@ -232,38 +246,64 @@ function getValuesAndLabel(xOry: 'x' | 'y', valueChosenToGraph: string, startEle
       labels = ["Atomic mass"];
       break;
     case 'effnuccharge': // effective nuclear charge
-      console.log('for effnuccharge: size of checkboxes set is ', checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.size);
       if (checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
-      getDataFromSpreadSheetData('Effective Nuclear Charge', 'Zeff');
+      getMethodAndOrbDataFromSpreadSheetData('Effective Nuclear Charge', 'Zeff');
       break;
 
-    case 'atomrad': // Atomic radius (Rp)
+    case 'orbrad': // Orbital radius
       if (checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
-      getDataFromSpreadSheetData('Atomic Radius', 'Rp');
+      getMethodAndOrbDataFromSpreadSheetData('Atomic Radius', 'Rp');
+      break;
+
+    case 'atomrad': // Atomic radius
+      if (checkboxElems[xOry].atomicRadSubchoiceCheckboxes.size === 0) {
+        return [{ data: [], label: '' }];
+      }
+      checkboxElems[xOry].atomicRadSubchoiceCheckboxes.keys().forEach((checkbox: string, index: number) => {
+
+        console.log(`atomrad: for ${xOry} checkbox = ${checkbox}`);
+
+        // checkbox has the format 'Van der Walls-atomicrad-checkbox', etc. Everything before the - is
+        // directly in the name of the field in the JSON structure.
+        const checkboxValue = checkbox.split('-')[0];
+
+        // In the JSON with the values, the fieldnames are like this:
+        // Rp - R0.001/Rahm
+        // Rp - Van der Waals
+        // Rp - Metallic
+
+        labels.push(`Atomic Radius: ${checkboxValue} (pm)`);
+
+        // Name in the json structure extracted from the excel spreadsheeet
+        const fieldname = `Rp - ${checkboxValue}`;
+
+        // Push on an array of numbers
+        data.push(dataFromExcelSheet.map((d: { [fieldname: string]: number }) => d[fieldname] || undefined));
+      });
       break;
 
     case 'ke': // kinetic energy
       if (checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
-      getDataFromSpreadSheetData('Kinetic Energy', 'KE');
+      getMethodAndOrbDataFromSpreadSheetData('Kinetic Energy', 'KE');
       break;
 
     case 'pe': // potential energy
       if (checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
-      getDataFromSpreadSheetData('Potential Energy', 'PE');
+      getMethodAndOrbDataFromSpreadSheetData('Potential Energy', 'PE');
       break;
     case 'te': // total energy
       if (checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
-      getDataFromSpreadSheetData('Total Energy', 'TE');
+      getMethodAndOrbDataFromSpreadSheetData('Total Energy', 'TE');
       break;
 
     case 'ie':   // ionization energy

@@ -15,9 +15,10 @@ const wb = read(b64, { type: "base64" });
 
 const dataFromExcelSheet = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],
   {
-    range: 'C5:FB122',
+    range: 'C5:FD122',
     header: COLUMN_NAMES,
   });
+
 
 ---
 
@@ -41,7 +42,11 @@ const dataFromExcelSheet = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],
         <input type="radio" id="y_effnuccharge" value="effnuccharge" name="y-graph-value"  />
       </div>
       <div>
-        <label for="y_atomrad">Atomic Radius (Rp)</label>
+        <label for="y_orbrad">Orbital Radius</label>
+        <input type="radio" id="y_orbrad" value="orbrad" name="y-graph-value" />
+      </div>
+      <div>
+        <label for="y_atomrad">Atomic Radius</label>
         <input type="radio" id="y_atomrad" value="atomrad" name="y-graph-value"  />
       </div>
       <div>
@@ -49,11 +54,11 @@ const dataFromExcelSheet = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],
         <input type="radio" id="y_ke" value="ke" name="y-graph-value"  />
       </div>
       <div>
-        <label for="y_pe">Potential Energy (PE)</label>
+        <label for="y_pe">Potential Energy</label>
         <input type="radio" id="y_pe" value="pe" name="y-graph-value"  />
       </div>
       <div>
-        <label for="y_te">Total Energy (TE)</label>
+        <label for="y_te">Total Energy</label>
         <input type="radio" id="y_te" value="te" name="y-graph-value"  />
       </div>
       <div>
@@ -127,7 +132,11 @@ const dataFromExcelSheet = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],
         <input type="radio" id="x_effnuccharge" value="effnuccharge" name="x-graph-value" />
       </div>
       <div>
-        <label for="x_atomrad">Atomic Radius (Rp)</label>
+        <label for="x_orbrad">Orbital Radius</label>
+        <input type="radio" id="x_orbrad" value="orbrad" name="x-graph-value" />
+      </div>
+      <div>
+        <label for="x_atomrad">Atomic Radius</label>
         <input type="radio" id="x_atomrad" value="atomrad" name="x-graph-value" />
       </div>
       <div>
@@ -135,11 +144,11 @@ const dataFromExcelSheet = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],
         <input type="radio" id="x_ke" value="ke" name="x-graph-value" />
       </div>
       <div>
-        <label for="x_pe">Potential Energy (PE)</label>
+        <label for="x_pe">Potential Energy</label>
         <input type="radio" id="x_pe" value="pe" name="x-graph-value" />
       </div>
       <div>
-        <label for="x_te">Total Energy (TE)</label>
+        <label for="x_te">Total Energy</label>
         <input type="radio" id="x_te" value="te" name="x-graph-value" />
       </div>
       <div>

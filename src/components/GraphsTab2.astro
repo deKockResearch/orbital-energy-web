@@ -81,32 +81,6 @@ const dataFromExcelSheet = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],
         <label for="y_boiling">Boiling Point</label>
         <input type="radio" id="y_boiling" value="boiling" name="y-graph-value" />
       </div>
-      <!-- <div>
-        <label for="y_polarizability">Polarizability</label>
-        <input type="radio" id="y_polarizability" value="polarizability" name="y-graph-value" />
-      </div> -->
-      <div class="space-above">
-        Display from...
-        <select id="lower-bound" autocomplete="off">
-          {elements.map(e => {
-            return <option value={e.number}>{e.number} {e.symbol}</option>;
-          })}
-
-        </select>
-      </div>
-      <div>
-        Up to...
-        <select id="upper-bound" autocomplete="off">
-          {elements.map((e: ElementType) => (
-            e.number === 18 ? ( // make Argon be the default upper bound selection
-              <option selected value={e.number}>{e.number} {e.symbol}</option>
-            ) : (
-              <option value={e.number}>{e.number} {e.symbol}</option>
-            )
-          ))}
-
-        </select>
-      </div>
     </div>
 
     <GraphSubChoice xOrY="y" />

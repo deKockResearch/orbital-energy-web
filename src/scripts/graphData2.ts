@@ -41,16 +41,6 @@ for (let ri of xradioInputs) {
   });
 }
 
-const lowerBoundSelection = document.getElementById('lower-bound')! as HTMLSelectElement;
-const upperBoundSelection = document.getElementById('upper-bound')! as HTMLSelectElement;
-
-const lowerBoundSlider = document.getElementById('fromInput')! as HTMLInputElement;
-const upperBoundSlider = document.getElementById('toInput')! as HTMLInputElement;
-
-// Redraw the graph when user changes the range of values to be graphed.
-lowerBoundSelection.addEventListener('change', drawGraph);
-upperBoundSelection.addEventListener('change', drawGraph);
-
 // Helper to handle checkbox selection and set management
 function setupCheckboxSet(className: string) {
   const checkboxes = Array.from(document.getElementsByClassName(className));
@@ -112,21 +102,11 @@ function method2Formal(method: string) {
 export function drawGraph() {
 
   // the + is a trick to convert string to number.
-  // const startElem = +lowerBoundSelection.value - 1;
-  // const numElems = +upperBoundSelection.value - startElem;
+  const lowerBoundSlider = document.getElementById('fromInput')! as HTMLInputElement;
+  const upperBoundSlider = document.getElementById('toInput')! as HTMLInputElement;
 
   const startElem = +lowerBoundSlider.value - 1;
   const numElems = +upperBoundSlider.value - startElem;
-
-
-  console.log(`selction from ${startElem} for numElems: ${numElems}`);
-
-
-
-
-
-
-
 
   if (chart) {
     chart.destroy();
@@ -140,15 +120,45 @@ export function drawGraph() {
   const xData = xdataAndLabel[0].data;
   const xLabel = xdataAndLabel[0].label;
 
-  console.log('xdataAndLabel = ', xdataAndLabel);
-
   // yData could be multiple arrays of values, e.g., if user chooses multiple Zeff's.
   const ydataAndLabel = getValuesAndLabel('y', yGraphChoice, startElem, numElems);
   if (ydataAndLabel.length === 0) {
     return;
   }
 
-  console.log('ydataAndLabel = ', ydataAndLabel);
+  function yChoice2yLabel(): string {
+    switch (yGraphChoice) {
+      case 'z':
+        return "Nuclear Charge";
+      case 'amass':
+        return "Atomic mass";
+      case 'effnuccharge':
+        return "Effective Nuclear Charge";
+      case 'orbrad':
+        return "Orbital Radius";
+        break;
+      case 'atomrad':
+        return "Atomic Radius";
+      case 'ke':
+        return "Kinetic Energy";
+      case 'pe':
+        return "Potential Energy";
+      case 'te':
+        return "Total Energy";
+      case 'ie':
+        return "Ionization Energy";
+      case 'electroneg':
+        return "Electronegativity";
+      case 'density':
+        return "Density";
+      case 'melting':
+        return "Melting Point";
+      case 'boiling':
+        return "Boiling Point";
+      default:
+        return "";
+    }
+  }
 
   const options = {
     scales: {
@@ -160,7 +170,7 @@ export function drawGraph() {
       },
       y: {
         title: {
-          text: ydataAndLabel[0].label,
+          text: yChoice2yLabel(),
           display: true,
         }
       }
@@ -168,8 +178,6 @@ export function drawGraph() {
   };
 
   // Merge xData values and yData values.
-  // console.log('ydata = ', ydataAndLabel);
-
   const data: ScatterDataPoint[][] = ydataAndLabel.map((ydAndL) => {
     return ydAndL.data.map((y, i) => ({ x: xData[i], y }));
   });
@@ -231,7 +239,7 @@ function getValuesAndLabel(xOry: 'x' | 'y', valueChosenToGraph: string, startEle
 
   function getMethodAndOrbDataFromSpreadSheetData(labelPrefix: string, fieldNamePrefix: string) {
     checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.keys().forEach((checkbox: string, index: number) => {
-      // checkbox has the format of <method>-<orbital>. Need to convert to
+      // checkbox has the format of <method>-<orbital>. Need to convert to:
       // Rp - method orbital
       const [method, orbital] = checkbox.split('-');
       const methodAndOrb = `${checkbox.split('-')[0]} ${checkbox.split('-')[1]}`;
@@ -269,7 +277,7 @@ function getValuesAndLabel(xOry: 'x' | 'y', valueChosenToGraph: string, startEle
       if (checkboxElems[xOry].methodAndOrbSubchoiceCheckboxes.size === 0) {
         return [{ data: [], label: '' }];
       }
-      getMethodAndOrbDataFromSpreadSheetData('Atomic Radius', 'Rp');
+      getMethodAndOrbDataFromSpreadSheetData('Orbital Radius', 'Rp');
       break;
 
     case 'atomrad': // Atomic radius
@@ -277,8 +285,6 @@ function getValuesAndLabel(xOry: 'x' | 'y', valueChosenToGraph: string, startEle
         return [{ data: [], label: '' }];
       }
       checkboxElems[xOry].atomicRadSubchoiceCheckboxes.keys().forEach((checkbox: string, index: number) => {
-
-        console.log(`atomrad: for ${xOry} checkbox = ${checkbox}`);
 
         // checkbox has the format 'Van der Walls-atomicrad-checkbox', etc. Everything before the - is
         // directly in the name of the field in the JSON structure.
@@ -390,15 +396,16 @@ drawGraph();
 
 // Didn't get this to work, on my first try.
 // https://medium.com/@code.sachin/making-sense-of-debouncing-in-javascript-input-change-9a91d02738b6
-// const debounce = (callback: any, waitTime: number) => {
-//   let timer: any;
-//   return (...args: any[]) => {
-//     clearTimeout(timer);
-//     timer = setTimeout(() => {
-//       callback(...args);
-//     }, waitTime);
-//   };
-// }
+
+const debounce = (callback: any, waitTime: number) => {
+  let timer: any;
+  return (...args: any[]) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      callback(...args);
+    }, waitTime);
+  };
+}
 
 function controlFromInput(fromSlider: HTMLInputElement, fromInput: HTMLInputElement, toInput: HTMLInputElement, controlSlider: HTMLInputElement) {
   const [from, to] = getParsed(fromInput, toInput);

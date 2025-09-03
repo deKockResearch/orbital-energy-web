@@ -119,7 +119,7 @@ function displayDetailedElementBox(): void {
       detailsElemBox.querySelector(".crystalline-struct-img")!.setAttribute('src', '');
     } else {
       detailsElemBox.querySelector(".crystalline-struct-img")!.setAttribute('src',
-        'src/' + elements[aNumber].crystallineStructure);
+        elements[aNumber - 1].crystallineStructure);
     }
     detailsElemBox.querySelector(".aEconfig")!.innerHTML = convertElectronConfigToHTML();
     detailsElemBox.querySelector("#density")!.innerHTML = selectedElement.density;

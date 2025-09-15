@@ -8,8 +8,13 @@ export function computeOrbitals(eConfigStr: string): Orbital[] {
   const res: Orbital[] = [];
   const groups = eConfigStr.split(" ");
   for (const group of groups) {
-    const re = /(\d+)([spdf])(\d+)/;
+    const re = /(\d+)([spdf])(\d+)|(predicted)/;
     const matches = group.match(re)!;
+    // This check is for when the eConfig contains (predicted): skip over
+    // it.
+    if (!matches[1]) {
+      continue;
+    }
     res.push({
       level: Number(matches[1]),
       sOrP: matches[2],

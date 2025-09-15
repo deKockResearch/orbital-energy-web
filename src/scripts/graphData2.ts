@@ -213,7 +213,7 @@ export function drawGraph() {
           return {
             data: [...values],
             borderWidth: 1,
-            label: `${xLabel} vs ${yLabels[index]}`,
+            label: `${yLabels[index]} vs ${xLabel}`,
           };
         })
     },
@@ -394,18 +394,20 @@ drawGraph();
 // Double-thumb slider in JavaScript:
 // https://medium.com/@predragdavidovic10/native-dual-range-slider-html-css-javascript-91e778134816
 
-// Didn't get this to work, on my first try.
-// https://medium.com/@code.sachin/making-sense-of-debouncing-in-javascript-input-change-9a91d02738b6
 
-const debounce = (callback: any, waitTime: number) => {
-  let timer: any;
-  return (...args: any[]) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      callback(...args);
-    }, waitTime);
+// https://medium.com/@code.sachin/making-sense-of-debouncing-in-javascript-input-change-9a91d02738b6
+// And, changes by GPT-4.1
+
+// Debounce utility
+function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
+  let timeout: ReturnType<typeof setTimeout>;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
   };
 }
+
+const debouncedDrawGraph = debounce(drawGraph, 300);
 
 function controlFromInput(fromSlider: HTMLInputElement, fromInput: HTMLInputElement, toInput: HTMLInputElement, controlSlider: HTMLInputElement) {
   const [from, to] = getParsed(fromInput, toInput);
@@ -416,7 +418,11 @@ function controlFromInput(fromSlider: HTMLInputElement, fromInput: HTMLInputElem
   } else {
     fromSlider.value = String(from);
   }
-  drawGraph();
+}
+
+function debounceControlFromInput(fromSlider: HTMLInputElement, fromInput: HTMLInputElement, toInput: HTMLInputElement, toSlider: HTMLInputElement) {
+  controlFromInput(fromSlider, fromInput, toInput, toSlider); // runs immediately
+  debouncedDrawGraph(); // debounced
 }
 
 function controlToInput(toSlider: HTMLInputElement, fromInput: HTMLInputElement,
@@ -430,7 +436,11 @@ function controlToInput(toSlider: HTMLInputElement, fromInput: HTMLInputElement,
   } else {
     toInput.value = String(from);
   }
-  drawGraph();
+}
+
+function debounceControlToInput(toSlider: HTMLInputElement, fromInput: HTMLInputElement, toInput: HTMLInputElement, toSlider2: HTMLInputElement) {
+  controlToInput(toSlider, fromInput, toInput, toSlider2); // runs immediately
+  debouncedDrawGraph(); // debounced
 }
 
 function controlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, fromInput: HTMLInputElement) {
@@ -442,7 +452,11 @@ function controlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElem
   } else {
     fromInput.value = String(from);
   }
-  drawGraph();
+}
+
+function debounceControlFromSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, fromInput: HTMLInputElement) {
+  controlFromSlider(fromSlider, toSlider, fromInput); // runs immediately
+  debouncedDrawGraph(); // debounced
 }
 
 function controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, toInput: HTMLInputElement) {
@@ -456,8 +470,14 @@ function controlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElemen
     toInput.value = String(from);
     toSlider.value = String(from);
   }
-  drawGraph();
 }
+
+function debounceControlToSlider(fromSlider: HTMLInputElement, toSlider: HTMLInputElement, toInput: HTMLInputElement) {
+  controlToSlider(fromSlider, toSlider, toInput); // runs immediately
+  debouncedDrawGraph(); // debounced
+}
+
+
 
 function getParsed(currentFrom: HTMLInputElement, currentTo: HTMLInputElement) {
   const from = parseInt(currentFrom.value, 10);
@@ -499,7 +519,7 @@ const toInput = document.querySelector('#toInput')! as HTMLInputElement;
 fillSlider(fromSlider, toSlider, 'black', '#25daa5', toSlider)!;
 setToggleAccessible(toSlider);
 
-fromSlider.oninput = () => controlFromSlider(fromSlider, toSlider, fromInput);
-toSlider.oninput = () => controlToSlider(fromSlider, toSlider, toInput);
-fromInput.oninput = () => controlFromInput(fromSlider, fromInput, toInput, toSlider);
-toInput.oninput = () => controlToInput(toSlider, fromInput, toInput, toSlider);
+fromSlider.oninput = () => debounceControlFromSlider(fromSlider, toSlider, fromInput);
+toSlider.oninput = () => debounceControlToSlider(fromSlider, toSlider, toInput);
+fromInput.oninput = () => debounceControlFromInput(fromSlider, fromInput, toInput, toSlider);
+toInput.oninput = () => debounceControlToInput(toSlider, fromInput, toInput, toSlider);
